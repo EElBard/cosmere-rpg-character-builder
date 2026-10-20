@@ -2,3 +2,8 @@
 .vercel
 node_modules/
 *.log
+__pycache__/
+talents_code.js
+official_sheet_template.pdf
+pdf-lib.min.js
+sheet_template.js
