@@ -24,7 +24,9 @@ Built with vanilla HTML, modern CSS, and JavaScript.
 - **18 Core Skills**: Distribute 10 ranks with automated path skill bonuses and modifier math.
 - **Starting Equipment Kits**: Academic, Artisan, Courtier, Military, Underworld, and Prisoner kits.
 - **Radiant Path & Ideals**: Swear Ideals, select from all 10 Radiant Orders, and bond Spren.
-- **Full Character Sheet Summary**:
+- **Full Character Sheet Summary & Official PDF Export**:
+  - **Official Cosmere RPG Character Sheet Export**: One-click download of the authentic 2-page Brotherwise Games character sheet pre-filled with all character statistics, defenses, vitals, skills (with filled rank pips), equipment, weapons, talents, appearance, purpose, obstacle, and goals.
+  - **Interactive In-Browser PDF Preview**: Inspect the finished official character sheet directly in the app before exporting.
   - Printable character sheet layout.
   - JSON export for digital backups and virtual tabletops.
   - LocalStorage auto-save so you never lose progress.
