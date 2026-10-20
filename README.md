@@ -33,4 +33,5 @@ Built with vanilla HTML, modern CSS, and JavaScript.
 
 ## 🚀 Live Demo
 
-- Hosted on [Vercel](https://vercel.com)
+- **Live URL**: [https://quirky-chandrasekhar.vercel.app](https://quirky-chandrasekhar.vercel.app)
+- **GitHub Repository**: [https://github.com/EElBard/cosmere-rpg-character-builder](https://github.com/EElBard/cosmere-rpg-character-builder)
