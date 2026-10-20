@@ -1,0 +1,2999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cosmere RPG — Stormlight Character Builder</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════
+   CSS CUSTOM PROPERTIES
+   ═══════════════════════════════════════════════════════════════ */
+:root {
+  --bg-deep: #060e1a;
+  --bg-primary: #0a1628;
+  --bg-secondary: #0f1f38;
+  --bg-card: #111e35;
+  --bg-card-hover: #162848;
+  --bg-input: #0c1829;
+  --border-dim: #1a2d4d;
+  --border-glow: #2a4a7a;
+  --border-active: #4a9eff;
+  --text-primary: #e8edf5;
+  --text-secondary: #8a9bb5;
+  --text-dim: #5a6b85;
+  --gold: #d4a843;
+  --gold-light: #f0d080;
+  --gold-dim: #8a6e2a;
+  --blue-glow: #4a9eff;
+  --blue-bright: #6ab4ff;
+  --cyan: #00d4ff;
+  --cyan-dim: #007a99;
+  --storm-purple: #7a5af0;
+  --red-alert: #ff4a6a;
+  --green-ok: #4aff8a;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --shadow-card: 0 4px 24px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
+  --shadow-glow: 0 0 20px rgba(74,158,255,0.15), 0 0 60px rgba(74,158,255,0.05);
+  --shadow-gold: 0 0 20px rgba(212,168,67,0.2);
+  --transition-fast: 0.2s ease;
+  --transition-med: 0.35s ease;
+  --transition-slow: 0.5s ease;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESET & BASE
+   ═══════════════════════════════════════════════════════════════ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   AMBIENT BACKGROUND EFFECTS
+   ═══════════════════════════════════════════════════════════════ */
+.bg-effects {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+}
+.bg-orb {
+  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12;
+  animation: orbFloat 20s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+.bg-orb:nth-child(1) { width: 500px; height: 500px; background: var(--blue-glow); top: -10%; left: -5%; animation-delay: 0s; }
+.bg-orb:nth-child(2) { width: 400px; height: 400px; background: var(--cyan); top: 40%; right: -10%; animation-delay: -7s; }
+.bg-orb:nth-child(3) { width: 350px; height: 350px; background: var(--storm-purple); bottom: -5%; left: 30%; animation-delay: -14s; }
+.bg-orb:nth-child(4) { width: 300px; height: 300px; background: var(--gold); top: 20%; left: 50%; animation-delay: -10s; opacity: 0.06; }
+@keyframes orbFloat {
+  0%, 100% { translate: 0 0; }
+  33% { translate: 40px -30px; }
+  66% { translate: -20px 50px; }
+}
+.storm-lines {
+  position: absolute; inset: 0; opacity: 0.03;
+  background: repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(74,158,255,0.3) 100px, transparent 101px);
+  animation: stormDrift 30s linear infinite;
+  @media (prefers-reduced-motion: reduce) { animation: none; }
+}
+@keyframes stormDrift { to { translate: -200px 0; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   LAYOUT
+   ═══════════════════════════════════════════════════════════════ */
+.app-container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 20px 16px 60px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   HEADER
+   ═══════════════════════════════════════════════════════════════ */
+.app-header {
+  text-align: center; padding: 32px 0 24px; margin-bottom: 8px;
+}
+.app-header h1 {
+  font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 700; letter-spacing: 0.06em;
+  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--cyan));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  text-transform: uppercase; margin-bottom: 4px;
+}
+.app-header .subtitle {
+  font-size: 0.85rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PROGRESS BAR
+   ═══════════════════════════════════════════════════════════════ */
+.progress-container {
+  margin-bottom: 32px; padding: 0 4px;
+}
+.progress-steps {
+  display: flex; align-items: center; justify-content: space-between; position: relative;
+}
+.progress-line {
+  position: absolute; top: 18px; left: 24px; right: 24px; height: 2px;
+  background: var(--border-dim); z-index: 0;
+}
+.progress-line-fill {
+  position: absolute; top: 18px; left: 24px; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--cyan));
+  z-index: 1; transition: width var(--transition-med);
+  box-shadow: 0 0 10px rgba(0,212,255,0.3);
+}
+.progress-step {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  position: relative; z-index: 2; cursor: pointer; background: none; border: none;
+  color: var(--text-dim); font-size: 0.65rem; letter-spacing: 0.05em;
+  transition: color var(--transition-fast);
+}
+.progress-step:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; border-radius: var(--radius-sm); }
+.step-circle {
+  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--border-dim); background: var(--bg-primary); font-size: 0.8rem; font-weight: 600;
+  transition: all var(--transition-med); color: var(--text-dim);
+}
+.progress-step.active .step-circle {
+  border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.08);
+  box-shadow: 0 0 16px rgba(0,212,255,0.25);
+}
+.progress-step.completed .step-circle {
+  border-color: var(--gold); background: var(--gold); color: var(--bg-deep);
+}
+.progress-step.active, .progress-step.completed { color: var(--text-primary); }
+.step-label { white-space: nowrap; }
+@media (max-width: 640px) {
+  .step-label { display: none; }
+  .step-circle { width: 30px; height: 30px; font-size: 0.7rem; }
+  .progress-line, .progress-line-fill { top: 14px; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP PANELS
+   ═══════════════════════════════════════════════════════════════ */
+.step-panel {
+  display: none; opacity: 0; translate: 0 20px;
+  transition: opacity var(--transition-med), translate var(--transition-med);
+  @media (prefers-reduced-motion: reduce) { transition: opacity 0.15s ease; translate: none; }
+}
+.step-panel.active { display: block; }
+.step-panel.visible { opacity: 1; translate: 0 0; }
+
+.step-title {
+  font-size: clamp(1.3rem, 4vw, 1.7rem); font-weight: 700; margin-bottom: 4px;
+  background: linear-gradient(90deg, var(--text-primary), var(--blue-bright));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.step-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   CARDS
+   ═══════════════════════════════════════════════════════════════ */
+.card {
+  background: var(--bg-card); border: 1px solid var(--border-dim);
+  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
+  transition: all var(--transition-fast); cursor: pointer; position: relative; overflow: hidden;
+}
+.card::before {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; opacity: 0;
+  background: linear-gradient(135deg, rgba(74,158,255,0.06), rgba(0,212,255,0.03));
+  transition: opacity var(--transition-fast); pointer-events: none;
+}
+.card:hover { border-color: var(--border-glow); }
+.card:hover::before { opacity: 1; }
+.card:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.card.selected {
+  border-color: var(--cyan); background: rgba(0,212,255,0.05);
+  box-shadow: 0 0 24px rgba(0,212,255,0.12), inset 0 0 30px rgba(0,212,255,0.03);
+}
+.card.selected::after {
+  content: '✓'; position: absolute; top: 12px; right: 14px;
+  width: 26px; height: 26px; border-radius: 50%; background: var(--cyan);
+  color: var(--bg-deep); font-size: 0.85rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+}
+.card-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+.card-title { font-size: 1.1rem; font-weight: 600; color: var(--gold-light); margin-bottom: 6px; }
+.card-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+.card-bonus {
+  font-size: 0.8rem; color: var(--cyan); background: rgba(0,212,255,0.06);
+  padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid rgba(0,212,255,0.15);
+  display: inline-block;
+}
+.card-detail {
+  font-size: 0.78rem; color: var(--text-dim); margin-top: 4px;
+}
+.card-grid {
+  display: grid; gap: 14px;
+}
+.card-grid.cols-2 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+.card-grid.cols-3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.card-grid.cols-5 { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
+
+/* ═══════════════════════════════════════════════════════════════
+   FORM INPUTS
+   ═══════════════════════════════════════════════════════════════ */
+.form-group { margin-bottom: 18px; }
+.form-label {
+  display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;
+}
+.form-input, .form-textarea {
+  width: 100%; padding: 12px 14px; font-size: 0.95rem; color: var(--text-primary);
+  background: var(--bg-input); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  font-family: inherit; line-height: 1.5;
+}
+.form-input:focus, .form-textarea:focus {
+  outline: none; border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.12), 0 0 16px rgba(0,212,255,0.08);
+}
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+.form-textarea { resize: vertical; min-height: 80px; }
+.form-input:user-invalid { border-color: var(--red-alert); }
+
+/* ═══════════════════════════════════════════════════════════════
+   SUB-OPTIONS (Singer forms, culture expertise)
+   ═══════════════════════════════════════════════════════════════ */
+.sub-options {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;
+  margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);
+}
+.sub-option {
+  padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); cursor: pointer; text-align: center; font-size: 0.85rem;
+  transition: all var(--transition-fast); color: var(--text-secondary);
+}
+.sub-option:hover { border-color: var(--border-glow); color: var(--text-primary); }
+.sub-option.selected { border-color: var(--gold); background: rgba(212,168,67,0.08); color: var(--gold-light); }
+
+/* ═══════════════════════════════════════════════════════════════
+   ATTRIBUTE CONTROLS
+   ═══════════════════════════════════════════════════════════════ */
+.attr-group-title {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text-dim); margin-bottom: 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-dim);
+}
+.attr-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 14px; margin-bottom: 6px; border-radius: var(--radius-md);
+  background: var(--bg-card); border: 1px solid var(--border-dim);
+  transition: border-color var(--transition-fast);
+}
+.attr-row.suggested { border-color: rgba(212,168,67,0.3); }
+.attr-row.suggested::before {
+  content: '★'; position: absolute; left: -4px; top: 50%; translate: 0 -50%;
+  color: var(--gold); font-size: 0.6rem;
+}
+.attr-row { position: relative; }
+.attr-info { display: flex; align-items: center; gap: 10px; }
+.attr-name { font-weight: 600; font-size: 0.95rem; min-width: 100px; }
+.attr-abbr { font-size: 0.7rem; color: var(--text-dim); }
+.attr-controls { display: flex; align-items: center; gap: 8px; }
+.attr-btn {
+  width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast); line-height: 1;
+}
+.attr-btn:hover:not(:disabled) { border-color: var(--cyan); background: rgba(0,212,255,0.1); }
+.attr-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.attr-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.attr-value {
+  font-size: 1.4rem; font-weight: 700; width: 36px; text-align: center; color: var(--cyan);
+  transition: color var(--transition-fast);
+}
+.attr-value[data-val="0"] { color: var(--text-dim); }
+.points-remaining {
+  text-align: center; padding: 14px; margin-bottom: 20px; border-radius: var(--radius-md);
+  background: var(--bg-card); border: 1px solid var(--border-dim);
+  font-size: 1rem; font-weight: 600;
+}
+.points-remaining .count {
+  font-size: 1.6rem; color: var(--cyan);
+  transition: color var(--transition-fast);
+}
+.points-remaining .count.warning { color: var(--gold); }
+.points-remaining .count.zero { color: var(--green-ok); }
+
+/* Derived stats */
+.derived-stats {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
+  margin-top: 20px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-lg);
+  border: 1px solid var(--border-dim);
+}
+.derived-stat {
+  text-align: center; padding: 10px;
+}
+.derived-stat .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 2px; }
+.derived-stat .value { font-size: 1.5rem; font-weight: 700; color: var(--gold-light); }
+.derived-stat .detail { font-size: 0.7rem; color: var(--text-dim); }
+
+/* ═══════════════════════════════════════════════════════════════
+   SKILLS
+   ═══════════════════════════════════════════════════════════════ */
+.skill-group { margin-bottom: 20px; }
+.skill-group-title {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
+  margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border-dim);
+}
+.skill-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 8px 12px; margin-bottom: 4px; border-radius: var(--radius-sm);
+  background: var(--bg-card); border: 1px solid transparent;
+  transition: all var(--transition-fast); font-size: 0.9rem;
+}
+.skill-row.free-skill { border-color: rgba(212,168,67,0.3); background: rgba(212,168,67,0.04); }
+.skill-info { display: flex; align-items: center; gap: 8px; flex: 1; }
+.skill-name { font-weight: 500; }
+.skill-badge {
+  font-size: 0.6rem; padding: 1px 6px; border-radius: 99px; background: rgba(212,168,67,0.15);
+  color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em;
+}
+.skill-bonus {
+  font-size: 0.8rem; color: var(--text-dim); min-width: 50px; text-align: right; margin-right: 10px;
+}
+.skill-controls { display: flex; align-items: center; gap: 6px; }
+.skill-btn {
+  width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast);
+}
+.skill-btn:hover:not(:disabled) { border-color: var(--cyan); }
+.skill-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.skill-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.skill-rank { font-weight: 700; width: 24px; text-align: center; font-size: 0.95rem; color: var(--cyan); }
+.skill-rank[data-val="0"] { color: var(--text-dim); }
+
+/* ═══════════════════════════════════════════════════════════════
+   EQUIPMENT CARDS
+   ═══════════════════════════════════════════════════════════════ */
+.equip-items {
+  font-size: 0.82rem; color: var(--text-secondary); margin-top: 8px; line-height: 1.7;
+}
+.equip-items li { padding-left: 4px; }
+.equip-money { color: var(--gold); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════════════
+   RADIANT SECTION
+   ═══════════════════════════════════════════════════════════════ */
+.radiant-toggle {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
+  padding: 16px; background: var(--bg-card); border-radius: var(--radius-md);
+  border: 1px solid var(--border-dim); cursor: pointer;
+}
+.toggle-switch {
+  width: 48px; height: 26px; border-radius: 99px; background: var(--border-dim);
+  position: relative; transition: background var(--transition-fast); flex-shrink: 0;
+}
+.toggle-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+  border-radius: 50%; background: var(--text-dim); transition: all var(--transition-fast);
+}
+.toggle-switch.on { background: var(--cyan); }
+.toggle-switch.on::after { translate: 22px 0; background: var(--bg-deep); }
+.radiant-toggle-label { font-weight: 600; font-size: 1rem; }
+.radiant-toggle-sub { font-size: 0.8rem; color: var(--text-dim); }
+
+.order-card .card-title { font-size: 1rem; }
+.order-card .oath {
+  font-style: italic; font-size: 0.82rem; color: var(--gold); margin-top: 6px;
+  border-left: 2px solid var(--gold-dim); padding-left: 10px;
+}
+.order-card .surges {
+  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+}
+.surge-tag {
+  font-size: 0.7rem; padding: 2px 8px; border-radius: 99px;
+  background: rgba(74,158,255,0.1); border: 1px solid rgba(74,158,255,0.2);
+  color: var(--blue-bright);
+}
+.restricted-badge {
+  font-size: 0.6rem; padding: 2px 8px; border-radius: 99px;
+  background: rgba(255,74,106,0.12); border: 1px solid rgba(255,74,106,0.25);
+  color: var(--red-alert); text-transform: uppercase; letter-spacing: 0.08em;
+}
+.ideal-input { margin-top: 20px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   NAVIGATION
+   ═══════════════════════════════════════════════════════════════ */
+.nav-buttons {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border-dim);
+}
+.btn {
+  padding: 12px 28px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600;
+  cursor: pointer; border: none; transition: all var(--transition-fast);
+  font-family: inherit; letter-spacing: 0.03em;
+}
+.btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+.btn-back {
+  background: var(--bg-secondary); border: 1px solid var(--border-dim); color: var(--text-secondary);
+}
+.btn-back:hover { border-color: var(--border-glow); color: var(--text-primary); }
+.btn-next {
+  background: linear-gradient(135deg, var(--blue-glow), var(--cyan));
+  color: var(--bg-deep); font-weight: 700;
+}
+.btn-next:hover { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+.btn-next:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  color: var(--bg-deep);
+}
+.btn-gold:hover { box-shadow: var(--shadow-gold); }
+.btn-danger {
+  background: rgba(255,74,106,0.1); border: 1px solid rgba(255,74,106,0.25);
+  color: var(--red-alert);
+}
+.btn-danger:hover { background: rgba(255,74,106,0.2); }
+.btn-outline {
+  background: transparent; border: 1px solid var(--border-glow); color: var(--text-secondary);
+}
+.btn-outline:hover { border-color: var(--cyan); color: var(--text-primary); }
+
+/* ═══════════════════════════════════════════════════════════════
+   VALIDATION MESSAGE
+   ═══════════════════════════════════════════════════════════════ */
+.validation-msg {
+  display: none; padding: 10px 14px; border-radius: var(--radius-sm);
+  background: rgba(255,74,106,0.08); border: 1px solid rgba(255,74,106,0.2);
+  color: var(--red-alert); font-size: 0.85rem; margin-top: 10px;
+}
+.validation-msg.show { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════
+   SUMMARY PANEL
+   ═══════════════════════════════════════════════════════════════ */
+.summary-sheet {
+  background: var(--bg-card); border: 1px solid var(--border-glow);
+  border-radius: var(--radius-xl); padding: 28px; position: relative; overflow: hidden;
+}
+.summary-sheet::before {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(135deg, rgba(74,158,255,0.03), transparent, rgba(212,168,67,0.03));
+  pointer-events: none;
+}
+.summary-header {
+  text-align: center; padding-bottom: 20px; margin-bottom: 20px;
+  border-bottom: 1px solid var(--border-dim);
+}
+.summary-name {
+  font-size: 1.8rem; font-weight: 700;
+  background: linear-gradient(135deg, var(--gold-light), var(--cyan));
+  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+}
+.summary-concept { color: var(--text-secondary); font-style: italic; margin-top: 4px; }
+.summary-section { margin-bottom: 20px; }
+.summary-section-title {
+  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 10px; padding-bottom: 4px;
+  border-bottom: 1px solid rgba(212,168,67,0.2);
+}
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+.summary-stat {
+  text-align: center; padding: 10px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm);
+}
+.summary-stat .label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); }
+.summary-stat .val { font-size: 1.3rem; font-weight: 700; color: var(--cyan); }
+.summary-stat .val.gold { color: var(--gold-light); }
+.summary-defense-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.summary-list { list-style: none; }
+.summary-list li {
+  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+  font-size: 0.9rem; color: var(--text-secondary);
+}
+.summary-list li:last-child { border: none; }
+.summary-list .skill-val { float: right; color: var(--cyan); font-weight: 600; }
+.summary-actions {
+  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+  margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-dim);
+}
+.summary-radiant {
+  text-align: center; padding: 16px; background: rgba(0,212,255,0.04);
+  border-radius: var(--radius-md); border: 1px solid rgba(0,212,255,0.15);
+}
+.summary-radiant .order-name { font-size: 1.2rem; font-weight: 700; color: var(--cyan); }
+.summary-radiant .spren-type { font-size: 0.85rem; color: var(--text-dim); margin-top: 2px; }
+.summary-radiant .oath-text {
+  font-style: italic; color: var(--gold); margin-top: 8px; font-size: 0.9rem;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SHIMMER ANIMATION
+   ═══════════════════════════════════════════════════════════════ */
+.shimmer {
+  position: relative; overflow: hidden;
+}
+.shimmer::after {
+  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
+  animation: shimmer 4s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) { animation: none; display: none; }
+}
+@keyframes shimmer { 0% { left: -100%; } 50%,100% { left: 200%; } }
+
+/* ═══════════════════════════════════════════════════════════════
+   PRINT
+   ═══════════════════════════════════════════════════════════════ */
+@media print {
+  .bg-effects, .progress-container, .nav-buttons, .summary-actions,
+  .app-header, .step-panel:not(.active) { display: none !important; }
+  body { background: white; color: black; }
+  .summary-sheet { border: 2px solid #333; box-shadow: none; }
+  .summary-name { -webkit-text-fill-color: #333; }
+  .summary-stat .val, .summary-stat .val.gold { color: #333; }
+  .summary-section-title { color: #666; border-color: #ccc; }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLLBAR
+   ═══════════════════════════════════════════════════════════════ */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-deep); }
+::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
+
+/* ═══════════════════════════════════════════════════════════════
+   CULTURE TAG DISPLAY
+   ═══════════════════════════════════════════════════════════════ */
+.culture-selected-display {
+  display: flex; gap: 8px; margin-bottom: 14px; min-height: 30px; flex-wrap: wrap;
+}
+.culture-tag {
+  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
+  border-radius: 99px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25);
+  color: var(--cyan); font-size: 0.8rem; font-weight: 500;
+}
+.culture-tag .remove-culture {
+  cursor: pointer; font-size: 0.9rem; opacity: 0.6; transition: opacity 0.15s;
+  background: none; border: none; color: inherit; padding: 0; line-height: 1;
+}
+.culture-tag .remove-culture:hover { opacity: 1; }
+
+/* ═══════════════════════════════════════════════════════════════
+   EXPERTISE SELECT
+   ═══════════════════════════════════════════════════════════════ */
+.expertise-select {
+  display: inline-flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
+  position: relative; z-index: 2;
+}
+.expertise-option {
+  padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); cursor: pointer; font-size: 0.78rem;
+  color: var(--text-secondary); transition: all var(--transition-fast);
+  user-select: none; position: relative; z-index: 2;
+}
+.expertise-option:hover { border-color: var(--border-glow); color: var(--text-primary); }
+.expertise-option.selected {
+  border-color: var(--gold); color: var(--gold-light);
+  background: rgba(212,168,67,0.18);
+  box-shadow: 0 0 10px rgba(212,168,67,0.25);
+  font-weight: 600;
+}
+
+/* Path specialty tags */
+.specialty-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.specialty-tag {
+  font-size: 0.72rem; padding: 3px 8px; border-radius: 99px;
+  background: rgba(122,90,240,0.1); border: 1px solid rgba(122,90,240,0.2);
+  color: var(--storm-purple);
+}
+.suggested-attrs {
+  font-size: 0.75rem; color: var(--text-dim); margin-top: 6px;
+}
+.suggested-attrs span { color: var(--gold); }
+
+/* ═══════════════════════════════════════════════════════════════
+   TALENT TREES STYLING
+   ═══════════════════════════════════════════════════════════════ */
+.talent-controls-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 20px; padding: 12px 18px;
+  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
+}
+.talent-level-select {
+  display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-secondary);
+}
+.talent-level-select select {
+  background: var(--bg-input); border: 1px solid var(--border-dim); border-radius: var(--radius-sm);
+  color: var(--gold-light); font-weight: 600; padding: 6px 12px; cursor: pointer; font-family: inherit;
+}
+.talent-level-select select:focus {
+  outline: 2px solid var(--gold); border-color: var(--gold);
+}
+.talent-points-pill {
+  font-size: 0.9rem; font-weight: 600; color: var(--text-primary);
+  display: flex; align-items: center; gap: 6px;
+}
+.talent-points-pill .count {
+  background: var(--gold); color: var(--bg-deep); border-radius: 99px;
+  padding: 2px 10px; font-weight: 700;
+}
+.talent-points-pill .count.zero {
+  background: var(--text-dim); color: var(--bg-deep);
+}
+.talent-tabs {
+  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px;
+  scrollbar-width: thin;
+}
+.talent-tab-btn {
+  padding: 8px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); color: var(--text-secondary); cursor: pointer;
+  font-size: 0.85rem; font-weight: 600; white-space: nowrap; transition: all var(--transition-fast);
+  display: flex; align-items: center; gap: 6px; font-family: inherit;
+}
+.talent-tab-btn:hover {
+  border-color: var(--border-glow); color: var(--text-primary);
+}
+.talent-tab-btn.active {
+  border-color: var(--gold); color: var(--gold-light); background: rgba(212,168,67,0.12);
+  box-shadow: 0 0 16px rgba(212,168,67,0.2);
+}
+.talent-specialties-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
+}
+.specialty-column {
+  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-lg);
+  padding: 16px; display: flex; flex-direction: column; gap: 14px;
+}
+.specialty-col-header {
+  border-bottom: 1px solid var(--border-dim); padding-bottom: 12px; margin-bottom: 4px;
+}
+.specialty-col-title {
+  font-size: 1.05rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 6px;
+}
+.specialty-col-desc {
+  font-size: 0.78rem; color: var(--text-dim); line-height: 1.4; margin-top: 4px;
+}
+.talent-node-card {
+  background: var(--bg-secondary); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
+  padding: 14px; transition: all var(--transition-fast); position: relative;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.talent-node-card:hover {
+  border-color: var(--border-glow);
+}
+.talent-node-card.learned {
+  border-color: var(--gold); background: rgba(212,168,67,0.08);
+  box-shadow: 0 0 16px rgba(212,168,67,0.18);
+}
+.talent-node-card.is-key {
+  border-color: var(--cyan); background: rgba(0,212,255,0.06);
+  box-shadow: 0 0 16px rgba(0,212,255,0.18);
+}
+.talent-node-card.locked {
+  opacity: 0.65;
+}
+.node-top-row {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+}
+.node-name {
+  font-size: 0.95rem; font-weight: 700; color: var(--text-primary);
+}
+.talent-node-card.learned .node-name {
+  color: var(--gold-light);
+}
+.talent-node-card.is-key .node-name {
+  color: var(--cyan);
+}
+.node-badges {
+  display: flex; gap: 4px; flex-wrap: wrap;
+}
+.node-badge {
+  font-size: 0.68rem; padding: 2px 7px; border-radius: 4px; font-weight: 600; text-transform: uppercase;
+}
+.node-badge.tier {
+  background: rgba(74,158,255,0.15); color: var(--blue-bright); border: 1px solid rgba(74,158,255,0.3);
+}
+.node-badge.cost {
+  background: rgba(122,90,240,0.15); color: var(--storm-purple); border: 1px solid rgba(122,90,240,0.3);
+}
+.node-badge.key {
+  background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3);
+}
+.node-prereq {
+  font-size: 0.72rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px;
+}
+.node-prereq.met {
+  color: var(--green-ok);
+}
+.node-prereq.unmet {
+  color: var(--red-alert);
+}
+.node-desc {
+  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;
+}
+.node-action-btn {
+  align-self: flex-start; padding: 5px 12px; border-radius: var(--radius-sm); font-size: 0.75rem;
+  font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all var(--transition-fast);
+  font-family: inherit; margin-top: 4px;
+}
+.node-action-btn.learn {
+  background: rgba(0,212,255,0.12); color: var(--cyan); border-color: rgba(0,212,255,0.3);
+}
+.node-action-btn.learn:hover {
+  background: var(--cyan); color: var(--bg-deep); box-shadow: 0 0 12px rgba(0,212,255,0.4);
+}
+.node-action-btn.learned {
+  background: rgba(212,168,67,0.2); color: var(--gold-light); border-color: var(--gold);
+}
+.node-action-btn.learned:hover {
+  background: rgba(255,74,106,0.2); color: var(--red-alert); border-color: var(--red-alert);
+}
+.node-action-btn.is-key-badge {
+  background: rgba(0,212,255,0.15); color: var(--cyan); border-color: rgba(0,212,255,0.3);
+  cursor: default;
+}
+.node-action-btn:disabled {
+  opacity: 0.4; cursor: not-allowed; border-color: var(--border-dim); background: var(--bg-input); color: var(--text-dim);
+}
+
+/* Modal styling for Universal Talent Tree Browser */
+.talent-modal-overlay {
+  position: fixed; inset: 0; z-index: 1000; background: rgba(6,14,26,0.85); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.talent-modal-overlay.open { display: flex; }
+.talent-modal-container {
+  background: var(--bg-primary); border: 1px solid var(--border-glow); border-radius: var(--radius-xl);
+  max-width: 1040px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px;
+  box-shadow: 0 12px 48px rgba(0,0,0,0.7), 0 0 40px rgba(0,212,255,0.1);
+  display: flex; flex-direction: column; gap: 16px; position: relative;
+}
+.talent-modal-header {
+  display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-dim);
+  padding-bottom: 14px;
+}
+.talent-modal-title {
+  font-size: 1.3rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 8px;
+}
+.talent-modal-close {
+  background: none; border: none; font-size: 1.5rem; color: var(--text-dim); cursor: pointer; line-height: 1;
+}
+.talent-modal-close:hover { color: var(--text-primary); }
+
+.summary-talents-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 8px;
+}
+.summary-talent-card {
+  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
+  padding: 12px 14px;
+}
+.summary-talent-card.is-key {
+  border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.03);
+}
+.summary-talent-card.is-surge {
+  border-color: rgba(122,90,240,0.3); background: rgba(122,90,240,0.03);
+}
+
+</style>
+</head>
+<body>
+
+<div class="bg-effects">
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="bg-orb"></div>
+  <div class="storm-lines"></div>
+</div>
+
+<div class="app-container">
+  <header class="app-header">
+    <div style="display:flex;align-items:center;justify-content:center;position:relative;flex-wrap:wrap;gap:12px;">
+      <h1>Stormlight Character Builder</h1>
+      <button type="button" class="btn btn-outline" id="btnOpenTalentBrowser" style="position:absolute;right:0;font-size:0.75rem;padding:6px 14px;border-radius:99px;" aria-label="Browse All Talent Trees">
+        🌳 Browse Talent Trees
+      </button>
+    </div>
+    <div class="subtitle">Cosmere Roleplaying Game</div>
+  </header>
+
+  <!-- Progress Bar -->
+  <nav class="progress-container" aria-label="Character creation progress">
+    <div class="progress-steps" id="progressSteps">
+      <div class="progress-line"></div>
+      <div class="progress-line-fill" id="progressFill"></div>
+    </div>
+  </nav>
+
+  <!-- ═══════ STEP 1: CONCEPT ═══════ -->
+  <section class="step-panel" id="step-1" aria-label="Step 1: Character Concept">
+    <h2 class="step-title">Character Concept</h2>
+    <p class="step-subtitle">Who is your character? Define the core of their identity.</p>
+
+    <div class="form-group">
+      <label class="form-label" for="charName">Character Name</label>
+      <input class="form-input" type="text" id="charName" placeholder="e.g. Kaladin, Shallan, Dalinar…" required maxlength="60">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="charConcept">Concept / Description</label>
+      <textarea class="form-textarea" id="charConcept" placeholder="A brief description of your character—their background, personality, and role." rows="3" maxlength="500"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="charPurpose">Purpose</label>
+      <input class="form-input" type="text" id="charPurpose" placeholder="What drives your character? Their deepest motivation." maxlength="200">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="charObstacle">Obstacle</label>
+      <input class="form-input" type="text" id="charObstacle" placeholder="What stands in their way? The challenge they must overcome." maxlength="200">
+    </div>
+    <div class="validation-msg" id="val-1"></div>
+  </section>
+
+  <!-- ═══════ STEP 2: ANCESTRY ═══════ -->
+  <section class="step-panel" id="step-2" aria-label="Step 2: Ancestry">
+    <h2 class="step-title">Ancestry</h2>
+    <p class="step-subtitle">Choose the ancestry that defines your character's heritage.</p>
+    <div id="ancestryCards" class="card-grid cols-2"></div>
+    <div id="singerFormContainer" style="display:none;">
+      <h3 style="font-size:0.95rem; color:var(--gold-light); margin:16px 0 8px;">Choose a Singer Form</h3>
+      <div id="singerForms" class="sub-options"></div>
+    </div>
+    <div class="validation-msg" id="val-2"></div>
+  </section>
+
+  <!-- ═══════ STEP 3: CULTURES ═══════ -->
+  <section class="step-panel" id="step-3" aria-label="Step 3: Cultures">
+    <h2 class="step-title">Cultures</h2>
+    <p class="step-subtitle">Pick <strong>two</strong> cultures that shaped your character. Each grants a language and a cultural expertise.</p>
+    <div class="culture-selected-display" id="cultureSelectedDisplay"></div>
+    <div id="cultureCards" class="card-grid cols-3"></div>
+    <div class="validation-msg" id="val-3"></div>
+  </section>
+
+  <!-- ═══════ STEP 4: PATH ═══════ -->
+  <section class="step-panel" id="step-4" aria-label="Step 4: Heroic Path">
+    <h2 class="step-title">Heroic Path</h2>
+    <p class="step-subtitle">Your path determines your starting talent, skill, and combat specialization.</p>
+    <div id="pathCards" class="card-grid cols-2"></div>
+    <div class="validation-msg" id="val-4"></div>
+  </section>
+
+  <!-- ═══════ STEP 5: ATTRIBUTES ═══════ -->
+  <section class="step-panel" id="step-5" aria-label="Step 5: Attributes">
+    <h2 class="step-title">Attributes</h2>
+    <p class="step-subtitle">Distribute 12 points among your six attributes. Each starts at 0, max 3.</p>
+    <div class="points-remaining" id="attrPointsDisplay">
+      Remaining Points: <span class="count" id="attrPointsCount">12</span>
+    </div>
+    <div id="attributeControls"></div>
+    <div class="derived-stats" id="derivedStats"></div>
+    <div class="validation-msg" id="val-5"></div>
+  </section>
+
+  <!-- ═══════ STEP 6: SKILLS ═══════ -->
+  <section class="step-panel" id="step-6" aria-label="Step 6: Skills">
+    <h2 class="step-title">Skills</h2>
+    <p class="step-subtitle">Distribute 10 skill ranks (max 2 per skill). Your path grants 1 free rank in your starting skill.</p>
+    <div class="points-remaining" id="skillPointsDisplay">
+      Remaining Skill Ranks: <span class="count" id="skillPointsCount">10</span>
+    </div>
+    <div id="skillControls"></div>
+    <div class="validation-msg" id="val-6"></div>
+  </section>
+
+  <!-- ═══════ STEP 7: TALENTS & TALENT TREES ═══════ -->
+  <section class="step-panel" id="step-7" aria-label="Step 7: Talents & Talent Trees">
+    <h2 class="step-title">Talents & Talent Trees</h2>
+    <p class="step-subtitle">Explore the talent trees of Roshar. Your Heroic Path grants your starting Key Talent, plus spend talent points to unlock specialties or multi-path into any Heroic or Surge tree.</p>
+
+    <div class="talent-controls-bar">
+      <div class="talent-level-select">
+        <label for="charLevelSelect"><strong>Character Level:</strong></label>
+        <select id="charLevelSelect" aria-label="Select Character Level">
+          <option value="1">Level 1 (Tier 1)</option>
+          <option value="2">Level 2</option>
+          <option value="3">Level 3</option>
+          <option value="4">Level 4</option>
+          <option value="5">Level 5 (Tier 2)</option>
+          <option value="6">Level 6</option>
+          <option value="7">Level 7</option>
+          <option value="8">Level 8</option>
+          <option value="9">Level 9</option>
+          <option value="10">Level 10 (Tier 3)</option>
+        </select>
+      </div>
+      <div class="talent-points-pill" id="talentPointsDisplay">
+        Talent Points: <span class="count" id="talentPointsCount">1</span> remaining
+      </div>
+      <button type="button" class="btn btn-outline" id="btnResetTalents" style="font-size:0.75rem;padding:4px 10px;">↻ Reset Talent Picks</button>
+    </div>
+
+    <div class="talent-tabs" id="talentPathTabs" role="tablist" aria-label="Talent Trees Paths">
+      <!-- Tabs for 6 Paths + Radiant Surges -->
+    </div>
+
+    <div id="talentSpecialtiesContainer">
+      <!-- 3 specialty columns or surge columns -->
+    </div>
+
+    <div class="validation-msg" id="val-9"></div>
+  </section>
+
+  <!-- ═══════ STEP 7: EQUIPMENT ═══════ -->
+  <section class="step-panel" id="step-8" aria-label="Step 8: Starting Equipment">
+    <h2 class="step-title">Starting Equipment</h2>
+    <p class="step-subtitle">Choose a kit to determine your starting gear and marks (currency).</p>
+    <div id="equipCards" class="card-grid cols-2"></div>
+    <div class="validation-msg" id="val-7"></div>
+  </section>
+
+  <!-- ═══════ STEP 8: RADIANT ═══════ -->
+  <section class="step-panel" id="step-9" aria-label="Step 9: Radiant Path">
+    <h2 class="step-title">Radiant Path</h2>
+    <p class="step-subtitle">Have you bonded a spren? Choose your Radiant Order (optional).</p>
+
+    <div class="radiant-toggle" id="radiantToggle" role="switch" tabindex="0" aria-checked="false" aria-label="Enable Radiant Order selection">
+      <div class="toggle-switch" id="toggleSwitch"></div>
+      <div>
+        <div class="radiant-toggle-label">I have bonded a spren</div>
+        <div class="radiant-toggle-sub">Enable to choose a Radiant Order</div>
+      </div>
+    </div>
+
+    <div id="radiantSection" style="display:none;">
+      <div id="orderCards" class="card-grid cols-2"></div>
+      <div class="ideal-input" id="idealInputContainer" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="secondIdeal">Your Second Ideal</label>
+          <textarea class="form-textarea" id="secondIdeal" placeholder="Speak your truth… What is your Second Ideal?" rows="2" maxlength="300"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="validation-msg" id="val-8"></div>
+  </section>
+
+  <!-- ═══════ STEP 9: SUMMARY ═══════ -->
+  <section class="step-panel" id="step-10" aria-label="Character Summary">
+    <h2 class="step-title">Character Complete</h2>
+    <p class="step-subtitle">Review your finished character sheet below.</p>
+    <div class="summary-sheet shimmer" id="summarySheet"></div>
+  </section>
+
+  <!-- Navigation -->
+  <div class="nav-buttons" id="navButtons">
+    <button class="btn btn-back" id="btnBack" type="button">← Back</button>
+    <button class="btn btn-next" id="btnNext" type="button">Next →</button>
+  </div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════════════════════ */
+const ANCESTRIES = [
+  { id:'human', name:'Human', icon:'👤',
+    desc:'The versatile inhabitants of Roshar, found across every nation and walk of life.',
+    bonus:'+1 to any attribute of choice, 1 bonus skill rank, 1 bonus expertise' },
+  { id:'singer', name:'Singer', icon:'🎵',
+    desc:'The native race of Roshar who can attune rhythms and change forms. Deeply connected to the land itself.',
+    bonus:'+1 Strength, +1 Willpower, natural armor (Deflect 1), choose a Form',
+    forms:[
+      { id:'workform', name:'Workform', bonus:'+1 Crafting, bonus expertise in a craft' },
+      { id:'warform', name:'Warform', bonus:'+1 Heavy Weaponry, natural weapon (1d6 impact)' },
+      { id:'nimbleform', name:'Nimbleform', bonus:'+1 Agility, +5 movement speed' },
+      { id:'mateform', name:'Mateform', bonus:'+1 Persuasion, advantage on social interactions' }
+    ]}
+];
+
+const CULTURES = [
+  { id:'alethi', name:'Alethi', desc:'Military-focused lighteyed/darkeyed society.', lang:'Alethi', expertise:['Warfare','Dueling'] },
+  { id:'azish', name:'Azish', desc:'Bureaucratic meritocracy.', lang:'Azish', expertise:['Law','Administration'] },
+  { id:'herdazian', name:'Herdazian', desc:'Resourceful coastal people.', lang:'Herdazian', expertise:['Humor','Resourcefulness'] },
+  { id:'iriali', name:'Iriali', desc:'Nomadic golden-haired people following The One.', lang:'Iriali', expertise:['Philosophy','Trade'] },
+  { id:'kharbranthian', name:'Kharbranthian', desc:'Scholarly island city.', lang:'Alethi', expertise:['Research','Artifabrian Technology'] },
+  { id:'listener', name:'Listener', desc:'Free Singers who follow their own path.', lang:'Listener', expertise:['Rhythms','Wilderness'] },
+  { id:'natan', name:'Natan', desc:'Mystical remnants of a lost kingdom.', lang:'Natan', expertise:['Prophecy','History'] },
+  { id:'reshi', name:'Reshi', desc:'Island people living on greatshell backs.', lang:'Reshi', expertise:['Sailing','Animal Handling'] },
+  { id:'shin', name:'Shin', desc:'Pacifistic stone-revering people from Shinovar.', lang:'Shin', expertise:['Agriculture','Meditation'] },
+  { id:'thaylen', name:'Thaylen', desc:'Merchant sailors with long eyebrows.', lang:'Thaylen', expertise:['Commerce','Sailing'] },
+  { id:'unkalaki', name:'Unkalaki', desc:'Mountain people (Horneaters).', lang:'Unkalaki', expertise:['Cooking','Spren Sight'] },
+  { id:'veden', name:'Veden', desc:'Scholarly and fractious highprince society.', lang:'Veden', expertise:['Scholarship','Politics'] },
+  { id:'wayfarer', name:'Wayfarer', desc:'Nomadic travelers.', lang:'Any one', expertise:['Survival','Streetwise'] }
+];
+
+const PATHS = [
+  { id:'agent', name:'Agent', icon:'🗡️',
+    desc:'Masters of stealth, subterfuge, and espionage. Investigators, spies, and thieves.',
+    skill:'Insight', talent:'Opportunist — Once per round, reroll your Plot Die.',
+    specialties:['Infiltrator','Investigator','Saboteur'], suggestedAttr:['Speed','Intellect','Awareness'] },
+  { id:'envoy', name:'Envoy', icon:'👑',
+    desc:'Social powerhouses who excel in diplomacy, performance, leadership, and support.',
+    skill:'Discipline', talent:'Rousing Presence — Grant an ally the Determined condition until the scene ends.',
+    specialties:['Faithful','Grifter','Mentor'], suggestedAttr:['Presence','Willpower'] },
+  { id:'hunter', name:'Hunter', icon:'🏹',
+    desc:'Wilderness and survival specialists skilled in tracking, scouting, and ranged combat.',
+    skill:'Perception', talent:'Seek Quarry — Choose a target as your quarry; gain advantage on tests to find, attack, and study them.',
+    specialties:['Archer','Assassin','Tracker'], suggestedAttr:['Awareness','Strength','Speed'] },
+  { id:'leader', name:'Leader', icon:'⚔️',
+    desc:'Tactical commanders who orchestrate team synergy, buff allies, and direct battlefield movement.',
+    skill:'Leadership', talent:'Decisive Command — Spend Focus to give an ally within 20 feet a d4 command die on their next test.',
+    specialties:['Champion','Officer','Politico'], suggestedAttr:['Presence','Strength','Willpower'] },
+  { id:'scholar', name:'Scholar', icon:'📖',
+    desc:'Intellectuals focused on lore, medicine, and technology. Surgeons, strategists, artifabrians.',
+    skill:'Lore', talent:'Erudition — Temporarily gain a cultural expertise and ranks in two cognitive skills. Reassignable after long rest.',
+    specialties:['Artifabrian','Strategist','Surgeon'], suggestedAttr:['Intellect','Presence'] },
+  { id:'warrior', name:'Warrior', icon:'🛡️',
+    desc:'Direct combat specialists ranging from disciplined soldiers to agile duelists.',
+    skill:'Athletics', talent:'Vigilant Stance — Reduce Focus cost of Dodge and Reactive Strike by 1. Enter combat stances as a free action.',
+    specialties:['Duelist','Guardian','Soldier'], suggestedAttr:['Strength','Speed','Willpower'] }
+];
+
+const ATTRIBUTES = [
+  { id:'Strength', abbr:'STR', group:'Physical' },
+  { id:'Speed', abbr:'SPD', group:'Physical' },
+  { id:'Intellect', abbr:'INT', group:'Cognitive' },
+  { id:'Willpower', abbr:'WIL', group:'Cognitive' },
+  { id:'Awareness', abbr:'AWA', group:'Spiritual' },
+  { id:'Presence', abbr:'PRE', group:'Spiritual' }
+];
+
+const SKILLS = [
+  { name:'Athletics', attr:'Strength' },
+  { name:'Heavy Weaponry', attr:'Strength' },
+  { name:'Agility', attr:'Speed' },
+  { name:'Light Weaponry', attr:'Speed' },
+  { name:'Stealth', attr:'Speed' },
+  { name:'Thievery', attr:'Speed' },
+  { name:'Crafting', attr:'Intellect' },
+  { name:'Deduction', attr:'Intellect' },
+  { name:'Lore', attr:'Intellect' },
+  { name:'Medicine', attr:'Intellect' },
+  { name:'Discipline', attr:'Willpower' },
+  { name:'Intimidation', attr:'Willpower' },
+  { name:'Insight', attr:'Awareness' },
+  { name:'Perception', attr:'Awareness' },
+  { name:'Survival', attr:'Awareness' },
+  { name:'Deception', attr:'Presence' },
+  { name:'Leadership', attr:'Presence' },
+  { name:'Persuasion', attr:'Presence' }
+];
+
+const EQUIPMENT = [
+  { id:'academic', name:'Academic Kit', icon:'📚',
+    items:['Knife','Uniform','Writing supplies','Reference books','Research tools','50 marks'],
+    money:50 },
+  { id:'artisan', name:'Artisan Kit', icon:'🔨',
+    items:['Hammer','Leather Armor (Deflect 1)','Tool chest','Artisan supplies','30 marks'],
+    money:30 },
+  { id:'courtier', name:'Courtier Kit', icon:'👗',
+    items:['Rapier','Fine clothing (Presentable)','Luxury items','Noble connections','100 marks'],
+    money:100 },
+  { id:'military', name:'Military Kit', icon:'⚔️',
+    items:['Longsword + Shield OR Greatsword','Chainmail (Deflect 2)','Military supplies','20 marks'],
+    money:20 },
+  { id:'underworld', name:'Underworld Kit', icon:'🗝️',
+    items:['Two knives','Leather Armor (Deflect 1)','Lockpicks','Disguise kit','25 marks'],
+    money:25 },
+  { id:'prisoner', name:'Prisoner Kit', icon:'⛓️',
+    items:['Torn clothing only','No weapons/armor/money','Story connection to a spren','0 marks'],
+    money:0 }
+];
+
+const ORDERS = [
+  { id:'windrunner', name:'Windrunner', surges:['Adhesion','Gravitation'], spren:'Honorspren',
+    oath:'"I will protect those who cannot protect themselves."' },
+  { id:'skybreaker', name:'Skybreaker', surges:['Gravitation','Division'], spren:'Highspren',
+    oath:'"I will put the law before all else."' },
+  { id:'dustbringer', name:'Dustbringer', surges:['Division','Abrasion'], spren:'Ashspren',
+    oath:'"I will seek self-mastery."' },
+  { id:'edgedancer', name:'Edgedancer', surges:['Abrasion','Progression'], spren:'Cultivationspren',
+    oath:'"I will remember those who have been forgotten."' },
+  { id:'truthwatcher', name:'Truthwatcher', surges:['Progression','Illumination'], spren:'Mistspren',
+    oath:'"I will seek truth and share it."' },
+  { id:'lightweaver', name:'Lightweaver', surges:['Illumination','Transformation'], spren:'Cryptics',
+    oath:'"I will speak my truth."' },
+  { id:'elsecaller', name:'Elsecaller', surges:['Transformation','Transportation'], spren:'Inkspren',
+    oath:'"I will reach my potential."' },
+  { id:'willshaper', name:'Willshaper', surges:['Transportation','Cohesion'], spren:'Lightspren',
+    oath:'"I will seek freedom."' },
+  { id:'stoneward', name:'Stoneward', surges:['Cohesion','Tension'], spren:'Peakspren',
+    oath:'"I will be there when I am needed."' },
+  { id:'bondsmith', name:'Bondsmith', surges:['Tension','Adhesion'], spren:'Godspren',
+    oath:'"I will unite instead of divide."', restricted:true }
+];
+
+
+const TALENT_TREES = {
+  agent: {
+    id: "agent",
+    name: "Agent",
+    icon: "🗡️",
+    keyTalent: {
+      id: "agent-key",
+      name: "Opportunist",
+      type: "Key Talent",
+      cost: "Reaction",
+      desc: "Once per round when you roll a plot die, you can discard the result and reroll it."
+    },
+    specialties: [
+      {
+        id: "investigator",
+        name: "Investigator",
+        desc: "Masters of observation, forensic deduction, and uncovering secrets.",
+        talents: [
+          { id: "agent-inv-1", name: "Watchful Eye", tier: 1, cost: "Reaction (1 Focus)", prereq: { text: "Opportunist" }, desc: "Spend 1 Focus to allow an ally within 30 feet to reroll their plot die using your Opportunist talent." },
+          { id: "agent-inv-2", name: "Quick Deduction", tier: 1, cost: "Minor Action", prereq: { skill: "Deduction", rank: 1, text: "Deduction 1+" }, desc: "Make a Deduction test to assess a target or inspect a scene as a minor action instead of an action." },
+          { id: "agent-inv-3", name: "Gather Evidence", tier: 2, cost: "Passive", prereq: { talent: "agent-inv-1", skill: "Deduction", rank: 2, text: "Watchful Eye, Deduction 2+" }, desc: "Succeeding on a Deduction or Insight test regarding a foe grants Focused (reduces next talent focus cost by 1)." },
+          { id: "agent-inv-4", name: "Interrogation", tier: 2, cost: "Action (1 Focus)", prereq: { talent: "agent-inv-2", skill: "Insight", rank: 2, text: "Quick Deduction, Insight 2+" }, desc: "Gain Advantage on Insight and Deduction tests to uncover lies, hidden motives, and secret plans when questioning a target." },
+          { id: "agent-inv-5", name: "Unmask Motive", tier: 3, cost: "Action (2 Focus)", prereq: { talent: "agent-inv-3", text: "Gather Evidence" }, desc: "Expose an enemy’s tactics or weak point; all allies gain +2 on attacks against them until the end of your next turn." }
+        ]
+      },
+      {
+        id: "spy",
+        name: "Spy",
+        desc: "Masters of deception, blending into social strata, and moving unseen.",
+        talents: [
+          { id: "agent-spy-1", name: "Cover Story", tier: 1, cost: "Passive", prereq: { skill: "Deception", rank: 1, text: "Deception 1+" }, desc: "Gain expertise in a chosen disguise or false identity. Tests by others to see through your deception suffer Disadvantage." },
+          { id: "agent-spy-2", name: "Subtle Takedown", tier: 1, cost: "1 Action", prereq: { skill: "Stealth", rank: 1, text: "Stealth 1+" }, desc: "When attacking an unaware or surprised target with a light weapon, deal +1d6 damage and silence them from sounding alarms for 1 round." },
+          { id: "agent-spy-3", name: "Sure Outcome", tier: 2, cost: "Reaction (2 Focus)", prereq: { talent: "agent-spy-2", skill: "Stealth", rank: 2, text: "Subtle Takedown, Stealth 2+" }, desc: "When you roll a plot die, you can manually set it to an Opportunity result instead of rolling." },
+          { id: "agent-spy-4", name: "Vanish in Plain Sight", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "agent-spy-1", skill: "Deception", rank: 2, text: "Cover Story, Deception 2+" }, desc: "You can take the Hide action even while observed if you are in a crowd, fog, or near partial cover." },
+          { id: "agent-spy-5", name: "Master of Espionage", tier: 3, cost: "Passive (2 Focus)", prereq: { text: "Sure Outcome or Vanish in Plain Sight" }, desc: "Assume identities so thoroughly that cognitive, magical, or mundane truth-seeking tests perceive only your cover identity." }
+        ]
+      },
+      {
+        id: "thief",
+        name: "Thief",
+        desc: "Experts in illicit acquisition, lockpicking, agility, and nimble evasion.",
+        talents: [
+          { id: "agent-thf-1", name: "Fast Hands", tier: 1, cost: "Minor Action", prereq: { skill: "Thievery", rank: 1, text: "Thievery 1+" }, desc: "Use Sleight of Hand, pick locks, or disarm mechanical traps as a minor action." },
+          { id: "agent-thf-2", name: "Risky Behavior", tier: 1, cost: "Free Action", prereq: { skill: "Thievery", rank: 1, text: "Thievery 1+" }, desc: "Intentionally add a Plot Die to any skill test. If you roll an Opportunity, regain 1 Focus." },
+          { id: "agent-thf-3", name: "Cheap Shot", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "agent-thf-1", attr: "Speed", attrVal: 2, text: "Fast Hands, Speed 2+" }, desc: "Strike with a finesse or light weapon; target must contest against your Agility or become Slowed and lose their reaction." },
+          { id: "agent-thf-4", name: "Shadow Slip", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "agent-thf-2", skill: "Stealth", rank: 2, text: "Risky Behavior, Stealth 2+" }, desc: "When a melee attack misses you, shift up to 10 feet into shadows or cover without provoking reactive strikes." },
+          { id: "agent-thf-5", name: "Master Thief", tier: 3, cost: "Passive (2 Focus)", prereq: { text: "Cheap Shot or Shadow Slip" }, desc: "Critical hits with Light Weaponry trigger an automatic Opportunity, and you effortlessly pickpocket or disarm an object from the foe." }
+        ]
+      }
+    ]
+  },
+  envoy: {
+    id: "envoy",
+    name: "Envoy",
+    icon: "👑",
+    keyTalent: {
+      id: "envoy-key",
+      name: "Rousing Presence",
+      type: "Key Talent",
+      cost: "Reaction",
+      desc: "When an ally within 30 feet fails a test, you can grant them the Determined condition (+2 on their next test)."
+    },
+    specialties: [
+      {
+        id: "diplomat",
+        name: "Diplomat",
+        desc: "Masters of negotiation, courtly etiquette, and high-society political intrigue.",
+        talents: [
+          { id: "env-dip-1", name: "Well Dressed", tier: 1, cost: "Passive", prereq: { skill: "Persuasion", rank: 1, text: "Persuasion 1+" }, desc: "Wearing fine clothing grants +1 Cognitive Defense and Advantage on Persuasion in noble, formal, or high-society settings." },
+          { id: "env-dip-2", name: "Collected", tier: 1, cost: "Passive", prereq: { text: "Rousing Presence" }, desc: "You are immune to being Intimidated or Shaken during diplomatic, political, or social negotiations." },
+          { id: "env-dip-3", name: "Calm Appeal", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "env-dip-2", skill: "Discipline", rank: 2, text: "Collected, Discipline 2+" }, desc: "Target a hostile humanoid; contest Persuasion vs Cognitive Defense to pause active combat hostilities and negotiate." },
+          { id: "env-dip-4", name: "Withering Retort", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "env-dip-1", skill: "Persuasion", rank: 2, text: "Well Dressed, Persuasion 2+" }, desc: "When targeted by a social attack, intimidation, or spell, retaliate with a scathing comeback imposing Disadvantage and mental strain." },
+          { id: "env-dip-5", name: "Master Ambassador", tier: 3, cost: "1 Action (2 Focus)", prereq: { text: "Calm Appeal or Withering Retort" }, desc: "Compel an opponent in high-stakes negotiations to grant a genuine political concession or reveal hidden terms." }
+        ]
+      },
+      {
+        id: "faithful",
+        name: "Faithful",
+        desc: "Spiritual adherents and devout guides who bolster willpower and divine resolve.",
+        talents: [
+          { id: "env-fth-1", name: "Devoted Presence", tier: 1, cost: "Passive", prereq: { text: "Rousing Presence" }, desc: "When you activate Rousing Presence on an ally, that ally also regains 1 Focus." },
+          { id: "env-fth-2", name: "Stalwart Presence", tier: 1, cost: "Aura", prereq: { skill: "Discipline", rank: 1, text: "Discipline 1+" }, desc: "You and all allies within 15 feet gain +1 Spiritual Defense against fear, investiture, and mental manipulation." },
+          { id: "env-fth-3", name: "Applied Motivation", tier: 2, cost: "Passive", prereq: { talent: "env-fth-1", skill: "Lore", rank: 2, text: "Devoted Presence, Lore 2+" }, desc: "Whenever you cause another character to regain Focus, you also regain 1 Focus (once per round)." },
+          { id: "env-fth-4", name: "Sage Counsel", tier: 2, cost: "Reaction", prereq: { talent: "env-fth-2", skill: "Lore", rank: 2, text: "Stalwart Presence, Lore 2+" }, desc: "When you take the Aid reaction to assist an ally’s test, you add your Lore rank as a direct bonus to their roll." },
+          { id: "env-fth-5", name: "Inspired Zeal", tier: 3, cost: "Action (2 Focus)", prereq: { talent: "env-fth-3", skill: "Discipline", rank: 3, text: "Applied Motivation, Discipline 3+" }, desc: "When an ally uses the Determined condition, all other chosen allies within 30 feet regain Focus equal to your Discipline rank." }
+        ]
+      },
+      {
+        id: "mentor",
+        name: "Mentor",
+        desc: "Wise teachers and field advisors who elevate the martial and tactical skill of companions.",
+        talents: [
+          { id: "env-men-1", name: "Sound Advice", tier: 1, cost: "Reaction (1 Focus)", prereq: { text: "Rousing Presence" }, desc: "Call out timely guidance to an ally on their turn, granting them a +2 bonus on their attack or skill test." },
+          { id: "env-men-2", name: "Instill Confidence", tier: 1, cost: "Passive", prereq: { skill: "Leadership", rank: 1, text: "Leadership 1+" }, desc: "Designate an ally as your pupil during a rest. When within 20 feet of each other, your pupil gains +1 to all Defenses." },
+          { id: "env-men-3", name: "Practical Demonstration", tier: 2, cost: "Free Action", prereq: { talent: "env-men-1", text: "Sound Advice" }, desc: "When you hit an enemy with a weapon strike, you can trigger Rousing Presence as a free action without expending your reaction." },
+          { id: "env-men-4", name: "Lessons in Patience", tier: 2, cost: "Passive", prereq: { talent: "env-men-2", skill: "Discipline", rank: 2, text: "Instill Confidence, Discipline 2+" }, desc: "When an ally within 20 feet misses an attack, their next attack against that same target gains +3 to hit." },
+          { id: "env-men-5", name: "Foresight", tier: 3, cost: "Passive", prereq: { talent: "env-men-3", skill: "Discipline", rank: 3, text: "Practical Demonstration, Discipline 3+" }, desc: "You gain an additional Reaction each round, usable for Mentor talents or the Aid reaction." }
+        ]
+      }
+    ]
+  },
+  hunter: {
+    id: "hunter",
+    name: "Hunter",
+    icon: "🏹",
+    keyTalent: {
+      id: "hunter-key",
+      name: "Seek Quarry",
+      type: "Key Talent",
+      cost: "Minor Action",
+      desc: "Choose a target you can see or track as your quarry. Gain Advantage on tests to find, track, attack, and study them."
+    },
+    specialties: [
+      {
+        id: "archer",
+        name: "Archer",
+        desc: "Deadly ranged combatants commanding distance, rapid projectile volleys, and sniping precision.",
+        talents: [
+          { id: "hnt-arc-1", name: "Tagging Shot", tier: 1, cost: "1 Action", prereq: { skill: "Perception", rank: 1, text: "Seek Quarry, Perception 1+" }, desc: "Make a ranged weapon strike; on hit or graze, the target immediately becomes your quarry without costing an extra action." },
+          { id: "hnt-arc-2", name: "Steady Aim", tier: 1, cost: "Minor Action", prereq: { skill: "Agility", rank: 1, text: "Agility 1+" }, desc: "Steady your breathing and posture to gain +2 to your next ranged weapon attack roll this turn." },
+          { id: "hnt-arc-3", name: "Sharp Eye", tier: 2, cost: "Passive", prereq: { talent: "hnt-arc-1", skill: "Perception", rank: 2, text: "Tagging Shot, Perception 2+" }, desc: "Observing your quarry reveals their Physical Defense, current health status, and weapon vulnerabilities." },
+          { id: "hnt-arc-4", name: "Backstep", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "hnt-arc-2", skill: "Agility", rank: 2, text: "Steady Aim, Agility 2+" }, desc: "When an enemy moves adjacent to you, leap back 10 feet without provoking reactive strikes and reload your ranged weapon." },
+          { id: "hnt-arc-5", name: "Unrelenting Salvo", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "hnt-arc-3", skill: "Agility", rank: 3, text: "Sharp Eye, Agility 3+" }, desc: "Fire three rapid-fire arrows or bolts at your quarry in a single action, rolling three separate attacks." }
+        ]
+      },
+      {
+        id: "assassin",
+        name: "Assassin",
+        desc: "Lethal executioners skilled at striking from the shadows and eliminating priority marks.",
+        talents: [
+          { id: "hnt-asn-1", name: "Killing Edge", tier: 1, cost: "Passive", prereq: { skill: "Perception", rank: 1, text: "Perception 1+" }, desc: "Gain expertise with knives, daggers, and slings; your critical hit threshold with light weapons expands by 1." },
+          { id: "hnt-asn-2", name: "Shadowing", tier: 1, cost: "Passive", prereq: { skill: "Stealth", rank: 1, text: "Stealth 1+" }, desc: "Trail your quarry through wilderness or city streets unseen, matching their movement without triggering perception contests." },
+          { id: "hnt-asn-3", name: "Startling Blow", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "hnt-asn-1", skill: "Stealth", rank: 2, text: "Killing Edge, Stealth 2+" }, desc: "Strike from stealth; on hit, target must beat your Agility with Physical Defense or lose their upcoming action." },
+          { id: "hnt-asn-4", name: "Cold Eyes", tier: 2, cost: "Passive", prereq: { talent: "hnt-asn-2", skill: "Perception", rank: 2, text: "Shadowing, Perception 2+" }, desc: "Your attacks against your chosen quarry completely ignore up to 2 points of Armor Deflect." },
+          { id: "hnt-asn-5", name: "Fatal Thrust", tier: 3, cost: "1 Action (2 Focus)", prereq: { skill: "Perception", rank: 3, text: "Startling Blow or Cold Eyes, Perception 3+" }, desc: "Deliver an execution blow to your quarry. If target has 20 health or less, reduce them to 0 health; otherwise deal +3d6 damage." }
+        ]
+      },
+      {
+        id: "tracker",
+        name: "Tracker",
+        desc: "Wilderness survivors, scouts, and trappers adept in navigating hostile terrain and beast lore.",
+        talents: [
+          { id: "hnt-trk-1", name: "Sure-Footed", tier: 1, cost: "Passive", prereq: { skill: "Survival", rank: 1, text: "Survival 1+" }, desc: "Ignore movement penalties from rough, rocky, or wild terrain, and gain +5 feet movement speed in the wild." },
+          { id: "hnt-trk-2", name: "Snare Maker", tier: 1, cost: "1 Minute", prereq: { skill: "Survival", rank: 1, text: "Survival 1+" }, desc: "Craft and conceal mechanical or rope traps in natural environments using foraged resources." },
+          { id: "hnt-trk-3", name: "Entangling Trap", tier: 2, cost: "Passive", prereq: { talent: "hnt-trk-2", skill: "Survival", rank: 2, text: "Snare Maker, Survival 2+" }, desc: "Enemies triggering your snares take 1d8 damage and become Restrained (escape DC = 10 + Survival rank)." },
+          { id: "hnt-trk-4", name: "Hunter’s Edge", tier: 2, cost: "Passive", prereq: { talent: "hnt-trk-1", skill: "Perception", rank: 2, text: "Sure-Footed, Perception 2+" }, desc: "Track your quarry across solid stone, water, or after a Highstorm has washed away physical tracks." },
+          { id: "hnt-trk-5", name: "Apex Predator", tier: 3, cost: "Passive (2 Focus)", prereq: { text: "Entangling Trap or Hunter’s Edge" }, desc: "When fighting your quarry in natural terrain, you have Advantage on all attacks, and your quarry has Disadvantage attacking you." }
+        ]
+      }
+    ]
+  },
+  leader: {
+    id: "leader",
+    name: "Leader",
+    icon: "⚔️",
+    keyTalent: {
+      id: "leader-key",
+      name: "Decisive Command",
+      type: "Key Talent",
+      cost: "1 Focus",
+      desc: "Spend 1 Focus to grant an ally within 20 feet a Command Die (d4) to add to their next test or damage roll."
+    },
+    specialties: [
+      {
+        id: "champion",
+        name: "Champion",
+        desc: "Frontline commanders leading by heroic example, inspiring grit, and protecting companions.",
+        talents: [
+          { id: "ldr-cmp-1", name: "Combat Coordination", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Decisive Command" }, desc: "When you take the Strike action, grant an ally within 20 feet a Command Die as part of the same action." },
+          { id: "ldr-cmp-2", name: "Resolute Stand", tier: 1, cost: "Passive", prereq: { skill: "Athletics", rank: 1, text: "Athletics 1+" }, desc: "When standing adjacent to at least one ally, both you and that ally gain +1 Physical Defense." },
+          { id: "ldr-cmp-3", name: "Valiant Intervention", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "ldr-cmp-2", attr: "Strength", attrVal: 2, text: "Resolute Stand, Strength 2+" }, desc: "When an adjacent ally is attacked, swap spaces with them, take the hit yourself, and apply your armor Deflect." },
+          { id: "ldr-cmp-4", name: "Greater Command Die", tier: 2, cost: "Passive", prereq: { talent: "ldr-cmp-1", skill: "Leadership", rank: 2, text: "Combat Coordination, Leadership 2+" }, desc: "Your Command Die increases in magnitude from a d4 to a d6." },
+          { id: "ldr-cmp-5", name: "Heroic Rally", tier: 3, cost: "1 Action (2 Focus)", prereq: { text: "Valiant Intervention or Greater Command Die" }, desc: "Shout a battle cry restoring health equal to your Strength + Leadership to all allies within 30 ft and clearing the Shaken condition." }
+        ]
+      },
+      {
+        id: "officer",
+        name: "Officer",
+        desc: "Disciplined tacticians orchestrating squad maneuvers, unit formations, and efficient operations.",
+        talents: [
+          { id: "ldr-off-1", name: "Through the Fray", tier: 1, cost: "Minor Action", prereq: { text: "Decisive Command" }, desc: "Direct an ally within 30 feet to immediately move up to half their speed without provoking reactive strikes." },
+          { id: "ldr-off-2", name: "Form Ranks", tier: 1, cost: "Aura", prereq: { skill: "Leadership", rank: 1, text: "Leadership 1+" }, desc: "Allies within 15 feet gain +1 to all Defenses as long as they are adjacent to another ally." },
+          { id: "ldr-off-3", name: "Synchronized Assault", tier: 2, cost: "1 Action (2 Focus)", prereq: { talent: "ldr-off-1", skill: "Leadership", rank: 2, text: "Through the Fray, Leadership 2+" }, desc: "Direct two allies within range to make an immediate coordinated Strike action against the same enemy." },
+          { id: "ldr-off-4", name: "Relentless March", tier: 2, cost: "Passive", prereq: { talent: "ldr-off-2", skill: "Discipline", rank: 2, text: "Form Ranks, Discipline 2+" }, desc: "Group overland travel speed increases by 25%, and allies gain Advantage on tests to resist physical exhaustion or forced marches." },
+          { id: "ldr-off-5", name: "Tactical Mastermind", tier: 3, cost: "1 Action (3 Focus)", prereq: { talent: "ldr-off-3", text: "Synchronized Assault" }, desc: "Coordinate battlefield positioning to grant all allies within 30 feet an immediate additional Action on their upcoming turn." }
+        ]
+      },
+      {
+        id: "politico",
+        name: "Politico",
+        desc: "Cunning manipulators turning social status, rhetoric, and political leverage into victory.",
+        talents: [
+          { id: "ldr-pol-1", name: "Well Dressed Politico", tier: 1, cost: "Passive", prereq: { skill: "Persuasion", rank: 1, text: "Persuasion 1+" }, desc: "Gain Advantage on all social and cognitive tests against nobility, military brass, and highprinces." },
+          { id: "ldr-pol-2", name: "Shrewd Command", tier: 1, cost: "1 Focus", prereq: { text: "Decisive Command" }, desc: "You can spend 1 Focus to give an ally a Command Die on social, cognitive, or intrigue tests." },
+          { id: "ldr-pol-3", name: "Undermine Rival", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "ldr-pol-2", skill: "Deception", rank: 2, text: "Shrewd Command, Deception 2+" }, desc: "Publicly expose an inconsistency or moral failing in a rival, giving them Disadvantage on social tests for 1 hour." },
+          { id: "ldr-pol-4", name: "Web of Influence", tier: 2, cost: "Passive", prereq: { talent: "ldr-pol-1", skill: "Leadership", rank: 2, text: "Well Dressed Politico, Leadership 2+" }, desc: "Establish a network of informants; once per session, ask the GM one specific question about local faction secrets or upcoming moves." },
+          { id: "ldr-pol-5", name: "Grand Puppeteer", tier: 3, cost: "1 Action (2 Focus)", prereq: { text: "Undermine Rival or Web of Influence" }, desc: "In any political debate, trial, or council, sway public sentiment so overwhelmingly that uncommitted observers side with your cause." }
+        ]
+      }
+    ]
+  },
+  scholar: {
+    id: "scholar",
+    name: "Scholar",
+    icon: "📖",
+    keyTalent: {
+      id: "scholar-key",
+      name: "Erudition",
+      type: "Key Talent",
+      cost: "Passive",
+      desc: "Temporarily gain a cultural or utility expertise and a rank in two non-surge cognitive skills. Reassignable after a long rest with library access."
+    },
+    specialties: [
+      {
+        id: "artifabrian",
+        name: "Artifabrian",
+        desc: "Builders and engineers mastering fabrials, trapped spren mechanics, and technological devices.",
+        talents: [
+          { id: "sch-art-1", name: "Efficient Engineer", tier: 1, cost: "Passive", prereq: { skill: "Crafting", rank: 1, text: "Crafting 1+" }, desc: "Halve the monetary and material costs of crafting or repairing gear, and expand your Opportunity range by 1 on Crafting tests." },
+          { id: "sch-art-2", name: "Fabrial Tuning", tier: 1, cost: "1 Action", prereq: { skill: "Crafting", rank: 1, text: "Crafting 1+" }, desc: "Tune a gemstone housing or fabrial mechanism, doubling its operational duration or halving Stormlight consumption." },
+          { id: "sch-art-3", name: "Prized Gemheart", tier: 2, cost: "Passive", prereq: { talent: "sch-art-2", skill: "Crafting", rank: 2, text: "Fabrial Tuning, Crafting 2+" }, desc: "You possess a perfectly cut gemstone housing capable of sustaining high-drain fabrials without cracking." },
+          { id: "sch-art-4", name: "Inventive Design", tier: 2, cost: "Passive", prereq: { talent: "sch-art-1", attr: "Intellect", attrVal: 2, text: "Efficient Engineer, Intellect 2+" }, desc: "You can design custom mechanical and fabrial devices (e.g. heating fabrials, warning spans, pulley ascenders, heat-casing)." },
+          { id: "sch-art-5", name: "Master Artifabrian", tier: 3, cost: "2 Focus", prereq: { text: "Inventive Design or Prized Gemheart" }, desc: "Create or calibrate legendary fabrials (such as Conjoined Fabrials or localized gravity dampeners) with permanent reliability." }
+        ]
+      },
+      {
+        id: "strategist",
+        name: "Strategist",
+        desc: "Analytical masters predicting enemy maneuvers, timing battlefield gambits, and orchestrating triumphs.",
+        talents: [
+          { id: "sch-str-1", name: "Strategize", tier: 1, cost: "Free Action", prereq: { skill: "Deduction", rank: 1, text: "Deduction 1+" }, desc: "After you gain an Advantage using an Erudition skill, you can pass that Advantage to an ally within 30 feet." },
+          { id: "sch-str-2", name: "Tactical Foresight", tier: 1, cost: "Passive", prereq: { skill: "Deduction", rank: 1, text: "Deduction 1+" }, desc: "Roll Deduction vs highest enemy Cognitive Defense at combat start; on success, your party cannot be surprised or ambushed." },
+          { id: "sch-str-3", name: "Know Your Moment", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "sch-str-1", attr: "Intellect", attrVal: 2, text: "Strategize, Intellect 2+" }, desc: "When an enemy enters an ally’s reach, grant that ally an immediate Reactive Strike with Advantage." },
+          { id: "sch-str-4", name: "Composed", tier: 2, cost: "Passive", prereq: { talent: "sch-str-2", attr: "Willpower", attrVal: 2, text: "Tactical Foresight, Willpower 2+" }, desc: "Your maximum Focus pool increases by +2, and you recover 1 Focus whenever an enemy action critically fails." },
+          { id: "sch-str-5", name: "Turning Point", tier: 3, cost: "Reaction (2 Focus)", prereq: { talent: "sch-str-3", attr: "Intellect", attrVal: 3, text: "Know Your Moment, Intellect 3+" }, desc: "Interrupt an enemy action to force them to reroll and take the worse result, then grant an ally an immediate free action." }
+        ]
+      },
+      {
+        id: "surgeon",
+        name: "Surgeon",
+        desc: "Medical savants trained in trauma care, battlefield surgery, anatomy, and miraculous stabilization.",
+        talents: [
+          { id: "sch-srg-1", name: "Field Medic", tier: 1, cost: "1 Action", prereq: { skill: "Medicine", rank: 1, text: "Medicine 1+" }, desc: "Make a Medicine test to bind wounds, healing an ally by 1d8 + your Medicine rank." },
+          { id: "sch-srg-2", name: "Triage", tier: 1, cost: "Minor Action", prereq: { skill: "Medicine", rank: 1, text: "Medicine 1+" }, desc: "Diagnose an ally or creature to immediately learn their exact health pool, status conditions, poisons, and diseases." },
+          { id: "sch-srg-3", name: "Ongoing Care", tier: 2, cost: "Passive", prereq: { talent: "sch-srg-1", skill: "Medicine", rank: 2, text: "Field Medic, Medicine 2+" }, desc: "When you treat patients during a short rest, they recover additional health equal to twice your Medicine rank." },
+          { id: "sch-srg-4", name: "Surgical Precision", tier: 2, cost: "Passive", prereq: { talent: "sch-srg-2", attr: "Intellect", attrVal: 2, text: "Triage, Intellect 2+" }, desc: "Attacks with light weapons (scalpels, daggers) against anatomically known enemies deal +1d6 critical damage." },
+          { id: "sch-srg-5", name: "Miraculous Recovery", tier: 3, cost: "1 Action (3 Focus)", prereq: { talent: "sch-srg-3", skill: "Medicine", rank: 3, text: "Ongoing Care, Medicine 3+" }, desc: "Resuscitate a character who fell to 0 health within the last minute, bringing them back with 10 + your Intellect health." }
+        ]
+      }
+    ]
+  },
+  warrior: {
+    id: "warrior",
+    name: "Warrior",
+    icon: "🛡️",
+    keyTalent: {
+      id: "warrior-key",
+      name: "Vigilant Stance",
+      type: "Key Talent",
+      cost: "Stance",
+      desc: "You can enter a defensive fighting stance. Reduces the Focus cost of Dodge and Reactive Strike by 1. Stance changes are a free action."
+    },
+    specialties: [
+      {
+        id: "duelist",
+        name: "Duelist",
+        desc: "Masters of one-on-one martial combat, technical weapon stances, finessed footwork, and counter-attacks.",
+        talents: [
+          { id: "war-due-1", name: "Flamestance", tier: 1, cost: "Stance", prereq: { text: "Vigilant Stance" }, desc: "Stance: Your melee weapon strikes gain +2 damage and expand your critical hit threshold by 1 against single targets." },
+          { id: "war-due-2", name: "Vinestance", tier: 1, cost: "Stance", prereq: { text: "Vigilant Stance" }, desc: "Stance: Gain +2 Physical Defense against melee attacks, and you can parry incoming weapon strikes as a reaction." },
+          { id: "war-due-3", name: "Feinting Strike", tier: 2, cost: "1 Action (1 Focus)", prereq: { attr: "Speed", attrVal: 2, text: "Flamestance or Vinestance, Speed 2+" }, desc: "Feint with your weapon; target must contest your Agility with Cognitive Defense or be caught completely flat-footed." },
+          { id: "war-due-4", name: "Signature Weapon", tier: 2, cost: "Passive", prereq: { text: "Light or Heavy Weaponry 2+" }, desc: "Bond with a specific signature weapon; gain +1 to hit, +1 damage, and you can never be disarmed of it." },
+          { id: "war-due-5", name: "Duelist’s Flow", tier: 3, cost: "2 Focus", prereq: { text: "Feinting Strike or Signature Weapon" }, desc: "Shift stances seamlessly after each attack. Hitting with a melee strike grants an immediate follow-up attack." }
+        ]
+      },
+      {
+        id: "soldier",
+        name: "Soldier",
+        desc: "Disciplined frontline anchors, heavy infantry, shieldbearers, and enduring battle survivors.",
+        talents: [
+          { id: "war-sld-1", name: "Shield Wall", tier: 1, cost: "Passive", prereq: { text: "Heavy Weaponry 1+ or Athletics 1+" }, desc: "Wielding a shield grants +2 Deflect instead of +1, and provides partial cover to adjacent allies." },
+          { id: "war-sld-2", name: "Heavy Blow", tier: 1, cost: "1 Action (1 Focus)", prereq: { attr: "Strength", attrVal: 1, text: "Strength 1+" }, desc: "Swing with brute force using a two-handed weapon; on hit, knock the target back 10 feet or knock them prone." },
+          { id: "war-sld-3", name: "Brace", tier: 2, cost: "Stance", prereq: { talent: "war-sld-1", attr: "Strength", attrVal: 2, text: "Shield Wall, Strength 2+" }, desc: "Stance: You cannot be knocked prone or moved against your will, and you gain +2 Armor Deflect against physical damage." },
+          { id: "war-sld-4", name: "Intercept", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "war-sld-2", skill: "Athletics", rank: 2, text: "Heavy Blow, Athletics 2+" }, desc: "Charge into the path of an enemy attacking an ally within 10 feet and make an immediate reactive strike." },
+          { id: "war-sld-5", name: "Unyielding Juggernaut", tier: 3, cost: "1 Action (2 Focus)", prereq: { text: "Brace or Intercept" }, desc: "For 1 minute, ignore physical pain, increase Deflect by 2, and fight on until health reaches negative your Strength." }
+        ]
+      },
+      {
+        id: "shardbearer",
+        name: "Shardbearer",
+        desc: "Wielders of ancient Shardblades and Plate, capable of cleaving ranks and commanding mythical power.",
+        talents: [
+          { id: "war-shd-1", name: "Blade Bond", tier: 1, cost: "1 Action", prereq: { skill: "Heavy Weaponry", rank: 2, text: "Heavy Weaponry 2+" }, desc: "You can summon and dismiss a bonded weapon (or Shardblade) in 10 heartbeats (or 1 action if living spren)." },
+          { id: "war-shd-2", name: "Plate Agility", tier: 1, cost: "Passive", prereq: { skill: "Athletics", rank: 2, text: "Athletics 2+" }, desc: "Move in heavy armor or Shardplate without movement speed penalties, and triple your maximum jumping distance." },
+          { id: "war-shd-3", name: "Sweeping Cleave", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "war-shd-1", attr: "Strength", attrVal: 2, text: "Blade Bond, Strength 2+" }, desc: "Swing a massive blade in a wide arc; make a single attack roll and apply damage to all enemies within reach." },
+          { id: "war-shd-4", name: "Imbued Armor", tier: 2, cost: "Passive", prereq: { talent: "war-shd-2", attr: "Willpower", attrVal: 2, text: "Plate Agility, Willpower 2+" }, desc: "When wearing infused Plate, your Deflect increases by +2, and you resist extreme fall or concussive impact damage." },
+          { id: "war-shd-5", name: "God of the Battlefield", tier: 3, cost: "1 Action (3 Focus)", prereq: { text: "Sweeping Cleave or Imbued Armor" }, desc: "Strike terror into armies; deal double damage against structures and inanimate objects, and foes must contest Willpower or flee." }
+        ]
+      }
+    ]
+  }
+};
+
+const SURGE_TREES = [
+  {
+    id: "adhesion",
+    name: "Adhesion",
+    orders: ["Windrunner", "Bondsmith"],
+    desc: "The Surge of Pressure and Vacuum — binds objects, creates atmospheric vacuums, and connects spirits.",
+    talents: [
+      { id: "srg-adh-1", name: "Full Lashing", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Adhesion" }, desc: "Infuse Stormlight to bind objects or a target’s limbs to an adjacent surface with immense binding force." },
+      { id: "srg-adh-2", name: "Reverse Lashing", tier: 2, cost: "Reaction (1 Focus)", prereq: { talent: "srg-adh-1", text: "Full Lashing" }, desc: "Create a gravitational and atmospheric pull toward an infused shield or object, drawing all ranged projectiles to it." },
+      { id: "srg-adh-3", name: "Spiritual Adhesion", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "srg-adh-2", text: "Reverse Lashing" }, desc: "Connect spiritwebs to translate unfamiliar spoken languages or strengthen the spiritual resolve of allies." }
+    ]
+  },
+  {
+    id: "gravitation",
+    name: "Gravitation",
+    orders: ["Windrunner", "Skybreaker"],
+    desc: "The Surge of Gravity — alters the direction and strength of gravitational pull.",
+    talents: [
+      { id: "srg-grv-1", name: "Basic Lashing", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Gravitation" }, desc: "Lash your own gravity toward any direction (walls, ceiling, sky) to fall upward or walk on surfaces at full speed." },
+      { id: "srg-grv-2", name: "Multiple Lashings", tier: 2, cost: "1 Action (2 Focus)", prereq: { talent: "srg-grv-1", text: "Basic Lashing" }, desc: "Apply double or triple lashings to skyward flight, doubling movement speed or hurling weighted objects with devastating kinetic velocity." },
+      { id: "srg-grv-3", name: "Ranged Gravitation", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "srg-grv-2", text: "Multiple Lashings" }, desc: "Lash an enemy or massive boulder skyward or toward a distant target from up to 60 feet away." }
+    ]
+  },
+  {
+    id: "division",
+    name: "Division",
+    orders: ["Skybreaker", "Dustbringer"],
+    desc: "The Surge of Destruction and Decay — causes molecular breakdown, burns, and decay.",
+    talents: [
+      { id: "srg-div-1", name: "Decay & Spoil", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Division" }, desc: "Touch organic or inorganic material to rapidly decay it, rotting wood or deteriorating stone into dust." },
+      { id: "srg-div-2", name: "Frictional Burn", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "srg-div-1", text: "Decay & Spoil" }, desc: "Spark intense molecular separation, setting weapons or terrain ablaze with energetic flames." },
+      { id: "srg-div-3", name: "Molecular Breakdown", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "srg-div-2", text: "Frictional Burn" }, desc: "Disintegrate enemy armor, shields, or fortifications on contact, reducing their Deflect by 4." }
+    ]
+  },
+  {
+    id: "abrasion",
+    name: "Abrasion",
+    orders: ["Dustbringer", "Edgedancer"],
+    desc: "The Surge of Friction — eliminates or amplifies friction over surfaces and bodies.",
+    talents: [
+      { id: "srg-abr-1", name: "Frictionless Glide", tier: 1, cost: "Minor Action (1 Focus)", prereq: { text: "Bonded Order with Abrasion" }, desc: "Remove friction from your soles or body, gliding effortlessly over mud, rock, or water with +15 ft speed." },
+      { id: "srg-abr-2", name: "Slick Surface", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "srg-abr-1", text: "Frictionless Glide" }, desc: "Strip friction from a 15-foot patch of floor or an enemy weapon, forcing opponents to slip and drop gear." },
+      { id: "srg-abr-3", name: "Absolute Inertia", tier: 3, cost: "Reaction (2 Focus)", prereq: { talent: "srg-abr-2", text: "Slick Surface" }, desc: "Slip past all physical grappling and restraint, and ricochet off surfaces at high speed without taking impact damage." }
+    ]
+  },
+  {
+    id: "progression",
+    name: "Progression",
+    orders: ["Edgedancer", "Truthwatcher"],
+    desc: "The Surge of Growth and Healing — accelerates organic growth, heals trauma, and regenerates cells.",
+    talents: [
+      { id: "srg-prg-1", name: "Regrowth", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Progression" }, desc: "Channel Stormlight into an injured creature, restoring 2d8 + Willpower health and knitting flesh." },
+      { id: "srg-prg-2", name: "Flora Surge", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "srg-prg-1", text: "Regrowth" }, desc: "Accelerate the growth of nearby seeds or vegetation to create grasping briars, ladders, or living barricades." },
+      { id: "srg-prg-3", name: "Cellular Restoration", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "srg-prg-2", text: "Flora Surge" }, desc: "Instantly mend broken bones, reattach severed limbs, and cure virulent biological poisons or diseases." }
+    ]
+  },
+  {
+    id: "illumination",
+    name: "Illumination",
+    orders: ["Truthwatcher", "Lightweaver"],
+    desc: "The Surge of Light, Sound, and Waveforms — creates sensory illusions and auditory weaves.",
+    talents: [
+      { id: "srg-ill-1", name: "Lightwoven Disguise", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Illumination" }, desc: "Weave light around yourself to adopt the appearance and voice of another person or creature." },
+      { id: "srg-ill-2", name: "Phantom Projection", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "srg-ill-1", text: "Lightwoven Disguise" }, desc: "Project autonomous illusions of warriors or decoy creatures with sound, drawing enemy fire." },
+      { id: "srg-ill-3", name: "Solidified Light", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "srg-ill-2", text: "Phantom Projection" }, desc: "Give lightwoven constructs tactile consistency, enabling them to block passages or support weight." }
+    ]
+  },
+  {
+    id: "transformation",
+    name: "Transformation",
+    orders: ["Lightweaver", "Elsecaller"],
+    desc: "The Surge of Soulcasting — alters material essence from one state of matter into another.",
+    talents: [
+      { id: "srg-trn-1", name: "Soulcast Stone to Air", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Transformation" }, desc: "Transmute stone, earth, or rock into breathable air, tunneling through solid walls." },
+      { id: "srg-trn-2", name: "Soulcast Essence Manifest", tier: 2, cost: "1 Action (2 Focus)", prereq: { talent: "srg-trn-1", text: "Soulcast Stone to Air" }, desc: "Transmute mundane objects into smoke, oil, blood, or crystal." },
+      { id: "srg-trn-3", name: "Living Transmutation", tier: 3, cost: "1 Action (3 Focus)", prereq: { talent: "srg-trn-2", text: "Soulcast Essence Manifest" }, desc: "Forcefully soulcast a non-invested enemy’s limb or armor into brittle stone or bronze." }
+    ]
+  },
+  {
+    id: "transportation",
+    name: "Transportation",
+    orders: ["Elsecaller", "Willshaper"],
+    desc: "The Surge of Motion and Realmic Transition — allows slipping into and out of Shadesmar.",
+    talents: [
+      { id: "srg-tsp-1", name: "Step into Shadesmar", tier: 1, cost: "1 Action (2 Focus)", prereq: { text: "Bonded Order with Transportation" }, desc: "Shift your perception and physical body across the veil into the Cognitive Realm (Shadesmar)." },
+      { id: "srg-tsp-2", name: "Spatial Slip", tier: 2, cost: "Minor Action (1 Focus)", prereq: { talent: "srg-tsp-1", text: "Step into Shadesmar" }, desc: "Dip into the Cognitive Realm to teleport up to 30 feet to an unoccupied space you can see." },
+      { id: "srg-tsp-3", name: "Planar Shift", tier: 3, cost: "1 Action (3 Focus)", prereq: { talent: "srg-tsp-2", text: "Spatial Slip" }, desc: "Transport yourself and up to 4 willing companions into or out of the Cognitive Realm." }
+    ]
+  },
+  {
+    id: "cohesion",
+    name: "Cohesion",
+    orders: ["Willshaper", "Stoneward"],
+    desc: "The Surge of Strong Axial Force — alters the solid cohesion of mineral objects and stone.",
+    talents: [
+      { id: "srg-coh-1", name: "Soften Mineral", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Cohesion" }, desc: "Turn stone, granite, or brick soft and pliable as warm clay with your touch." },
+      { id: "srg-coh-2", name: "Earthen Passage", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "srg-coh-1", text: "Soften Mineral" }, desc: "Part sheer rock faces to create doorways, steps, or handholds that set solid once passed." },
+      { id: "srg-coh-3", name: "Stone Wave", tier: 3, cost: "1 Action (2 Focus)", prereq: { talent: "srg-coh-2", text: "Earthen Passage" }, desc: "Send a rolling ripple through stone flooring, knocking prone all foes within a 20-foot cone." }
+    ]
+  },
+  {
+    id: "tension",
+    name: "Tension",
+    orders: ["Stoneward", "Bondsmith"],
+    desc: "The Surge of Soft Axial Force — controls the flexibility, rigidity, and tensile strength of matter.",
+    talents: [
+      { id: "srg-ten-1", name: "Rigid Infusion", tier: 1, cost: "1 Action (1 Focus)", prereq: { text: "Bonded Order with Tension" }, desc: "Turn flexible ropes, cloth, or scarves as stiff and durable as forged steel." },
+      { id: "srg-ten-2", name: "Fortify Structure", tier: 2, cost: "1 Action (1 Focus)", prereq: { talent: "srg-ten-1", text: "Rigid Infusion" }, desc: "Imbue a shield, door, or barricade with immense tension, increasing its resilience against breaking by +10." },
+      { id: "srg-ten-3", name: "Kinetic Recoil", tier: 3, cost: "Reaction (2 Focus)", prereq: { talent: "srg-ten-2", text: "Fortify Structure" }, desc: "Absorb the kinetic impact of an incoming blow and recoil it outward, throwing the attacker back 15 feet." }
+    ]
+  }
+];
+
+const STEP_LABELS = ['Concept','Ancestry','Cultures','Path','Attributes','Skills','Talents','Equipment','Radiant','Summary'];
+const TOTAL_STEPS = STEP_LABELS.length;
+const ATTR_POINTS = 12;
+const SKILL_POINTS = 10;
+const MAX_ATTR = 3;
+const MAX_SKILL = 2;
+
+/* ═══════════════════════════════════════════════════════════════
+   STATE
+   ═══════════════════════════════════════════════════════════════ */
+let state = {
+  currentStep: 1,
+  level: 1,
+  charName: '', charConcept: '', charPurpose: '', charObstacle: '',
+  ancestry: null, singerForm: null,
+  cultures: [], cultureExpertise: {},
+  path: null,
+  attributes: { Strength:0, Speed:0, Intellect:0, Willpower:0, Awareness:0, Presence:0 },
+  skills: {},
+  talents: [],
+  activeTalentTab: 'warrior',
+  equipment: null,
+  isRadiant: false, radiantOrder: null, secondIdeal: ''
+};
+
+// Initialize skill ranks to 0
+SKILLS.forEach(s => state.skills[s.name] = 0);
+
+/* ═══════════════════════════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════════════════════════ */
+function init() {
+  loadState();
+  buildProgressBar();
+  buildAncestryCards();
+  buildCultureCards();
+  buildPathCards();
+  buildAttributeControls();
+  buildSkillControls();
+  buildTalentTreeSection();
+  buildEquipmentCards();
+  buildRadiantSection();
+  setupNavigation();
+  setupTalentModal();
+  goToStep(state.currentStep);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   LOCAL STORAGE
+   ═══════════════════════════════════════════════════════════════ */
+function saveState() {
+  if (el('charName')) state.charName = el('charName').value;
+  if (el('charConcept')) state.charConcept = el('charConcept').value;
+  if (el('charPurpose')) state.charPurpose = el('charPurpose').value;
+  if (el('charObstacle')) state.charObstacle = el('charObstacle').value;
+  if (el('secondIdeal')) state.secondIdeal = el('secondIdeal').value;
+  const lvlEl = el('charLevelSelect');
+  if (lvlEl && lvlEl.value) state.level = parseInt(lvlEl.value);
+  try { localStorage.setItem('cosmere_char', JSON.stringify(state)); } catch(e) {}
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem('cosmere_char');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      Object.assign(state, parsed);
+      if (!Array.isArray(state.talents)) state.talents = [];
+      if (!state.level) state.level = 1;
+      // Ensure skills object has all keys
+      SKILLS.forEach(s => { if (!(s.name in state.skills)) state.skills[s.name] = 0; });
+      // Ensure cultureExpertise is populated for any selected cultures
+      if (!state.cultureExpertise) state.cultureExpertise = {};
+      if (Array.isArray(state.cultures)) {
+        state.cultures.forEach(cid => {
+          if (!state.cultureExpertise[cid]) {
+            const cObj = CULTURES.find(c => c.id === cid);
+            if (cObj && cObj.expertise && cObj.expertise.length > 0) {
+              state.cultureExpertise[cid] = cObj.expertise[0];
+            }
+          }
+        });
+      }
+    }
+  } catch(e) {}
+}
+
+function restoreInputs() {
+  el('charName').value = state.charName;
+  el('charConcept').value = state.charConcept;
+  el('charPurpose').value = state.charPurpose;
+  el('charObstacle').value = state.charObstacle;
+  if (el('secondIdeal')) el('secondIdeal').value = state.secondIdeal;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   HELPERS
+   ═══════════════════════════════════════════════════════════════ */
+function el(id) { return document.getElementById(id); }
+function qs(sel) { return document.querySelector(sel); }
+function qsa(sel) { return document.querySelectorAll(sel); }
+
+/* ═══════════════════════════════════════════════════════════════
+   PROGRESS BAR
+   ═══════════════════════════════════════════════════════════════ */
+function buildProgressBar() {
+  const container = el('progressSteps');
+  STEP_LABELS.forEach((label, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'progress-step';
+    btn.type = 'button';
+    btn.dataset.step = i + 1;
+    btn.innerHTML = `<span class="step-circle">${i + 1}</span><span class="step-label">${label}</span>`;
+    btn.setAttribute('aria-label', `Step ${i+1}: ${label}`);
+    btn.addEventListener('click', () => {
+      if (i + 1 <= state.currentStep) goToStep(i + 1);
+    });
+    container.appendChild(btn);
+  });
+  updateProgress();
+}
+
+function updateProgress() {
+  const steps = qsa('.progress-step');
+  steps.forEach((s, i) => {
+    s.classList.toggle('active', i + 1 === state.currentStep);
+    s.classList.toggle('completed', i + 1 < state.currentStep);
+  });
+  const fill = el('progressFill');
+  const pct = ((state.currentStep - 1) / (TOTAL_STEPS - 1)) * 100;
+  const stepsEl = el('progressSteps');
+  const totalWidth = stepsEl.offsetWidth - 48; // account for left offset
+  fill.style.width = (totalWidth * pct / 100) + 'px';
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP NAVIGATION
+   ═══════════════════════════════════════════════════════════════ */
+function goToStep(step) {
+  // Hide all panels
+  qsa('.step-panel').forEach(p => { p.classList.remove('active', 'visible'); });
+
+  state.currentStep = step;
+  updateProgress();
+
+  const panel = el(`step-${step}`);
+  panel.classList.add('active');
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => { panel.classList.add('visible'); });
+  });
+
+  // Update nav buttons
+  const btnBack = el('btnBack');
+  const btnNext = el('btnNext');
+  btnBack.style.visibility = step === 1 ? 'hidden' : 'visible';
+
+  if (step === TOTAL_STEPS) {
+    btnNext.style.display = 'none';
+    btnBack.textContent = '← Edit Character';
+    buildSummary();
+  } else {
+    btnNext.style.display = '';
+    btnBack.textContent = '← Back';
+    btnNext.textContent = step === TOTAL_STEPS - 1 ? 'Finish ✦' : 'Next →';
+  }
+
+  // Restore inputs on step 1
+  if (step === 1) restoreInputs();
+  // Update skills display on step 6
+  if (step === 6) updateSkillDisplay();
+  // Update talents display on step 7
+  if (step === 7) updateTalentTreeDisplay();
+
+  // Hide validation
+  const valMsg = el(`val-${step}`);
+  if (valMsg) { valMsg.classList.remove('show'); valMsg.textContent = ''; }
+
+  saveState();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function setupNavigation() {
+  el('btnBack').addEventListener('click', () => {
+    if (state.currentStep > 1) goToStep(state.currentStep - 1);
+  });
+  el('btnNext').addEventListener('click', () => {
+    if (validateStep(state.currentStep)) {
+      goToStep(state.currentStep + 1);
+    }
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   VALIDATION
+   ═══════════════════════════════════════════════════════════════ */
+function validateStep(step) {
+  const valMsg = el(`val-${step}`);
+  const showError = (msg) => {
+    if (valMsg) { valMsg.textContent = msg; valMsg.classList.add('show'); }
+    return false;
+  };
+  if (valMsg) { valMsg.classList.remove('show'); }
+
+  switch(step) {
+    case 1:
+      saveState();
+      if (!state.charName.trim()) return showError('Please enter a character name.');
+      break;
+    case 2:
+      if (!state.ancestry) return showError('Please choose an ancestry.');
+      if (state.ancestry === 'singer' && !state.singerForm) return showError('Please choose a Singer form.');
+      break;
+    case 3:
+      if (state.cultures.length !== 2) return showError('Please select exactly two cultures.');
+      // Ensure expertise chosen for each culture, defaulting to first if not set
+      for (const cid of state.cultures) {
+        if (!state.cultureExpertise[cid]) {
+          const cObj = CULTURES.find(c => c.id === cid);
+          if (cObj && cObj.expertise && cObj.expertise.length > 0) {
+            state.cultureExpertise[cid] = cObj.expertise[0];
+          } else {
+            return showError(`Please choose an expertise for ${CULTURES.find(c=>c.id===cid)?.name || 'each culture'}.`);
+          }
+        }
+      }
+      break;
+    case 4:
+      if (!state.path) return showError('Please choose a heroic path.');
+      break;
+    case 5: {
+      const spent = Object.values(state.attributes).reduce((a,b)=>a+b,0);
+      if (spent !== ATTR_POINTS) return showError(`Please distribute all ${ATTR_POINTS} attribute points (${ATTR_POINTS - spent} remaining).`);
+      break;
+    }
+    case 6: {
+      const spent = Object.values(state.skills).reduce((a,b)=>a+b,0);
+      const freeRank = state.path ? 1 : 0;
+      if (spent < SKILL_POINTS + freeRank) return showError(`You have ${SKILL_POINTS + freeRank - spent} skill ranks remaining to distribute.`);
+      break;
+    }
+    case 7: {
+      // Step 7 is Talents
+      saveState();
+      break;
+    }
+    case 8:
+      if (!state.equipment) return showError('Please choose a starting equipment kit.');
+      break;
+    case 9:
+      // Step 9 is Radiant (Optional step, always valid)
+      saveState();
+      break;
+  }
+  return true;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 2: ANCESTRY
+   ═══════════════════════════════════════════════════════════════ */
+function buildAncestryCards() {
+  const container = el('ancestryCards');
+  ANCESTRIES.forEach(a => {
+    const card = document.createElement('div');
+    card.className = 'card' + (state.ancestry === a.id ? ' selected' : '');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', state.ancestry === a.id);
+    card.innerHTML = `
+      <span class="card-icon">${a.icon}</span>
+      <div class="card-title">${a.name}</div>
+      <div class="card-desc">${a.desc}</div>
+      <div class="card-bonus">${a.bonus}</div>
+    `;
+    card.addEventListener('click', () => selectAncestry(a.id));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectAncestry(a.id); } });
+    container.appendChild(card);
+  });
+
+  // Build singer forms
+  const singerForms = el('singerForms');
+  ANCESTRIES[1].forms.forEach(f => {
+    const opt = document.createElement('div');
+    opt.className = 'sub-option' + (state.singerForm === f.id ? ' selected' : '');
+    opt.tabIndex = 0;
+    opt.innerHTML = `<strong>${f.name}</strong><br><span style="font-size:0.75rem;color:var(--text-dim)">${f.bonus}</span>`;
+    opt.addEventListener('click', () => selectSingerForm(f.id));
+    opt.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectSingerForm(f.id); } });
+    singerForms.appendChild(opt);
+  });
+
+  if (state.ancestry === 'singer') el('singerFormContainer').style.display = '';
+}
+
+function selectAncestry(id) {
+  state.ancestry = id;
+  state.singerForm = null;
+  el('ancestryCards').querySelectorAll('.card').forEach((c, i) => {
+    c.classList.toggle('selected', ANCESTRIES[i].id === id);
+    c.setAttribute('aria-checked', ANCESTRIES[i].id === id);
+  });
+  el('singerFormContainer').style.display = id === 'singer' ? '' : 'none';
+  el('singerForms').querySelectorAll('.sub-option').forEach(o => o.classList.remove('selected'));
+  saveState();
+}
+
+function selectSingerForm(id) {
+  state.singerForm = id;
+  el('singerForms').querySelectorAll('.sub-option').forEach((o, i) => {
+    o.classList.toggle('selected', ANCESTRIES[1].forms[i].id === id);
+  });
+  saveState();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 3: CULTURES
+   ═══════════════════════════════════════════════════════════════ */
+function buildCultureCards() {
+  const container = el('cultureCards');
+  CULTURES.forEach(c => {
+    const card = document.createElement('div');
+    const isSelected = state.cultures.includes(c.id);
+    card.className = 'card' + (isSelected ? ' selected' : '');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'checkbox');
+    card.setAttribute('aria-checked', isSelected);
+    card.innerHTML = `
+      <div class="card-title">${c.name}</div>
+      <div class="card-desc">${c.desc}</div>
+      <div class="card-detail">Language: <strong style="color:var(--blue-bright)">${c.lang}</strong></div>
+      <div class="expertise-select" data-culture="${c.id}">
+        ${c.expertise.map(e => `<button type="button" class="expertise-option${isSelected && state.cultureExpertise[c.id]===e ? ' selected' : ''}" data-exp="${e}" aria-label="${c.name} expertise: ${e}">${e}</button>`).join('')}
+      </div>
+    `;
+    card.addEventListener('click', (e) => {
+      const expBtn = e.target.closest('.expertise-option');
+      if (expBtn) {
+        e.stopPropagation();
+        const exp = expBtn.dataset.exp;
+        if (!state.cultures.includes(c.id)) {
+          if (state.cultures.length >= 2) {
+            showError('You can only select two cultures. Deselect one first.');
+            return;
+          }
+          state.cultures.push(c.id);
+        }
+        selectExpertise(c.id, exp);
+        updateCultureCards();
+        updateCultureDisplay();
+        return;
+      }
+      toggleCulture(c.id);
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        const expBtn = e.target.closest('.expertise-option');
+        if (expBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          const exp = expBtn.dataset.exp;
+          if (!state.cultures.includes(c.id)) {
+            if (state.cultures.length >= 2) {
+              showError('You can only select two cultures. Deselect one first.');
+              return;
+            }
+            state.cultures.push(c.id);
+          }
+          selectExpertise(c.id, exp);
+          updateCultureCards();
+          updateCultureDisplay();
+        } else if (e.target === card) {
+          e.preventDefault();
+          toggleCulture(c.id);
+        }
+      }
+    });
+    container.appendChild(card);
+  });
+
+  updateCultureDisplay();
+}
+
+function toggleCulture(id) {
+  const idx = state.cultures.indexOf(id);
+  if (idx >= 0) {
+    state.cultures.splice(idx, 1);
+    delete state.cultureExpertise[id];
+  } else if (state.cultures.length < 2) {
+    state.cultures.push(id);
+    if (!state.cultureExpertise[id]) {
+      const cObj = CULTURES.find(c => c.id === id);
+      if (cObj && cObj.expertise && cObj.expertise.length > 0) {
+        state.cultureExpertise[id] = cObj.expertise[0];
+      }
+    }
+  } else {
+    showError('You can only select two cultures. Deselect one first.');
+    return;
+  }
+  updateCultureCards();
+  updateCultureDisplay();
+  saveState();
+}
+
+function selectExpertise(cultureId, expertise) {
+  state.cultureExpertise[cultureId] = expertise;
+  const container = qs(`.expertise-select[data-culture="${cultureId}"]`);
+  if (container) {
+    container.querySelectorAll('.expertise-option').forEach(o => {
+      o.classList.toggle('selected', o.dataset.exp === expertise);
+    });
+  }
+  saveState();
+}
+
+function updateCultureCards() {
+  el('cultureCards').querySelectorAll('.card').forEach((card, i) => {
+    const cid = CULTURES[i].id;
+    const isSel = state.cultures.includes(cid);
+    card.classList.toggle('selected', isSel);
+    card.setAttribute('aria-checked', isSel);
+    const expertiseContainer = card.querySelector('.expertise-select');
+    if (expertiseContainer) {
+      expertiseContainer.querySelectorAll('.expertise-option').forEach(o => {
+        o.classList.toggle('selected', isSel && state.cultureExpertise[cid] === o.dataset.exp);
+      });
+    }
+  });
+}
+
+function updateCultureDisplay() {
+  const display = el('cultureSelectedDisplay');
+  display.innerHTML = '';
+  state.cultures.forEach(cid => {
+    const c = CULTURES.find(x => x.id === cid);
+    if (!c) return;
+    const exp = state.cultureExpertise[cid];
+    const tag = document.createElement('span');
+    tag.className = 'culture-tag';
+    tag.innerHTML = `${c.name} ${exp ? `<span style="color:var(--gold);font-weight:600;margin-left:4px;">(${exp})</span>` : ''} <button class="remove-culture" aria-label="Remove ${c.name}" type="button">×</button>`;
+    tag.querySelector('.remove-culture').addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleCulture(cid);
+    });
+    display.appendChild(tag);
+  });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 4: PATH
+   ═══════════════════════════════════════════════════════════════ */
+function buildPathCards() {
+  const container = el('pathCards');
+  PATHS.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'card' + (state.path === p.id ? ' selected' : '');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', state.path === p.id);
+    card.innerHTML = `
+      <span class="card-icon">${p.icon}</span>
+      <div class="card-title">${p.name}</div>
+      <div class="card-desc">${p.desc}</div>
+      <div class="card-bonus" style="margin-bottom:6px;">Starting Skill: ${p.skill}</div>
+      <div class="card-detail" style="color:var(--gold);font-size:0.82rem;margin-bottom:4px;">
+        <strong>✦ ${p.talent}</strong>
+      </div>
+      <div class="specialty-tags">
+        ${p.specialties.map(s => `<span class="specialty-tag">${s}</span>`).join('')}
+      </div>
+      <div class="suggested-attrs">Suggested: ${p.suggestedAttr.map(a=>`<span>${a}</span>`).join(', ')}</div>
+    `;
+    card.addEventListener('click', () => selectPath(p.id));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectPath(p.id); } });
+    container.appendChild(card);
+  });
+}
+
+function selectPath(id) {
+  const oldPath = PATHS.find(p => p.id === state.path);
+  const newPath = PATHS.find(p => p.id === id);
+
+  // Remove old free skill rank
+  if (oldPath && state.skills[oldPath.skill] > 0) {
+    state.skills[oldPath.skill] = Math.max(0, state.skills[oldPath.skill] - 1);
+  }
+
+  state.path = id;
+
+  // Add new free skill rank
+  if (newPath) {
+    state.skills[newPath.skill] = Math.min(MAX_SKILL, state.skills[newPath.skill] + 1);
+  }
+
+  el('pathCards').querySelectorAll('.card').forEach((c, i) => {
+    c.classList.toggle('selected', PATHS[i].id === id);
+    c.setAttribute('aria-checked', PATHS[i].id === id);
+  });
+
+  // Update attribute suggestions
+  updateAttributeSuggestions();
+  saveState();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 5: ATTRIBUTES
+   ═══════════════════════════════════════════════════════════════ */
+function buildAttributeControls() {
+  const container = el('attributeControls');
+  const groups = ['Physical', 'Cognitive', 'Spiritual'];
+
+  groups.forEach(group => {
+    const groupDiv = document.createElement('div');
+    groupDiv.style.marginBottom = '16px';
+    groupDiv.innerHTML = `<div class="attr-group-title">${group}</div>`;
+
+    ATTRIBUTES.filter(a => a.group === group).forEach(attr => {
+      const row = document.createElement('div');
+      row.className = 'attr-row';
+      row.id = `attr-row-${attr.id}`;
+      row.innerHTML = `
+        <div class="attr-info">
+          <span class="attr-name">${attr.id} <span class="attr-abbr">(${attr.abbr})</span></span>
+        </div>
+        <div class="attr-controls">
+          <button class="attr-btn" type="button" data-attr="${attr.id}" data-dir="-1" aria-label="Decrease ${attr.id}">−</button>
+          <span class="attr-value" id="attr-val-${attr.id}" data-val="${state.attributes[attr.id]}">${state.attributes[attr.id]}</span>
+          <button class="attr-btn" type="button" data-attr="${attr.id}" data-dir="1" aria-label="Increase ${attr.id}">+</button>
+        </div>
+      `;
+      row.querySelectorAll('.attr-btn').forEach(btn => {
+        btn.addEventListener('click', () => changeAttribute(btn.dataset.attr, parseInt(btn.dataset.dir)));
+      });
+      groupDiv.appendChild(row);
+    });
+    container.appendChild(groupDiv);
+  });
+
+  updateAttributeDisplay();
+  buildDerivedStats();
+}
+
+function changeAttribute(attrId, dir) {
+  const current = state.attributes[attrId];
+  const spent = Object.values(state.attributes).reduce((a,b)=>a+b,0);
+  const newVal = current + dir;
+
+  if (newVal < 0 || newVal > MAX_ATTR) return;
+  if (dir > 0 && spent >= ATTR_POINTS) return;
+
+  state.attributes[attrId] = newVal;
+  updateAttributeDisplay();
+  updateDerivedStats();
+  saveState();
+}
+
+function updateAttributeDisplay() {
+  const spent = Object.values(state.attributes).reduce((a,b)=>a+b,0);
+  const remaining = ATTR_POINTS - spent;
+
+  ATTRIBUTES.forEach(attr => {
+    const valEl = el(`attr-val-${attr.id}`);
+    if (valEl) {
+      valEl.textContent = state.attributes[attr.id];
+      valEl.dataset.val = state.attributes[attr.id];
+    }
+    // Disable buttons
+    const row = el(`attr-row-${attr.id}`);
+    if (row) {
+      const btns = row.querySelectorAll('.attr-btn');
+      btns[0].disabled = state.attributes[attr.id] <= 0;
+      btns[1].disabled = state.attributes[attr.id] >= MAX_ATTR || remaining <= 0;
+    }
+  });
+
+  const countEl = el('attrPointsCount');
+  countEl.textContent = remaining;
+  countEl.className = 'count' + (remaining === 0 ? ' zero' : remaining <= 3 ? ' warning' : '');
+
+  updateAttributeSuggestions();
+}
+
+function updateAttributeSuggestions() {
+  const path = PATHS.find(p => p.id === state.path);
+  ATTRIBUTES.forEach(attr => {
+    const row = el(`attr-row-${attr.id}`);
+    if (row) {
+      row.classList.toggle('suggested', path ? path.suggestedAttr.includes(attr.id) : false);
+    }
+  });
+}
+
+function buildDerivedStats() {
+  const container = el('derivedStats');
+  container.innerHTML = `
+    <div class="derived-stat"><div class="label">Physical Def</div><div class="value" id="ds-pdef">10</div><div class="detail">10 + STR + SPD</div></div>
+    <div class="derived-stat"><div class="label">Cognitive Def</div><div class="value" id="ds-cdef">10</div><div class="detail">10 + INT + WIL</div></div>
+    <div class="derived-stat"><div class="label">Spiritual Def</div><div class="value" id="ds-sdef">10</div><div class="detail">10 + AWA + PRE</div></div>
+    <div class="derived-stat"><div class="label">Health</div><div class="value" id="ds-health">10</div><div class="detail">10 + STR×2 + WIL</div></div>
+    <div class="derived-stat"><div class="label">Focus</div><div class="value" id="ds-focus">2</div><div class="detail">2 + WIL + PRE</div></div>
+    <div class="derived-stat"><div class="label">Movement</div><div class="value" id="ds-move">20</div><div class="detail">20 + SPD×5 ft</div></div>
+  `;
+  updateDerivedStats();
+}
+
+function updateDerivedStats() {
+  const a = state.attributes;
+  el('ds-pdef').textContent = 10 + a.Strength + a.Speed;
+  el('ds-cdef').textContent = 10 + a.Intellect + a.Willpower;
+  el('ds-sdef').textContent = 10 + a.Awareness + a.Presence;
+  el('ds-health').textContent = 10 + (a.Strength * 2) + a.Willpower;
+  el('ds-focus').textContent = 2 + a.Willpower + a.Presence;
+  el('ds-move').textContent = (20 + (a.Speed * 5)) + ' ft';
+}
+
+function getDerived() {
+  const a = state.attributes;
+  return {
+    pdef: 10 + a.Strength + a.Speed,
+    cdef: 10 + a.Intellect + a.Willpower,
+    sdef: 10 + a.Awareness + a.Presence,
+    health: 10 + (a.Strength * 2) + a.Willpower,
+    focus: 2 + a.Willpower + a.Presence,
+    movement: 20 + (a.Speed * 5)
+  };
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 6: SKILLS
+   ═══════════════════════════════════════════════════════════════ */
+function buildSkillControls() {
+  const container = el('skillControls');
+  const attrOrder = ['Strength','Speed','Intellect','Willpower','Awareness','Presence'];
+
+  attrOrder.forEach(attr => {
+    const groupDiv = document.createElement('div');
+    groupDiv.className = 'skill-group';
+    groupDiv.innerHTML = `<div class="skill-group-title">${attr} Skills</div>`;
+
+    SKILLS.filter(s => s.attr === attr).forEach(skill => {
+      const isFree = state.path && PATHS.find(p=>p.id===state.path)?.skill === skill.name;
+      const row = document.createElement('div');
+      row.className = 'skill-row' + (isFree ? ' free-skill' : '');
+      row.id = `skill-row-${skill.name.replace(/\s+/g,'-')}`;
+      row.innerHTML = `
+        <div class="skill-info">
+          <span class="skill-name">${skill.name}</span>
+          ${isFree ? '<span class="skill-badge">Free</span>' : ''}
+        </div>
+        <span class="skill-bonus" id="skill-bonus-${skill.name.replace(/\s+/g,'-')}"></span>
+        <div class="skill-controls">
+          <button class="skill-btn" type="button" data-skill="${skill.name}" data-dir="-1" aria-label="Decrease ${skill.name}">−</button>
+          <span class="skill-rank" id="skill-rank-${skill.name.replace(/\s+/g,'-')}" data-val="${state.skills[skill.name]}">${state.skills[skill.name]}</span>
+          <button class="skill-btn" type="button" data-skill="${skill.name}" data-dir="1" aria-label="Increase ${skill.name}">+</button>
+        </div>
+      `;
+      row.querySelectorAll('.skill-btn').forEach(btn => {
+        btn.addEventListener('click', () => changeSkill(btn.dataset.skill, parseInt(btn.dataset.dir)));
+      });
+      groupDiv.appendChild(row);
+    });
+    container.appendChild(groupDiv);
+  });
+
+  updateSkillDisplay();
+}
+
+function changeSkill(skillName, dir) {
+  const freeSkill = state.path ? PATHS.find(p=>p.id===state.path)?.skill : null;
+  const current = state.skills[skillName];
+  const newVal = current + dir;
+
+  // Calculate total spent (minus free rank)
+  const totalSpent = Object.values(state.skills).reduce((a,b)=>a+b,0);
+  const freeRanks = freeSkill ? 1 : 0;
+  const playerSpent = totalSpent - freeRanks;
+
+  if (newVal < 0 || newVal > MAX_SKILL) return;
+
+  // Don't allow removing the free rank below what was given
+  if (skillName === freeSkill && newVal < 1) return;
+
+  // Check remaining points (don't count free rank)
+  if (dir > 0 && playerSpent >= SKILL_POINTS) return;
+
+  state.skills[skillName] = newVal;
+  updateSkillDisplay();
+  saveState();
+}
+
+function updateSkillDisplay() {
+  const freeSkill = state.path ? PATHS.find(p=>p.id===state.path)?.skill : null;
+  const totalSpent = Object.values(state.skills).reduce((a,b)=>a+b,0);
+  const freeRanks = freeSkill ? 1 : 0;
+  const playerSpent = totalSpent - freeRanks;
+  const remaining = SKILL_POINTS - playerSpent;
+
+  const countEl = el('skillPointsCount');
+  if (countEl) {
+    countEl.textContent = remaining;
+    countEl.className = 'count' + (remaining === 0 ? ' zero' : remaining <= 3 ? ' warning' : '');
+  }
+
+  SKILLS.forEach(skill => {
+    const key = skill.name.replace(/\s+/g,'-');
+    const rankEl = el(`skill-rank-${key}`);
+    const bonusEl = el(`skill-bonus-${key}`);
+    const rowEl = el(`skill-row-${key}`);
+
+    if (rankEl) {
+      rankEl.textContent = state.skills[skill.name];
+      rankEl.dataset.val = state.skills[skill.name];
+    }
+    if (bonusEl) {
+      const total = state.attributes[skill.attr] + state.skills[skill.name];
+      bonusEl.textContent = total > 0 ? `+${total}` : '0';
+    }
+
+    // Update free skill badge
+    if (rowEl) {
+      const isFree = freeSkill === skill.name;
+      rowEl.classList.toggle('free-skill', isFree);
+      const badge = rowEl.querySelector('.skill-badge');
+      if (isFree && !badge) {
+        rowEl.querySelector('.skill-info').insertAdjacentHTML('beforeend', '<span class="skill-badge">Free</span>');
+      } else if (!isFree && badge) {
+        badge.remove();
+      }
+
+      // Disable buttons
+      const btns = rowEl.querySelectorAll('.skill-btn');
+      const minVal = isFree ? 1 : 0;
+      btns[0].disabled = state.skills[skill.name] <= minVal;
+      btns[1].disabled = state.skills[skill.name] >= MAX_SKILL || remaining <= 0;
+    }
+  });
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   TALENT TREES LOGIC
+   ═══════════════════════════════════════════════════════════════ */
+function getTalentPoints() {
+  const total = state.level || 1;
+  const spent = state.talents.length;
+  return { total, spent, remaining: total - spent };
+}
+
+function checkPrerequisites(talent) {
+  if (talent.isKey) return { met: true, text: 'Path Key Talent (Free)' };
+  if (!talent.prereq) return { met: true, text: 'None' };
+
+  // Check required talent
+  if (talent.prereq.talent) {
+    const hasTalent = state.talents.includes(talent.prereq.talent) ||
+      (state.path && TALENT_TREES[state.path]?.keyTalent.id === talent.prereq.talent);
+    if (!hasTalent) {
+      return { met: false, text: talent.prereq.text || 'Requires prerequisite talent' };
+    }
+  }
+
+  // Check required skill rank
+  if (talent.prereq.skill && talent.prereq.rank) {
+    const currentRank = state.skills[talent.prereq.skill] || 0;
+    if (currentRank < talent.prereq.rank) {
+      return { met: false, text: talent.prereq.text || `Requires ${talent.prereq.skill} ${talent.prereq.rank}+` };
+    }
+  }
+
+  // Check required attribute
+  if (talent.prereq.attr && talent.prereq.attrVal) {
+    const currentVal = state.attributes[talent.prereq.attr] || 0;
+    if (currentVal < talent.prereq.attrVal) {
+      return { met: false, text: talent.prereq.text || `Requires ${talent.prereq.attr} ${talent.prereq.attrVal}+` };
+    }
+  }
+
+  // Check Surge requirement if it is a surge talent
+  if (talent.id.startsWith('srg-')) {
+    if (!state.isRadiant || !state.radiantOrder) {
+      return { met: false, text: 'Requires bonding a Radiant Order' };
+    }
+    const orderObj = ORDERS.find(o => o.id === state.radiantOrder);
+    const parentSurge = SURGE_TREES.find(s => s.talents.some(t => t.id === talent.id));
+    if (orderObj && parentSurge && !orderObj.surges.includes(parentSurge.name)) {
+      return { met: false, text: `Requires order with ${parentSurge.name} (${parentSurge.orders.join(', ')})` };
+    }
+  }
+
+  return { met: true, text: talent.prereq.text || 'Prerequisites met' };
+}
+
+function buildTalentTreeSection() {
+  const tabsContainer = el('talentPathTabs');
+  if (!tabsContainer) return;
+
+  const pathKeys = ['agent', 'envoy', 'hunter', 'leader', 'scholar', 'warrior'];
+  let tabsHtml = '';
+  pathKeys.forEach(pk => {
+    const p = TALENT_TREES[pk];
+    tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === pk ? ' active' : ''}" data-tab="${pk}" role="tab">${p.icon} ${p.name}</button>`;
+  });
+  tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === 'surges' ? ' active' : ''}" data-tab="surges" role="tab">⚡ Radiant Surges</button>`;
+  tabsContainer.innerHTML = tabsHtml;
+
+  tabsContainer.querySelectorAll('.talent-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeTalentTab = btn.dataset.tab;
+      tabsContainer.querySelectorAll('.talent-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === state.activeTalentTab));
+      renderTalentTree('talentSpecialtiesContainer', state.activeTalentTab, false);
+    });
+  });
+
+  // Level selector
+  const lvlSelect = el('charLevelSelect');
+  if (lvlSelect) {
+    lvlSelect.value = state.level || 1;
+    lvlSelect.addEventListener('change', (e) => {
+      state.level = parseInt(e.target.value);
+      updateTalentTreeDisplay();
+      saveState();
+    });
+  }
+
+  // Reset button
+  const resetBtn = el('btnResetTalents');
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      if (state.talents.length === 0) return;
+      if (confirm('Reset all spent talent points?')) {
+        state.talents = [];
+        updateTalentTreeDisplay();
+        saveState();
+      }
+    });
+  }
+
+  updateTalentTreeDisplay();
+}
+
+function updateTalentTreeDisplay() {
+  if (state.path && !state.activeTalentTab) {
+    state.activeTalentTab = state.path;
+  }
+  const tabsContainer = el('talentPathTabs');
+  if (tabsContainer) {
+    tabsContainer.querySelectorAll('.talent-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === state.activeTalentTab));
+  }
+
+  const pts = getTalentPoints();
+  const countEl = el('talentPointsCount');
+  if (countEl) {
+    countEl.textContent = pts.remaining;
+    countEl.className = 'count' + (pts.remaining === 0 ? ' zero' : '');
+  }
+
+  renderTalentTree('talentSpecialtiesContainer', state.activeTalentTab, false);
+}
+
+function renderTalentTree(containerId, tabKey, isModal) {
+  const container = el(containerId);
+  if (!container) return;
+
+  const pts = getTalentPoints();
+  let html = '';
+
+  if (tabKey === 'surges') {
+    html += '<div class="talent-specialties-grid">';
+    SURGE_TREES.forEach(surge => {
+      html += `
+        <div class="specialty-column">
+          <div class="specialty-col-header">
+            <div class="specialty-col-title">⚡ ${surge.name}</div>
+            <div class="specialty-col-desc">${surge.desc}</div>
+            <div style="font-size:0.75rem;color:var(--gold-dim);margin-top:4px;">Orders: ${surge.orders.join(', ')}</div>
+          </div>
+          ${surge.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+        </div>
+      `;
+    });
+    html += '</div>';
+  } else {
+    const pathObj = TALENT_TREES[tabKey];
+    if (!pathObj) return;
+
+    // Show Key Talent Card at top
+    const isPrimaryPath = state.path === pathObj.id;
+    html += `
+      <div style="margin-bottom:16px;">
+        <div class="talent-node-card is-key" style="border-left:4px solid var(--cyan);">
+          <div class="node-top-row">
+            <span class="node-name">✦ ${pathObj.name} Key Talent: ${pathObj.keyTalent.name}</span>
+            <div class="node-badges">
+              <span class="node-badge key">Key Talent</span>
+              <span class="node-badge cost">${pathObj.keyTalent.cost}</span>
+            </div>
+          </div>
+          <div class="node-desc">${pathObj.keyTalent.desc}</div>
+          <div style="font-size:0.75rem;color:var(--cyan);font-weight:600;">
+            ${isPrimaryPath ? '✓ Free starting talent from your Heroic Path' : 'Available if choosing ' + pathObj.name + ' as your Heroic Path'}
+          </div>
+        </div>
+      </div>
+      <div class="talent-specialties-grid">
+    `;
+
+    pathObj.specialties.forEach(spec => {
+      html += `
+        <div class="specialty-column">
+          <div class="specialty-col-header">
+            <div class="specialty-col-title">⚔️ ${spec.name}</div>
+            <div class="specialty-col-desc">${spec.desc}</div>
+          </div>
+          ${spec.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+        </div>
+      `;
+    });
+    html += '</div>';
+  }
+
+  container.innerHTML = html;
+
+  // Attach button click events
+  container.querySelectorAll('.node-action-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const tid = btn.dataset.tid;
+      const isLearned = state.talents.includes(tid);
+      if (isLearned) {
+        unlearnTalent(tid);
+      } else {
+        learnTalent(tid);
+      }
+      if (isModal) {
+        renderTalentTree('modalTalentSpecialtiesContainer', state.activeTalentTab, true);
+        updateTalentTreeDisplay();
+      } else {
+        updateTalentTreeDisplay();
+      }
+    });
+  });
+}
+
+function renderTalentCard(t, pts, isModal) {
+  const isLearned = state.talents.includes(t.id);
+  const prereqCheck = checkPrerequisites(t);
+  const canLearn = !isLearned && prereqCheck.met && pts.remaining > 0;
+  const isLocked = !isLearned && !prereqCheck.met;
+
+  return `
+    <div class="talent-node-card${isLearned ? ' learned' : ''}${isLocked ? ' locked' : ''}">
+      <div class="node-top-row">
+        <span class="node-name">${t.name}</span>
+        <div class="node-badges">
+          <span class="node-badge tier">Tier ${t.tier}</span>
+          <span class="node-badge cost">${t.cost}</span>
+        </div>
+      </div>
+      <div class="node-prereq ${prereqCheck.met ? 'met' : 'unmet'}">
+        ${prereqCheck.met ? '✓' : '🔒'} ${prereqCheck.text}
+      </div>
+      <div class="node-desc">${t.desc}</div>
+      <div>
+        ${isLearned
+          ? `<button type="button" class="node-action-btn learned" data-tid="${t.id}" aria-label="Unlearn ${t.name}">✓ Learned (Click to Remove)</button>`
+          : `<button type="button" class="node-action-btn learn" data-tid="${t.id}" ${!canLearn ? 'disabled' : ''} aria-label="Learn ${t.name}">${pts.remaining <= 0 ? 'No Points Left' : !prereqCheck.met ? 'Locked' : '+ Learn Talent'}</button>`
+        }
+      </div>
+    </div>
+  `;
+}
+
+function learnTalent(talentId) {
+  const pts = getTalentPoints();
+  if (pts.remaining <= 0) return;
+  if (state.talents.includes(talentId)) return;
+
+  // Find talent
+  let found = null;
+  Object.values(TALENT_TREES).forEach(p => {
+    p.specialties.forEach(s => {
+      const match = s.talents.find(t => t.id === talentId);
+      if (match) found = match;
+    });
+  });
+  if (!found) {
+    SURGE_TREES.forEach(s => {
+      const match = s.talents.find(t => t.id === talentId);
+      if (match) found = match;
+    });
+  }
+
+  if (found) {
+    const prereq = checkPrerequisites(found);
+    if (!prereq.met) return;
+    state.talents.push(talentId);
+    saveState();
+  }
+}
+
+function unlearnTalent(talentId) {
+  // Check if any other learned talent depends on this one
+  const dependents = [];
+  const allTalents = [];
+  Object.values(TALENT_TREES).forEach(p => p.specialties.forEach(s => allTalents.push(...s.talents)));
+  SURGE_TREES.forEach(s => allTalents.push(...s.talents));
+
+  state.talents.forEach(tid => {
+    const tObj = allTalents.find(t => t.id === tid);
+    if (tObj && tObj.prereq && tObj.prereq.talent === talentId) {
+      dependents.push(tObj.name);
+    }
+  });
+
+  if (dependents.length > 0) {
+    alert(`Cannot remove this talent because the following talent(s) depend on it: ${dependents.join(', ')}`);
+    return;
+  }
+
+  state.talents = state.talents.filter(id => id !== talentId);
+  saveState();
+}
+
+function setupTalentModal() {
+  const openBtn = el('btnOpenTalentBrowser');
+  const closeBtn = el('btnCloseTalentModal');
+  const modal = el('talentModalOverlay');
+  if (!modal) return;
+
+  if (openBtn) {
+    openBtn.addEventListener('click', () => {
+      modal.classList.add('open');
+      buildModalTalentSection();
+    });
+  }
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.remove('open');
+      updateTalentTreeDisplay();
+    });
+  }
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      modal.classList.remove('open');
+      updateTalentTreeDisplay();
+    }
+  });
+}
+
+function buildModalTalentSection() {
+  const tabsContainer = el('modalTalentPathTabs');
+  if (!tabsContainer) return;
+
+  const pathKeys = ['agent', 'envoy', 'hunter', 'leader', 'scholar', 'warrior'];
+  let tabsHtml = '';
+  pathKeys.forEach(pk => {
+    const p = TALENT_TREES[pk];
+    tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === pk ? ' active' : ''}" data-tab="${pk}" role="tab">${p.icon} ${p.name}</button>`;
+  });
+  tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === 'surges' ? ' active' : ''}" data-tab="surges" role="tab">⚡ Radiant Surges</button>`;
+  tabsContainer.innerHTML = tabsHtml;
+
+  tabsContainer.querySelectorAll('.talent-tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      state.activeTalentTab = btn.dataset.tab;
+      tabsContainer.querySelectorAll('.talent-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === state.activeTalentTab));
+      renderTalentTree('modalTalentSpecialtiesContainer', state.activeTalentTab, true);
+    });
+  });
+
+  renderTalentTree('modalTalentSpecialtiesContainer', state.activeTalentTab, true);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 8: EQUIPMENT
+   ═══════════════════════════════════════════════════════════════ */
+function buildEquipmentCards() {
+  const container = el('equipCards');
+  EQUIPMENT.forEach(eq => {
+    const card = document.createElement('div');
+    card.className = 'card' + (state.equipment === eq.id ? ' selected' : '');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', state.equipment === eq.id);
+    card.innerHTML = `
+      <span class="card-icon">${eq.icon}</span>
+      <div class="card-title">${eq.name}</div>
+      <ul class="equip-items">
+        ${eq.items.map(item => `<li>${item.includes('marks') ? `<span class="equip-money">${item}</span>` : item}</li>`).join('')}
+      </ul>
+    `;
+    card.addEventListener('click', () => selectEquipment(eq.id));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectEquipment(eq.id); } });
+    container.appendChild(card);
+  });
+}
+
+function selectEquipment(id) {
+  state.equipment = id;
+  el('equipCards').querySelectorAll('.card').forEach((c, i) => {
+    c.classList.toggle('selected', EQUIPMENT[i].id === id);
+    c.setAttribute('aria-checked', EQUIPMENT[i].id === id);
+  });
+  saveState();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   STEP 8: RADIANT
+   ═══════════════════════════════════════════════════════════════ */
+function buildRadiantSection() {
+  const toggle = el('radiantToggle');
+  const toggleSwitch = el('toggleSwitch');
+  const section = el('radiantSection');
+
+  if (state.isRadiant) {
+    toggleSwitch.classList.add('on');
+    toggle.setAttribute('aria-checked', 'true');
+    section.style.display = '';
+  }
+
+  toggle.addEventListener('click', () => {
+    state.isRadiant = !state.isRadiant;
+    toggleSwitch.classList.toggle('on', state.isRadiant);
+    toggle.setAttribute('aria-checked', state.isRadiant);
+    section.style.display = state.isRadiant ? '' : 'none';
+    if (!state.isRadiant) { state.radiantOrder = null; }
+    saveState();
+  });
+  toggle.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+  });
+
+  // Build order cards
+  const container = el('orderCards');
+  ORDERS.forEach(order => {
+    const card = document.createElement('div');
+    card.className = 'card order-card' + (state.radiantOrder === order.id ? ' selected' : '');
+    card.tabIndex = 0;
+    card.setAttribute('role', 'radio');
+    card.setAttribute('aria-checked', state.radiantOrder === order.id);
+    card.innerHTML = `
+      <div class="card-title">${order.name} ${order.restricted ? '<span class="restricted-badge">Rare / Restricted</span>' : ''}</div>
+      <div class="card-desc">${order.spren}</div>
+      <div class="surges">
+        ${order.surges.map(s => `<span class="surge-tag">${s}</span>`).join('')}
+      </div>
+      <div class="oath">${order.oath}</div>
+    `;
+    card.addEventListener('click', () => selectOrder(order.id));
+    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOrder(order.id); } });
+    container.appendChild(card);
+  });
+}
+
+function selectOrder(id) {
+  state.radiantOrder = id;
+  el('orderCards').querySelectorAll('.card').forEach((c, i) => {
+    c.classList.toggle('selected', ORDERS[i].id === id);
+    c.setAttribute('aria-checked', ORDERS[i].id === id);
+  });
+  el('idealInputContainer').style.display = id ? '' : 'none';
+  saveState();
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SUMMARY
+   ═══════════════════════════════════════════════════════════════ */
+function buildSummary() {
+  saveState();
+  const d = getDerived();
+  const path = PATHS.find(p => p.id === state.path);
+  const ancestry = ANCESTRIES.find(a => a.id === state.ancestry);
+  const equip = EQUIPMENT.find(e => e.id === state.equipment);
+  const order = state.isRadiant ? ORDERS.find(o => o.id === state.radiantOrder) : null;
+
+  const cultures = state.cultures.map(cid => {
+    const c = CULTURES.find(x => x.id === cid);
+    return { ...c, chosenExpertise: state.cultureExpertise[cid] || c.expertise[0] };
+  });
+
+  // Build skills with bonuses
+  const skillsList = SKILLS
+    .map(s => ({
+      name: s.name,
+      attr: s.attr,
+      rank: state.skills[s.name],
+      total: state.attributes[s.attr] + state.skills[s.name],
+      isFree: path && path.skill === s.name
+    }))
+    .filter(s => s.total > 0 || s.rank > 0);
+
+  let singerFormInfo = '';
+  if (state.ancestry === 'singer' && state.singerForm) {
+    const form = ANCESTRIES[1].forms.find(f => f.id === state.singerForm);
+    singerFormInfo = form ? ` (${form.name})` : '';
+  }
+
+  const sheet = el('summarySheet');
+  sheet.innerHTML = `
+    <div class="summary-header">
+      <div class="summary-name">${escHtml(state.charName)}</div>
+      ${state.charConcept ? `<div class="summary-concept">${escHtml(state.charConcept)}</div>` : ''}
+      ${state.charPurpose ? `<div style="font-size:0.85rem;color:var(--text-dim);margin-top:6px;"><strong style="color:var(--gold)">Purpose:</strong> ${escHtml(state.charPurpose)}</div>` : ''}
+      ${state.charObstacle ? `<div style="font-size:0.85rem;color:var(--text-dim);margin-top:2px;"><strong style="color:var(--red-alert)">Obstacle:</strong> ${escHtml(state.charObstacle)}</div>` : ''}
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-section-title">Heritage</div>
+      <div style="display:flex;flex-wrap:wrap;gap:20px;">
+        <div><span style="color:var(--text-dim);font-size:0.8rem;">Ancestry</span><br><strong>${ancestry ? ancestry.name : '—'}${singerFormInfo}</strong></div>
+        <div><span style="color:var(--text-dim);font-size:0.8rem;">Cultures</span><br><strong>${cultures.map(c => c.name).join(' & ') || '—'}</strong></div>
+        <div><span style="color:var(--text-dim);font-size:0.8rem;">Languages</span><br><strong>${[...new Set(cultures.map(c => c.lang))].join(', ') || '—'}</strong></div>
+        <div><span style="color:var(--text-dim);font-size:0.8rem;">Expertise</span><br><strong>${cultures.map(c => c.chosenExpertise).join(', ') || '—'}</strong></div>
+      </div>
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-section-title">Heroic Path: ${path ? path.name : '—'}</div>
+      ${path ? `
+        <div style="font-size:0.88rem;color:var(--text-secondary);margin-bottom:6px;">${path.desc}</div>
+        <div style="font-size:0.85rem;color:var(--gold);margin-bottom:4px;">✦ ${path.talent}</div>
+        <div style="font-size:0.8rem;color:var(--text-dim);">Specialties: ${path.specialties.join(', ')}</div>
+      ` : ''}
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-section-title">Talents & Maneuvers (Level ${state.level || 1})</div>
+      <div class="summary-talents-grid">
+        ${path ? `
+          <div class="summary-talent-card is-key">
+            <div style="font-weight:700;color:var(--cyan);font-size:0.95rem;">✦ ${path.talent.split('—')[0].trim()} (Key Talent)</div>
+            <div style="font-size:0.75rem;color:var(--text-dim);margin:2px 0 6px;">Free starting feature from ${path.name} path</div>
+            <div style="font-size:0.8rem;color:var(--text-secondary);line-height:1.4;">${path.talent.includes('—') ? path.talent.split('—')[1].trim() : path.desc}</div>
+          </div>
+        ` : ''}
+        ${state.talents.map(tid => {
+          let found = null;
+          let category = '';
+          Object.values(TALENT_TREES).forEach(p => {
+            p.specialties.forEach(s => {
+              const match = s.talents.find(t => t.id === tid);
+              if (match) { found = match; category = `${p.name} (${s.name})`; }
+            });
+          });
+          if (!found) {
+            SURGE_TREES.forEach(s => {
+              const match = s.talents.find(t => t.id === tid);
+              if (match) { found = match; category = `Surge: ${s.name}`; }
+            });
+          }
+          if (!found) return '';
+          return `
+            <div class="summary-talent-card${tid.startsWith('srg-') ? ' is-surge' : ''}">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span style="font-weight:700;color:var(--gold-light);font-size:0.92rem;">${found.name}</span>
+                <span style="font-size:0.68rem;padding:2px 6px;border-radius:4px;background:rgba(212,168,67,0.15);color:var(--gold);">Tier ${found.tier}</span>
+              </div>
+              <div style="font-size:0.72rem;color:var(--storm-purple);margin:2px 0 4px;">${category} • ${found.cost}</div>
+              <div style="font-size:0.78rem;color:var(--text-secondary);line-height:1.4;">${found.desc}</div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      ${state.talents.length === 0 ? '<div style="font-size:0.85rem;color:var(--text-dim);font-style:italic;">No additional talents chosen.</div>' : ''}
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-section-title">Attributes</div>
+      <div class="summary-grid">
+        ${ATTRIBUTES.map(a => `
+          <div class="summary-stat">
+            <div class="label">${a.id} (${a.abbr})</div>
+            <div class="val">${state.attributes[a.id]}</div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="summary-section">
+      <div class="summary-section-title">Defenses & Vitals</div>
+      <div class="summary-grid">
+        <div class="summary-stat"><div class="label">Physical Def</div><div class="val gold">${d.pdef}</div></div>
+        <div class="summary-stat"><div class="label">Cognitive Def</div><div class="val gold">${d.cdef}</div></div>
+        <div class="summary-stat"><div class="label">Spiritual Def</div><div class="val gold">${d.sdef}</div></div>
+        <div class="summary-stat"><div class="label">Health</div><div class="val">${d.health}</div></div>
+        <div class="summary-stat"><div class="label">Focus</div><div class="val">${d.focus}</div></div>
+        <div class="summary-stat"><div class="label">Movement</div><div class="val">${d.movement} ft</div></div>
+      </div>
+    </div>
+
+    ${skillsList.length > 0 ? `
+    <div class="summary-section">
+      <div class="summary-section-title">Skills</div>
+      <ul class="summary-list">
+        ${skillsList.map(s => `
+          <li>
+            ${s.name}${s.isFree ? ' <span style="color:var(--gold);font-size:0.7rem;">★ PATH</span>' : ''}
+            <span class="skill-val">+${s.total} <span style="color:var(--text-dim);font-size:0.75rem;">(${s.rank} rank${s.rank !== 1 ? 's' : ''})</span></span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+    ` : ''}
+
+    ${equip ? `
+    <div class="summary-section">
+      <div class="summary-section-title">Equipment: ${equip.name}</div>
+      <ul class="summary-list">
+        ${equip.items.map(item => `<li>${item.includes('marks') ? `<span style="color:var(--gold)">${item}</span>` : item}</li>`).join('')}
+      </ul>
+    </div>
+    ` : ''}
+
+    ${order ? `
+    <div class="summary-section">
+      <div class="summary-section-title">Radiant Order</div>
+      <div class="summary-radiant">
+        <div class="order-name">${order.name} ${order.restricted ? '(Rare)' : ''}</div>
+        <div class="spren-type">Bonded Spren: ${order.spren}</div>
+        <div class="surges" style="justify-content:center;margin-top:8px;">
+          ${order.surges.map(s => `<span class="surge-tag">${s}</span>`).join('')}
+        </div>
+        <div class="oath-text">${order.oath}</div>
+        ${state.secondIdeal ? `<div style="margin-top:8px;font-size:0.85rem;color:var(--text-secondary);">Second Ideal: "${escHtml(state.secondIdeal)}"</div>` : ''}
+      </div>
+    </div>
+    ` : ''}
+
+    <div class="summary-actions">
+      <button class="btn btn-gold" onclick="window.print()" type="button">🖨️ Print Sheet</button>
+      <button class="btn btn-outline" onclick="exportJSON()" type="button">📄 Export JSON</button>
+      <button class="btn btn-danger" onclick="startOver()" type="button">↻ Start Over</button>
+    </div>
+  `;
+}
+
+function escHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function exportJSON() {
+  saveState();
+  const d = getDerived();
+  const path = PATHS.find(p => p.id === state.path);
+  const ancestry = ANCESTRIES.find(a => a.id === state.ancestry);
+  const equip = EQUIPMENT.find(e => e.id === state.equipment);
+  const order = state.isRadiant ? ORDERS.find(o => o.id === state.radiantOrder) : null;
+  const cultures = state.cultures.map(cid => {
+    const c = CULTURES.find(x => x.id === cid);
+    return { name: c.name, language: c.lang, expertise: state.cultureExpertise[cid] || c.expertise[0] };
+  });
+
+  const singerForm = state.ancestry === 'singer' && state.singerForm
+    ? ANCESTRIES[1].forms.find(f => f.id === state.singerForm)
+    : null;
+
+  const skills = {};
+  SKILLS.forEach(s => {
+    if (state.skills[s.name] > 0 || state.attributes[s.attr] > 0) {
+      skills[s.name] = { rank: state.skills[s.name], attribute: s.attr, total: state.attributes[s.attr] + state.skills[s.name] };
+    }
+  });
+
+  const allTalentsList = [];
+  if (path && path.talent) allTalentsList.push({ name: path.talent.split('—')[0].trim(), type: 'Key Talent', desc: path.talent });
+  state.talents.forEach(tid => {
+    Object.values(TALENT_TREES).forEach(p => {
+      p.specialties.forEach(s => {
+        const m = s.talents.find(t => t.id === tid);
+        if (m) allTalentsList.push({ name: m.name, specialty: s.name, path: p.name, tier: m.tier, cost: m.cost, desc: m.desc });
+      });
+    });
+    SURGE_TREES.forEach(s => {
+      const m = s.talents.find(t => t.id === tid);
+      if (m) allTalentsList.push({ name: m.name, surge: s.name, tier: m.tier, cost: m.cost, desc: m.desc });
+    });
+  });
+
+  const exportData = {
+    name: state.charName,
+    concept: state.charConcept,
+    purpose: state.charPurpose,
+    obstacle: state.charObstacle,
+    level: state.level || 1,
+    ancestry: { type: ancestry?.name, form: singerForm?.name || null },
+    cultures,
+    path: path ? { name: path.name, startingSkill: path.skill, talent: path.talent, specialties: path.specialties } : null,
+    talents: allTalentsList,
+    attributes: { ...state.attributes },
+    derived: d,
+    skills,
+    equipment: equip ? { kit: equip.name, items: equip.items } : null,
+    radiant: order ? { order: order.name, spren: order.spren, surges: order.surges, secondIdeal: state.secondIdeal } : null
+  };
+
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `${state.charName.replace(/\s+/g, '_').toLowerCase() || 'character'}_cosmere.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function startOver() {
+  if (!confirm('Are you sure you want to start over? All progress will be lost.')) return;
+  localStorage.removeItem('cosmere_char');
+  // Reset state
+  state = {
+    currentStep: 1,
+    level: 1,
+    charName: '', charConcept: '', charPurpose: '', charObstacle: '',
+    ancestry: null, singerForm: null,
+    cultures: [], cultureExpertise: {},
+    path: null,
+    attributes: { Strength:0, Speed:0, Intellect:0, Willpower:0, Awareness:0, Presence:0 },
+    skills: {},
+    talents: [],
+    activeTalentTab: 'agent',
+    equipment: null,
+    isRadiant: false, radiantOrder: null, secondIdeal: ''
+  };
+  SKILLS.forEach(s => state.skills[s.name] = 0);
+
+  // Rebuild UI
+  document.querySelectorAll('.card').forEach(c => { c.classList.remove('selected'); c.setAttribute('aria-checked', 'false'); });
+  document.querySelectorAll('.sub-option').forEach(o => o.classList.remove('selected'));
+  el('singerFormContainer').style.display = 'none';
+  el('toggleSwitch').classList.remove('on');
+  el('radiantToggle').setAttribute('aria-checked', 'false');
+  el('radiantSection').style.display = 'none';
+  el('idealInputContainer').style.display = 'none';
+  el('cultureSelectedDisplay').innerHTML = '';
+
+  // Reset attribute values
+  ATTRIBUTES.forEach(a => {
+    const v = el(`attr-val-${a.id}`);
+    if (v) { v.textContent = '0'; v.dataset.val = '0'; }
+  });
+  updateAttributeDisplay();
+  updateDerivedStats();
+
+  // Reset skill values
+  SKILLS.forEach(s => {
+    const key = s.name.replace(/\s+/g,'-');
+    const r = el(`skill-rank-${key}`);
+    if (r) { r.textContent = '0'; r.dataset.val = '0'; }
+  });
+  updateSkillDisplay();
+
+  goToStep(1);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   BOOT
+   ═══════════════════════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', init);
+</script>
+
+<!-- Universal Talent Tree Browser Modal -->
+<div class="talent-modal-overlay" id="talentModalOverlay" role="dialog" aria-modal="true" aria-label="Universal Talent Trees Browser">
+  <div class="talent-modal-container">
+    <div class="talent-modal-header">
+      <div class="talent-modal-title">🌳 Cosmere RPG Talent Trees Rulebook</div>
+      <button type="button" class="talent-modal-close" id="btnCloseTalentModal" aria-label="Close talent browser">×</button>
+    </div>
+    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">
+      Browse all Heroic Paths (Agent, Envoy, Hunter, Leader, Scholar, Warrior) and Radiant Surges across all specialties and tiers. You can learn and unlearn talents here directly.
+    </p>
+    <div class="talent-tabs" id="modalTalentPathTabs" role="tablist"></div>
+    <div id="modalTalentSpecialtiesContainer"></div>
+  </div>
+</div>
+
+</body>
+</html>
