@@ -7,6 +7,18 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('cosmere_builder_theme');
+        if (saved === 'dark') {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'sepia');
+        }
+      } catch(e) {}
+    })();
+  </script>
   <style>
 /* ═══════════════════════════════════════════════════════════════
    COSMERE RPG — OFFICIAL STORMLIGHT RULEBOOK SEPIA LIGHT MODE
@@ -1276,7 +1288,8 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 @media print {
   .bg-effects, .progress-container, .nav-buttons, .summary-actions,
-  .app-header, .rulebook-page-footer, .step-panel:not(.active) { display: none !important; }
+  .app-header, .rulebook-page-footer, .step-panel:not(.active),
+  .theme-toggle-floating { display: none !important; }
   body { background: white; color: black; }
   .summary-sheet { border: 2px solid #222; box-shadow: none; background: white; color: black; }
   .summary-name { color: #111; text-shadow: none; }
@@ -1293,9 +1306,729 @@ body {
 ::-webkit-scrollbar-thumb { background: #baa685; border-radius: 4px; border: 1px solid #d5c7ab; }
 ::-webkit-scrollbar-thumb:hover { background: #b3821a; }
 
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE SYSTEM (Urithiru Night / Highstorm Mist Theme)
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  /* Atmospheric Backgrounds */
+  --bg-deep: #070d18;
+  --bg-primary: #0b1524;
+  --bg-secondary: #101c2e;
+  --bg-card: #132238;
+  --bg-card-hover: #192d4a;
+  --bg-input: #08111e;
+
+  /* Inked Borders & Framing */
+  --border-dim: #1d2e46;
+  --border-glow: #29466e;
+  --border-active: #00d4ff;
+  --border-gold: #c8982a;
+  --border-gold-subtle: rgba(200, 152, 42, 0.35);
+
+  /* Typography Colors */
+  --text-primary: #f0f4f9;
+  --text-secondary: #9cb1c9;
+  --text-dim: #60758e;
+  --text-gold: #f5d688;
+
+  /* Rulebook Burnished Gold Palette */
+  --gold: #c8982a;
+  --gold-light: #fbe08e;
+  --gold-bright: #ffeaa4;
+  --gold-dim: #7f5c12;
+  --gold-banner-grad: linear-gradient(180deg, #dfa732 0%, #f1c75c 48%, #b67c14 100%);
+  --gold-ribbon-border: #ffeaa4;
+
+  /* Stormlight Cyan & Gemheart Accents */
+  --cyan: #00d4ff;
+  --cyan-bright: #67e8f9;
+  --cyan-dim: #007a99;
+  --cyan-glow: rgba(0, 212, 255, 0.25);
+  --blue-glow: #38bdf8;
+  --storm-purple: #a855f7;
+  --red-alert: #f43f5e;
+  --green-ok: #10b981;
+
+  /* Card Tokens */
+  --parchment-bg: #132238;
+  --parchment-card: #132238;
+  --parchment-border: #223755;
+  --parchment-border-subtle: #1e3350;
+  --parchment-ink: #f0f4f9;
+  --parchment-ink-muted: #9cb1c9;
+  --parchment-ink-dim: #60758e;
+  --parchment-gold-tag: rgba(200, 152, 42, 0.2);
+
+  /* Shadows */
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 25px rgba(0,212,255,0.2), 0 0 60px rgba(0,212,255,0.06);
+  --shadow-gold: 0 0 24px rgba(200,152,42,0.3);
+}
+
+/* Theme Toggle Controls */
+.theme-toggle-floating {
+  position: fixed;
+  top: 14px;
+  right: 18px;
+  z-index: 99;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 99px;
+  font-family: var(--font-title);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: #fdfaf2;
+  border: 1.5px solid var(--gold);
+  color: #6b4705;
+  box-shadow: 0 4px 14px rgba(60, 45, 25, 0.15), inset 0 1px 0 rgba(255,255,255,0.9);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.theme-toggle-floating:hover {
+  background: var(--gold-banner-grad);
+  border-color: #8c6006;
+  color: #121c28;
+  box-shadow: 0 0 16px rgba(179, 130, 26, 0.4);
+  translate: 0 -1px;
+}
+[data-theme="dark"] .theme-toggle-floating {
+  background: #101c2e;
+  border: 1.5px solid var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+[data-theme="dark"] .theme-toggle-floating:hover {
+  background: var(--gold-banner-grad);
+  border-color: #ffeaa4;
+  color: #08111e;
+  box-shadow: 0 0 20px rgba(200, 152, 42, 0.45);
+}
+
+.theme-toggle-btn {
+  font-family: var(--font-title);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  border-radius: 4px;
+  background: linear-gradient(180deg, #fdf9f0 0%, #efe4ce 100%);
+  border: 1.5px solid var(--gold);
+  color: #5a3e06;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 3px 12px rgba(60, 45, 25, 0.12), inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: all var(--transition-fast);
+  user-select: none;
+}
+.theme-toggle-btn:hover {
+  background: var(--gold-banner-grad);
+  border-color: #966708;
+  color: #121c28;
+  box-shadow: 0 0 18px rgba(179, 130, 26, 0.35);
+  translate: 0 -1px;
+}
+[data-theme="dark"] .theme-toggle-btn {
+  background: linear-gradient(180deg, #182842 0%, #0f1c30 100%);
+  border-color: var(--gold);
+  color: var(--gold-light);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+[data-theme="dark"] .theme-toggle-btn:hover {
+  background: var(--gold-banner-grad);
+  border-color: #ffeaa4;
+  color: #08111e;
+  box-shadow: 0 0 20px rgba(200, 152, 42, 0.4);
+}
+
+@media (max-width: 680px) {
+  .theme-toggle-floating .theme-toggle-text { display: none; }
+  .theme-toggle-floating {
+    padding: 7px 11px;
+    font-size: 0.95rem;
+    top: 10px;
+    right: 12px;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DARK MODE COMPONENT OVERRIDES
+   ═══════════════════════════════════════════════════════════════ */
+[data-theme="dark"] body {
+  background: var(--bg-deep);
+  color: var(--text-primary);
+  background-image: radial-gradient(circle at 50% 0%, #111d30 0%, #08111e 50%, #040911 100%);
+}
+[data-theme="dark"] .bg-orb:nth-child(1) { background: #00d4ff; opacity: 0.14; }
+[data-theme="dark"] .bg-orb:nth-child(2) { background: #c8982a; opacity: 0.12; }
+[data-theme="dark"] .bg-orb:nth-child(3) { background: #a855f7; opacity: 0.09; }
+[data-theme="dark"] .bg-orb:nth-child(4) { background: #007a99; opacity: 0.12; }
+[data-theme="dark"] .storm-lines {
+  opacity: 0.05;
+  background: repeating-linear-gradient(90deg, transparent, transparent 120px, rgba(0, 212, 255, 0.25) 120px, transparent 121px);
+}
+
+[data-theme="dark"] .app-header h1 {
+  color: #f5d688;
+  text-shadow: 0 0 30px rgba(200, 152, 42, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+[data-theme="dark"] .app-header .subtitle {
+  color: #9cb1c9;
+}
+
+[data-theme="dark"] .progress-line { background: #1d2e46; }
+[data-theme="dark"] .progress-step { color: #60758e; }
+[data-theme="dark"] .step-circle {
+  border: 2px solid #1d2e46;
+  background: #0b1524;
+  color: #9cb1c9;
+}
+[data-theme="dark"] .progress-step.active .step-circle {
+  border-color: #00d4ff;
+  color: #00d4ff;
+  background: #07192f;
+  box-shadow: 0 0 16px rgba(0, 212, 255, 0.4);
+}
+[data-theme="dark"] .progress-step.completed .step-circle {
+  border-color: #f5d688;
+  background: var(--gold-banner-grad);
+  color: #08111e;
+  box-shadow: 0 0 14px rgba(200, 152, 42, 0.3);
+}
+[data-theme="dark"] .progress-step.active,
+[data-theme="dark"] .progress-step.completed {
+  color: #f0f4f9;
+}
+
+[data-theme="dark"] .chapter-header-badge {
+  color: #fbe08e;
+  background: rgba(200, 152, 42, 0.15);
+  border-color: rgba(200, 152, 42, 0.4);
+}
+[data-theme="dark"] .step-title {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .step-subtitle {
+  color: #9cb1c9;
+}
+
+[data-theme="dark"] .scholar-note {
+  background: #0d192a;
+  border-color: #1e3350;
+  border-left-color: var(--gold);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+[data-theme="dark"] .scholar-text {
+  color: #e2e8f0;
+}
+[data-theme="dark"] .scholar-author {
+  color: #f5d688;
+}
+
+[data-theme="dark"] .card {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .card:hover {
+  background: var(--bg-card-hover);
+  border-color: var(--border-glow);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.5), 0 0 15px rgba(0, 212, 255, 0.1);
+}
+[data-theme="dark"] .card.selected {
+  border-color: var(--cyan);
+  background: #0d2238;
+  box-shadow: 0 0 24px rgba(0, 212, 255, 0.25), inset 0 0 30px rgba(0, 212, 255, 0.05);
+}
+[data-theme="dark"] .card-title {
+  color: #f5d688;
+}
+[data-theme="dark"] .card-desc {
+  color: #c5d4e8;
+}
+[data-theme="dark"] .card-bonus {
+  color: var(--cyan);
+  background: rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+[data-theme="dark"] .card-detail {
+  color: #8fa2ba;
+}
+
+[data-theme="dark"] .form-label {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .form-input,
+[data-theme="dark"] .form-textarea {
+  background: var(--bg-input);
+  border-color: var(--border-dim);
+  color: var(--text-primary);
+}
+[data-theme="dark"] .form-input:focus,
+[data-theme="dark"] .form-textarea:focus {
+  background: #0c182a;
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.18), 0 0 16px rgba(0, 212, 255, 0.12);
+}
+
+[data-theme="dark"] .sub-options {
+  background: rgba(0, 0, 0, 0.3);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .sub-option {
+  background: #0b1524;
+  border-color: var(--border-dim);
+  color: var(--text-secondary);
+}
+[data-theme="dark"] .sub-option:hover {
+  border-color: var(--border-glow);
+  background: #132238;
+  color: var(--text-primary);
+}
+[data-theme="dark"] .sub-option.selected {
+  border-color: var(--gold);
+  background: rgba(200, 152, 42, 0.2);
+  color: #fbe08e;
+  box-shadow: 0 0 14px rgba(200, 152, 42, 0.3);
+}
+
+[data-theme="dark"] .points-remaining {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .attr-group-title {
+  color: #f5d688;
+  border-bottom-color: var(--border-dim);
+}
+[data-theme="dark"] .attr-row {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .attr-name {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .attr-btn {
+  background: #15243b;
+  border-color: #233b5c;
+  color: #f0f4f9;
+}
+[data-theme="dark"] .attr-btn:hover:not(:disabled) {
+  border-color: var(--cyan);
+  background: #0d2238;
+  color: var(--cyan);
+}
+[data-theme="dark"] .derived-stats {
+  background: #0d1829;
+  border-color: #1c304d;
+}
+[data-theme="dark"] .derived-stat {
+  background: #132238;
+  border-color: #1e3352;
+}
+[data-theme="dark"] .derived-stat .label {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .derived-stat .value {
+  color: #f5d688;
+}
+[data-theme="dark"] .derived-stat .detail {
+  color: #60758e;
+}
+
+[data-theme="dark"] .skill-group-title {
+  color: #f5d688;
+  border-bottom-color: var(--border-dim);
+}
+[data-theme="dark"] .skill-row {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .skill-row.free-skill {
+  border-color: rgba(200, 152, 42, 0.45);
+  background: rgba(200, 152, 42, 0.1);
+}
+[data-theme="dark"] .skill-name {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .skill-badge {
+  background: rgba(200, 152, 42, 0.22);
+  color: #fbe08e;
+}
+[data-theme="dark"] .skill-btn {
+  background: #15243b;
+  border-color: #233b5c;
+  color: #f0f4f9;
+}
+[data-theme="dark"] .skill-btn:hover:not(:disabled) {
+  border-color: var(--cyan);
+  background: #0d2238;
+  color: var(--cyan);
+}
+
+[data-theme="dark"] .talent-controls-bar {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .talent-level-select select {
+  background: var(--bg-input);
+  border-color: var(--border-dim);
+  color: #f5d688;
+}
+[data-theme="dark"] .talent-tab-btn {
+  background: #0e1b2c;
+  border-color: var(--border-dim);
+  color: var(--text-secondary);
+}
+[data-theme="dark"] .talent-tab-btn:hover {
+  border-color: var(--border-glow);
+  background: #162942;
+  color: var(--text-primary);
+}
+[data-theme="dark"] .talent-tab-btn.active {
+  border-color: #ffeaa4;
+  color: #08111e;
+  background: var(--gold-banner-grad);
+  box-shadow: 0 0 20px rgba(200, 152, 42, 0.4);
+}
+[data-theme="dark"] .specialty-column {
+  background: #0c1829;
+  border-color: #1c304d;
+}
+[data-theme="dark"] .specialty-col-desc {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .specialty-orders-tag {
+  color: #f5d688;
+}
+[data-theme="dark"] .rulebook-banner {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="dark"] .talent-node-card {
+  background: #132238;
+  border: 1.5px solid #233b5c;
+  color: #f0f4f9;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+[data-theme="dark"] .talent-node-card:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+}
+[data-theme="dark"] .talent-node-card.learned {
+  border-color: var(--gold);
+  background: #121e2f;
+  box-shadow: 0 0 18px rgba(200, 152, 42, 0.35);
+}
+[data-theme="dark"] .talent-node-card.learned .node-name {
+  color: #fbe08e;
+}
+[data-theme="dark"] .talent-node-card.learned .node-rule-icon {
+  color: #f5d688;
+}
+[data-theme="dark"] .talent-node-card.learned::before {
+  color: #08111e;
+}
+[data-theme="dark"] .talent-node-card.is-key {
+  border-color: var(--cyan);
+  background: #0d2238;
+}
+[data-theme="dark"] .talent-node-card.locked {
+  background: #0d1726;
+  opacity: 0.65;
+}
+[data-theme="dark"] .node-name {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .node-rule-icon {
+  color: #67e8f9;
+}
+[data-theme="dark"] .node-prereq {
+  color: #9cb1c9;
+  border-bottom-color: #1e3350;
+}
+[data-theme="dark"] .node-prereq.met { color: #34d399; }
+[data-theme="dark"] .node-prereq.unmet { color: #f87171; }
+[data-theme="dark"] .node-summary {
+  color: #c5d4e8;
+}
+[data-theme="dark"] .talent-details summary {
+  color: var(--cyan);
+}
+[data-theme="dark"] .talent-details[open] summary {
+  color: #f5d688;
+}
+[data-theme="dark"] .talent-full-text {
+  background: rgba(0, 0, 0, 0.4);
+  border-color: rgba(255, 255, 255, 0.08);
+  border-left-color: var(--cyan);
+  color: #dbeafe;
+}
+[data-theme="dark"] .talent-toolbar {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .btn-toggle-all-details {
+  background: #0e1b2c;
+  border-color: var(--border-dim);
+  color: #f5d688;
+}
+[data-theme="dark"] .btn-toggle-all-details:hover {
+  background: var(--gold-banner-grad);
+  color: #08111e;
+}
+[data-theme="dark"] .node-badge.tier.tier-1 {
+  background: #1e293b; color: #94a3b8; border-color: #334155;
+}
+[data-theme="dark"] .node-badge.tier.tier-2 {
+  background: #082f49; color: #38bdf8; border-color: #0369a1;
+}
+[data-theme="dark"] .node-badge.tier.tier-3 {
+  background: #451a03; color: #fcd34d; border-color: #78350f;
+}
+[data-theme="dark"] .node-badge.tier.tier-4 {
+  background: #3b0764; color: #c084fc; border-color: #581c87;
+}
+[data-theme="dark"] .node-badge.cost {
+  background: #1e293b; color: #cbd5e1; border-color: #334155;
+}
+[data-theme="dark"] .node-badge.key {
+  background: #172554; color: #60a5fa; border-color: #1e40af;
+}
+[data-theme="dark"] .node-action-btn:disabled {
+  border-color: #334155;
+  background: #1e293b;
+  color: #64748b;
+}
+
+[data-theme="dark"] .summary-sheet {
+  background: linear-gradient(180deg, #0e1a2c 0%, #09121f 100%);
+  border-color: var(--gold);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 25px rgba(200, 152, 42, 0.18);
+  color: var(--text-primary);
+}
+[data-theme="dark"] .summary-sheet::before {
+  border-color: rgba(200, 152, 42, 0.35);
+}
+[data-theme="dark"] .summary-header {
+  border-bottom-color: rgba(200, 152, 42, 0.3);
+}
+[data-theme="dark"] .summary-name {
+  color: #f5d688;
+  text-shadow: 0 0 25px rgba(200, 152, 42, 0.4), 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+[data-theme="dark"] .summary-concept {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .summary-section-title {
+  color: #f5d688;
+  border-bottom-color: rgba(200, 152, 42, 0.3);
+}
+[data-theme="dark"] .summary-stat {
+  background: #132238;
+  border-color: #1e3352;
+}
+[data-theme="dark"] .summary-stat .label {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .summary-stat .val {
+  color: var(--cyan);
+}
+[data-theme="dark"] .summary-stat .val.gold {
+  color: #f5d688;
+}
+[data-theme="dark"] .summary-list li {
+  border-bottom-color: rgba(255, 255, 255, 0.08);
+  color: #d8e2ed;
+}
+[data-theme="dark"] .summary-list .skill-val {
+  color: var(--cyan);
+}
+[data-theme="dark"] .summary-talent-card {
+  background: #132238;
+  border-color: #233b5c;
+  color: #f0f4f9;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+}
+[data-theme="dark"] .summary-talent-card.is-key {
+  border-color: var(--cyan);
+  background: #0d2238;
+}
+[data-theme="dark"] .summary-talent-card.is-surge {
+  border-color: #a855f7;
+  background: #1d1430;
+}
+[data-theme="dark"] .summary-radiant {
+  background: rgba(0, 212, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.3);
+}
+[data-theme="dark"] .summary-radiant .order-name {
+  color: var(--cyan);
+}
+[data-theme="dark"] .summary-radiant .spren-type {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .summary-radiant .oath-text {
+  color: #f5d688;
+}
+
+[data-theme="dark"] .nav-buttons {
+  border-top-color: var(--border-dim);
+}
+[data-theme="dark"] .btn-back {
+  background: #142236;
+  border-color: #233a59;
+  color: #9cb1c9;
+}
+[data-theme="dark"] .btn-back:hover {
+  border-color: #38bdf8;
+  color: #f0f4f9;
+  background: #192b45;
+}
+[data-theme="dark"] .btn-outline {
+  background: #0e1b2c;
+  border-color: #233a59;
+  color: #9cb1c9;
+}
+[data-theme="dark"] .btn-outline:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: #0d2238;
+}
+[data-theme="dark"] .validation-msg {
+  background: rgba(244, 63, 94, 0.12);
+  border-color: rgba(244, 63, 94, 0.35);
+  color: #fca5a5;
+}
+
+[data-theme="dark"] .rulebook-page-footer {
+  border-top-color: rgba(200, 152, 42, 0.35);
+}
+[data-theme="dark"] .footer-medallion {
+  background: #101c2e;
+  border-color: var(--gold);
+}
+[data-theme="dark"] .page-number {
+  color: #f5d688;
+}
+[data-theme="dark"] .footer-chapter-text {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .footer-studio {
+  color: #f5d688;
+}
+[data-theme="dark"] .footer-license {
+  color: #60758e;
+}
+
+[data-theme="dark"] .talent-modal-overlay {
+  background: rgba(4, 8, 16, 0.85);
+}
+[data-theme="dark"] .talent-modal-container {
+  background: #0d1827;
+  border-color: var(--gold);
+  color: var(--text-primary);
+  box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(200, 152, 42, 0.25);
+}
+[data-theme="dark"] .talent-modal-header {
+  border-bottom-color: rgba(200, 152, 42, 0.3);
+}
+[data-theme="dark"] .talent-modal-title {
+  color: #f5d688;
+}
+[data-theme="dark"] .talent-modal-close {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .talent-modal-close:hover {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .talent-modal-desc {
+  color: #9cb1c9;
+}
+
+[data-theme="dark"] .radiant-toggle {
+  background: var(--bg-card);
+  border-color: var(--border-dim);
+}
+[data-theme="dark"] .toggle-switch {
+  background: #1d2e46;
+}
+[data-theme="dark"] .toggle-switch::after {
+  background: #60758e;
+}
+[data-theme="dark"] .toggle-switch.on::after {
+  background: #ffffff;
+}
+[data-theme="dark"] .radiant-toggle-label {
+  color: #f5d688;
+}
+[data-theme="dark"] .radiant-toggle-sub {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .order-card .oath {
+  color: #f5d688;
+  border-left-color: var(--gold);
+}
+[data-theme="dark"] .culture-tag {
+  background: rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.35);
+  color: var(--cyan);
+}
+[data-theme="dark"] .expertise-option {
+  background: #0e1b2c;
+  border-color: var(--border-dim);
+  color: var(--text-secondary);
+}
+[data-theme="dark"] .expertise-option:hover {
+  border-color: var(--border-glow);
+  background: #162942;
+  color: var(--text-primary);
+}
+[data-theme="dark"] .expertise-option.selected {
+  border-color: var(--gold);
+  color: #fbe08e;
+  background: rgba(200, 152, 42, 0.2);
+}
+[data-theme="dark"] .specialty-tag {
+  background: rgba(168, 85, 247, 0.15);
+  border-color: rgba(168, 85, 247, 0.35);
+  color: #c084fc;
+}
+[data-theme="dark"] .suggested-attrs {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .suggested-attrs span {
+  color: #f5d688;
+}
+[data-theme="dark"] .equip-items {
+  color: #c5d4e8;
+}
+[data-theme="dark"] .equip-money {
+  color: #f5d688;
+}
+
+[data-theme="dark"] ::-webkit-scrollbar-track { background: #08111e; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb { background: #1d2e46; border-color: #29466e; }
+[data-theme="dark"] ::-webkit-scrollbar-thumb:hover { background: var(--gold); }
+
 </style>
 </head>
 <body>
+
+<!-- Floating Theme Toggle (Available Across All Steps) -->
+<button type="button" class="theme-toggle-floating" id="btnThemeToggleFloat" aria-label="Toggle Sepia Parchment / Dark Mode" title="Toggle Theme (Sepia / Dark)">
+  <span class="theme-toggle-icon" id="themeIconFloat">🌙</span>
+  <span class="theme-toggle-text" id="themeTextFloat">Dark Mode</span>
+</button>
+
 
 <div class="bg-effects">
   <div class="bg-orb"></div>
@@ -1317,6 +2050,10 @@ body {
     <div class="header-actions">
       <button type="button" class="btn talent-browse-header-btn" id="btnOpenTalentBrowser" aria-label="Browse All Talent Trees">
         📜 Browse Talent Trees
+      </button>
+      <button type="button" class="btn theme-toggle-btn" id="btnThemeToggleHeader" aria-label="Toggle Sepia Parchment / Dark Mode">
+        <span class="theme-toggle-icon" id="themeIconHeader">🌙</span>
+        <span class="theme-toggle-text" id="themeTextHeader">Dark Mode</span>
       </button>
       <button type="button" class="btn btn-dummy-build" id="btnQuickBuildDummy" aria-label="Fill Dummy Data and Build Character">
         ⚡ Fill Dummy Data (Test Build)
@@ -4537,6 +5274,7 @@ SKILLS.forEach(s => state.skills[s.name] = 0);
    INIT
    ═══════════════════════════════════════════════════════════════ */
 function init() {
+  setupThemeToggle();
   loadState();
   buildProgressBar();
   buildAncestryCards();
@@ -7070,6 +7808,65 @@ function showDummyToast(msg) {
   toast._timeout = setTimeout(() => {
     toast.classList.remove('show');
   }, 3500);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   THEME MANAGER (Sepia Light Mode / Dark Mode Toggle)
+   ═══════════════════════════════════════════════════════════════ */
+const THEME_KEY = 'cosmere_builder_theme';
+
+function getPreferredTheme() {
+  const saved = localStorage.getItem(THEME_KEY);
+  if (saved === 'dark' || saved === 'sepia') return saved;
+  return 'sepia';
+}
+
+function applyTheme(theme) {
+  const isDark = theme === 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  try { localStorage.setItem(THEME_KEY, theme); } catch(e) {}
+
+  const icon = isDark ? '📜' : '🌙';
+  const text = isDark ? 'Sepia Mode' : 'Dark Mode';
+  const title = isDark ? 'Switch to Rosharan Sepia Parchment Mode' : 'Switch to Highstorm Dark Mode';
+
+  const btnFloat = el('btnThemeToggleFloat');
+  if (btnFloat) {
+    const iconSpan = el('themeIconFloat');
+    const textSpan = el('themeTextFloat');
+    if (iconSpan) iconSpan.textContent = icon;
+    if (textSpan) textSpan.textContent = text;
+    btnFloat.title = title;
+    btnFloat.setAttribute('aria-label', title);
+  }
+
+  const btnHeader = el('btnThemeToggleHeader');
+  if (btnHeader) {
+    const iconSpan = el('themeIconHeader');
+    const textSpan = el('themeTextHeader');
+    if (iconSpan) iconSpan.textContent = icon;
+    if (textSpan) textSpan.textContent = text;
+    btnHeader.title = title;
+    btnHeader.setAttribute('aria-label', title);
+  }
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'sepia';
+  const next = current === 'dark' ? 'sepia' : 'dark';
+  applyTheme(next);
+}
+
+function setupThemeToggle() {
+  const initialTheme = getPreferredTheme();
+  applyTheme(initialTheme);
+
+  const btnFloat = el('btnThemeToggleFloat');
+  if (btnFloat) btnFloat.addEventListener('click', toggleTheme);
+
+  const btnHeader = el('btnThemeToggleHeader');
+  if (btnHeader) btnHeader.addEventListener('click', toggleTheme);
 }
 
 function setupDummyBuildButtons() {
