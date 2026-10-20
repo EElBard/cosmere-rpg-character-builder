@@ -94,16 +94,31 @@ body {
    HEADER
    ═══════════════════════════════════════════════════════════════ */
 .app-header {
-  text-align: center; padding: 32px 0 24px; margin-bottom: 8px;
+  text-align: center; padding: 28px 0 20px; margin-bottom: 8px;
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
 }
 .app-header h1 {
   font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 700; letter-spacing: 0.06em;
   background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--cyan));
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  text-transform: uppercase; margin-bottom: 4px;
+  text-transform: uppercase; margin: 0; line-height: 1.25;
 }
 .app-header .subtitle {
-  font-size: 0.85rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase;
+  font-size: 0.85rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin: 0;
+}
+.header-actions {
+  display: flex; justify-content: center; align-items: center; margin-top: 8px;
+}
+.talent-browse-header-btn {
+  font-size: 0.82rem; font-weight: 600; padding: 8px 22px; border-radius: 99px;
+  background: rgba(74,158,255,0.08); border: 1px solid var(--border-glow);
+  color: var(--cyan); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.3); transition: all var(--transition-fast);
+  font-family: inherit; user-select: none;
+}
+.talent-browse-header-btn:hover {
+  background: rgba(0,212,255,0.15); border-color: var(--cyan); color: var(--text-primary);
+  box-shadow: 0 0 20px rgba(0,212,255,0.35); translate: 0 -1px;
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -622,14 +637,15 @@ body {
   background: var(--text-dim); color: var(--bg-deep);
 }
 .talent-tabs {
-  display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 20px;
-  scrollbar-width: thin;
+  display: flex; gap: 8px; overflow-x: auto; padding: 4px 4px 12px; margin-bottom: 20px;
+  scrollbar-width: thin; flex-shrink: 0; min-height: 52px; align-items: center;
 }
 .talent-tab-btn {
   padding: 8px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-dim);
   background: var(--bg-secondary); color: var(--text-secondary); cursor: pointer;
   font-size: 0.85rem; font-weight: 600; white-space: nowrap; transition: all var(--transition-fast);
-  display: flex; align-items: center; gap: 6px; font-family: inherit;
+  display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
+  flex-shrink: 0; height: 38px; line-height: 1; user-select: none;
 }
 .talent-tab-btn:hover {
   border-color: var(--border-glow); color: var(--text-primary);
@@ -751,15 +767,18 @@ body {
 }
 .talent-modal-header {
   display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-dim);
-  padding-bottom: 14px;
+  padding-bottom: 14px; flex-shrink: 0;
 }
 .talent-modal-title {
   font-size: 1.3rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 8px;
 }
 .talent-modal-close {
-  background: none; border: none; font-size: 1.5rem; color: var(--text-dim); cursor: pointer; line-height: 1;
+  background: none; border: none; font-size: 1.5rem; color: var(--text-dim); cursor: pointer; line-height: 1; padding: 4px;
 }
 .talent-modal-close:hover { color: var(--text-primary); }
+.talent-modal-desc {
+  font-size: 0.85rem; color: var(--text-secondary); margin: 0; flex-shrink: 0; line-height: 1.5;
+}
 
 .summary-talents-grid {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 8px;
@@ -789,13 +808,13 @@ body {
 
 <div class="app-container">
   <header class="app-header">
-    <div style="display:flex;align-items:center;justify-content:center;position:relative;flex-wrap:wrap;gap:12px;">
-      <h1>Stormlight Character Builder</h1>
-      <button type="button" class="btn btn-outline" id="btnOpenTalentBrowser" style="position:absolute;right:0;font-size:0.75rem;padding:6px 14px;border-radius:99px;" aria-label="Browse All Talent Trees">
+    <h1>Stormlight Character Builder</h1>
+    <div class="subtitle">Cosmere Roleplaying Game</div>
+    <div class="header-actions">
+      <button type="button" class="btn talent-browse-header-btn" id="btnOpenTalentBrowser" aria-label="Browse All Talent Trees">
         🌳 Browse Talent Trees
       </button>
     </div>
-    <div class="subtitle">Cosmere Roleplaying Game</div>
   </header>
 
   <!-- Progress Bar -->
@@ -2987,7 +3006,7 @@ document.addEventListener('DOMContentLoaded', init);
       <div class="talent-modal-title">🌳 Cosmere RPG Talent Trees Rulebook</div>
       <button type="button" class="talent-modal-close" id="btnCloseTalentModal" aria-label="Close talent browser">×</button>
     </div>
-    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">
+    <p class="talent-modal-desc">
       Browse all Heroic Paths (Agent, Envoy, Hunter, Leader, Scholar, Warrior) and Radiant Surges across all specialties and tiers. You can learn and unlearn talents here directly.
     </p>
     <div class="talent-tabs" id="modalTalentPathTabs" role="tablist"></div>
