@@ -4,144 +4,283 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cosmere RPG — Stormlight Character Builder</title>
-<style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
 /* ═══════════════════════════════════════════════════════════════
-   CSS CUSTOM PROPERTIES
+   COSMERE RPG — OFFICIAL STORMLIGHT RULEBOOK DESIGN SYSTEM
    ═══════════════════════════════════════════════════════════════ */
+@import url('https://fonts.googleapis.com/css2?family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Alegreya:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Caveat:wght@400;600;700&family=Cinzel+Decorative:wght@700&family=Cinzel:wght@500;600;700;800;900&display=swap');
+
 :root {
-  --bg-deep: #060e1a;
-  --bg-primary: #0a1628;
-  --bg-secondary: #0f1f38;
-  --bg-card: #111e35;
-  --bg-card-hover: #162848;
-  --bg-input: #0c1829;
-  --border-dim: #1a2d4d;
-  --border-glow: #2a4a7a;
-  --border-active: #4a9eff;
-  --text-primary: #e8edf5;
-  --text-secondary: #8a9bb5;
-  --text-dim: #5a6b85;
-  --gold: #d4a843;
-  --gold-light: #f0d080;
-  --gold-dim: #8a6e2a;
-  --blue-glow: #4a9eff;
-  --blue-bright: #6ab4ff;
+  color-scheme: dark;
+
+  /* Typography */
+  --font-title: 'Cinzel', Georgia, 'Times New Roman', serif;
+  --font-display: 'Cinzel Decorative', 'Cinzel', serif;
+  --font-body: 'Alegreya', Georgia, serif;
+  --font-ui: 'Alegreya Sans', system-ui, -apple-system, sans-serif;
+  --font-hand: 'Caveat', cursive;
+
+  /* Core Atmospheric Backgrounds (Urithiru Stone & Highstorm Mist) */
+  --bg-deep: #070d18;
+  --bg-primary: #0b1524;
+  --bg-secondary: #101c2e;
+  --bg-card: #132238;
+  --bg-card-hover: #192d4a;
+  --bg-input: #08111e;
+
+  /* Borders & Framing */
+  --border-dim: #1d2e46;
+  --border-glow: #29466e;
+  --border-active: #00d4ff;
+  --border-gold: #c8982a;
+  --border-gold-subtle: rgba(200, 152, 42, 0.35);
+
+  /* Typography Colors */
+  --text-primary: #f0f4f9;
+  --text-secondary: #9cb1c9;
+  --text-dim: #60758e;
+  --text-gold: #f5d688;
+
+  /* Rulebook Burnished Gold Palette (Ribbons & Plaques) */
+  --gold: #c8982a;
+  --gold-light: #fbe08e;
+  --gold-bright: #ffeaa4;
+  --gold-dim: #7f5c12;
+  --gold-banner-grad: linear-gradient(180deg, #dfa732 0%, #f1c75c 48%, #b67c14 100%);
+  --gold-ribbon-border: #ffeaa4;
+
+  /* Stormlight Cyan & Gemheart Accents */
   --cyan: #00d4ff;
+  --cyan-bright: #67e8f9;
   --cyan-dim: #007a99;
-  --storm-purple: #7a5af0;
-  --red-alert: #ff4a6a;
-  --green-ok: #4aff8a;
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --shadow-card: 0 4px 24px rgba(0,0,0,0.4), 0 1px 4px rgba(0,0,0,0.3);
-  --shadow-glow: 0 0 20px rgba(74,158,255,0.15), 0 0 60px rgba(74,158,255,0.05);
-  --shadow-gold: 0 0 20px rgba(212,168,67,0.2);
-  --transition-fast: 0.2s ease;
-  --transition-med: 0.35s ease;
-  --transition-slow: 0.5s ease;
+  --cyan-glow: rgba(0, 212, 255, 0.25);
+  --blue-glow: #38bdf8;
+  --storm-purple: #a855f7;
+  --red-alert: #f43f5e;
+  --green-ok: #10b981;
+
+  /* Official Rulebook Light Parchment System (Talent Tree Cards - Page 160) */
+  --parchment-bg: #faf7ee;
+  --parchment-card: #faf7ee;
+  --parchment-border: #1d2c3e;
+  --parchment-border-subtle: #dbd0b9;
+  --parchment-ink: #16212e;
+  --parchment-ink-muted: #4e5f73;
+  --parchment-ink-dim: #78879b;
+  --parchment-gold-tag: #eeddbb;
+
+  /* Radius & Shadows */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --shadow-card: 0 4px 20px rgba(0,0,0,0.5), 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-glow: 0 0 25px rgba(0,212,255,0.2), 0 0 60px rgba(0,212,255,0.06);
+  --shadow-gold: 0 0 24px rgba(200,152,42,0.3);
+
+  /* Transitions */
+  --transition-fast: 0.18s ease;
+  --transition-med: 0.3s ease;
 }
 
-
+/* Export Official Button (Gold Leaf / Illuminated Rosharan Book Style) */
 .btn-export-official {
-  background: linear-gradient(135deg, #d4a843 0%, #f0d080 50%, #d4a843 100%) !important;
-  color: #060e1a !important;
-  font-weight: 700 !important;
-  border: 1px solid #f0d080 !important;
-  box-shadow: 0 0 24px rgba(212,168,67,0.45);
+  background: var(--gold-banner-grad) !important;
+  color: #121c28 !important;
+  font-family: var(--font-title) !important;
+  font-weight: 800 !important;
+  font-size: 0.98rem !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  border: 1px solid var(--gold-ribbon-border) !important;
+  box-shadow: 0 4px 20px rgba(200,152,42,0.4), inset 0 1px 0 rgba(255,255,255,0.7) !important;
   cursor: pointer;
-  border-radius: var(--radius-md);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border-radius: var(--radius-sm) !important;
+  transition: all var(--transition-fast) !important;
 }
 .btn-export-official:hover {
   transform: translateY(-2px);
-  box-shadow: 0 0 35px rgba(212,168,67,0.7);
+  box-shadow: 0 0 30px rgba(200,152,42,0.65), inset 0 1px 0 rgba(255,255,255,0.9) !important;
+  filter: brightness(1.08);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   RESET & BASE
+   RESET & GLOBAL TYPOGRAPHY
    ═══════════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
+
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-body);
   background: var(--bg-deep);
   color: var(--text-primary);
   line-height: 1.6;
   min-height: 100vh;
   overflow-x: hidden;
+  background-image:
+    radial-gradient(circle at 50% 0%, #152744 0%, #0a1322 45%, #050a12 100%);
+  background-attachment: fixed;
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   AMBIENT BACKGROUND EFFECTS
+   ATMOSPHERIC STORMLIGHT & URITHIRU STONE EFFECTS
    ═══════════════════════════════════════════════════════════════ */
 .bg-effects {
   position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
 }
 .bg-orb {
-  position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.12;
-  animation: orbFloat 20s ease-in-out infinite;
+  position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.14;
+  animation: orbFloat 22s ease-in-out infinite;
   @media (prefers-reduced-motion: reduce) { animation: none; }
 }
-.bg-orb:nth-child(1) { width: 500px; height: 500px; background: var(--blue-glow); top: -10%; left: -5%; animation-delay: 0s; }
-.bg-orb:nth-child(2) { width: 400px; height: 400px; background: var(--cyan); top: 40%; right: -10%; animation-delay: -7s; }
-.bg-orb:nth-child(3) { width: 350px; height: 350px; background: var(--storm-purple); bottom: -5%; left: 30%; animation-delay: -14s; }
-.bg-orb:nth-child(4) { width: 300px; height: 300px; background: var(--gold); top: 20%; left: 50%; animation-delay: -10s; opacity: 0.06; }
+.bg-orb:nth-child(1) { width: 550px; height: 550px; background: var(--blue-glow); top: -12%; left: -8%; animation-delay: 0s; }
+.bg-orb:nth-child(2) { width: 450px; height: 450px; background: var(--cyan); top: 35%; right: -12%; animation-delay: -8s; }
+.bg-orb:nth-child(3) { width: 380px; height: 380px; background: var(--storm-purple); bottom: -6%; left: 25%; animation-delay: -15s; }
+.bg-orb:nth-child(4) { width: 320px; height: 320px; background: var(--gold); top: 15%; left: 55%; animation-delay: -11s; opacity: 0.08; }
+
 @keyframes orbFloat {
   0%, 100% { translate: 0 0; }
-  33% { translate: 40px -30px; }
-  66% { translate: -20px 50px; }
+  33% { translate: 35px -25px; }
+  66% { translate: -25px 40px; }
 }
+
 .storm-lines {
-  position: absolute; inset: 0; opacity: 0.03;
-  background: repeating-linear-gradient(90deg, transparent, transparent 100px, rgba(74,158,255,0.3) 100px, transparent 101px);
-  animation: stormDrift 30s linear infinite;
+  position: absolute; inset: 0; opacity: 0.035;
+  background: repeating-linear-gradient(90deg, transparent, transparent 120px, rgba(0,212,255,0.3) 120px, transparent 121px);
+  animation: stormDrift 35s linear infinite;
   @media (prefers-reduced-motion: reduce) { animation: none; }
 }
-@keyframes stormDrift { to { translate: -200px 0; } }
+@keyframes stormDrift { to { translate: -240px 0; } }
 
 /* ═══════════════════════════════════════════════════════════════
-   LAYOUT
+   LAYOUT & CONTAINER
    ═══════════════════════════════════════════════════════════════ */
-.app-container { position: relative; z-index: 1; max-width: 960px; margin: 0 auto; padding: 20px 16px 60px; }
+.app-container {
+  position: relative; z-index: 1; max-width: 1040px; margin: 0 auto;
+  padding: 24px 20px 80px;
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   HEADER
+   HEADER (Rosharan Rulebook Grand Crest)
    ═══════════════════════════════════════════════════════════════ */
 .app-header {
-  text-align: center; padding: 28px 0 20px; margin-bottom: 8px;
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  text-align: center; padding: 24px 0 16px; margin-bottom: 12px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  position: relative;
 }
+.header-ornament-line {
+  display: flex; align-items: center; justify-content: center; gap: 14px;
+  width: 100%; max-width: 580px; margin: 0 auto 4px;
+}
+.ornament-rule {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.ornament-diamond {
+  color: var(--gold); font-size: 0.85rem; line-height: 1;
+  text-shadow: 0 0 10px rgba(200, 152, 42, 0.6);
+}
+
 .app-header h1 {
-  font-size: clamp(1.6rem, 5vw, 2.4rem); font-weight: 700; letter-spacing: 0.06em;
-  background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--cyan));
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
-  text-transform: uppercase; margin: 0; line-height: 1.25;
+  font-family: var(--font-title);
+  font-size: clamp(1.8rem, 5.5vw, 2.7rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1.18;
+  background: linear-gradient(180deg, #fff3c4 0%, #f4ca5b 45%, #b97f14 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.8));
 }
 .app-header .subtitle {
-  font-size: 0.85rem; color: var(--text-dim); letter-spacing: 0.15em; text-transform: uppercase; margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin: 0;
+  font-weight: 600;
 }
+
 .header-actions {
-  display: flex; justify-content: center; align-items: center; margin-top: 8px;
+  display: flex; justify-content: center; align-items: center; gap: 12px; margin-top: 10px;
 }
 .talent-browse-header-btn {
-  font-size: 0.82rem; font-weight: 600; padding: 8px 22px; border-radius: 99px;
-  background: rgba(74,158,255,0.08); border: 1px solid var(--border-glow);
-  color: var(--cyan); cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.3); transition: all var(--transition-fast);
-  font-family: inherit; user-select: none;
+  font-family: var(--font-title);
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 24px; border-radius: 4px;
+  background: linear-gradient(180deg, #182842 0%, #0d1a2c 100%);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  cursor: pointer; display: inline-flex; align-items: center; gap: 10px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+  transition: all var(--transition-fast); user-select: none;
 }
 .talent-browse-header-btn:hover {
-  background: rgba(0,212,255,0.15); border-color: var(--cyan); color: var(--text-primary);
-  box-shadow: 0 0 20px rgba(0,212,255,0.35); translate: 0 -1px;
+  background: linear-gradient(180deg, #223758 0%, #13243c 100%);
+  border-color: var(--gold-bright); color: #fff;
+  box-shadow: 0 0 20px rgba(200, 152, 42, 0.4);
+  translate: 0 -1px;
+}
+
+.btn-dummy-build {
+  font-family: var(--font-title);
+  font-size: 0.82rem; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 9px 22px; border-radius: 4px;
+  background: linear-gradient(180deg, rgba(200, 152, 42, 0.22) 0%, rgba(138, 102, 26, 0.35) 100%);
+  border: 1px solid var(--gold-bright, #e4be58);
+  color: #fff;
+  cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15), 0 0 14px rgba(200, 152, 42, 0.25);
+  transition: all var(--transition-fast); user-select: none;
+}
+.btn-dummy-build:hover {
+  background: linear-gradient(180deg, rgba(228, 190, 88, 0.35) 0%, rgba(200, 152, 42, 0.5) 100%);
+  border-color: #fff; color: #fff;
+  box-shadow: 0 0 24px rgba(228, 190, 88, 0.5);
+  translate: 0 -1px;
+}
+.btn-dummy-build:active {
+  translate: 0 1px;
+}
+
+.dummy-toast-notice {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: rgba(10, 22, 40, 0.96);
+  border: 1px solid var(--gold);
+  color: var(--gold-light);
+  font-family: var(--font-ui, sans-serif);
+  font-size: 0.86rem;
+  font-weight: 600;
+  padding: 12px 20px;
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 18px rgba(212,168,67,0.3);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dummy-toast-notice.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   PROGRESS BAR
+   PROGRESS BAR (Oathgate Chapter Sequence with Roman Numerals)
    ═══════════════════════════════════════════════════════════════ */
 .progress-container {
-  margin-bottom: 32px; padding: 0 4px;
+  margin-bottom: 34px; padding: 0 4px;
 }
 .progress-steps {
   display: flex; align-items: center; justify-content: space-between; position: relative;
@@ -154,296 +293,790 @@ body {
   position: absolute; top: 18px; left: 24px; height: 2px;
   background: linear-gradient(90deg, var(--gold), var(--cyan));
   z-index: 1; transition: width var(--transition-med);
-  box-shadow: 0 0 10px rgba(0,212,255,0.3);
+  box-shadow: 0 0 12px rgba(0,212,255,0.4);
 }
 .progress-step {
   display: flex; flex-direction: column; align-items: center; gap: 6px;
   position: relative; z-index: 2; cursor: pointer; background: none; border: none;
-  color: var(--text-dim); font-size: 0.65rem; letter-spacing: 0.05em;
+  color: var(--text-dim); font-family: var(--font-ui); font-size: 0.68rem;
+  letter-spacing: 0.08em; text-transform: uppercase; font-weight: 600;
   transition: color var(--transition-fast);
 }
 .progress-step:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; border-radius: var(--radius-sm); }
+
 .step-circle {
-  width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
-  border: 2px solid var(--border-dim); background: var(--bg-primary); font-size: 0.8rem; font-weight: 600;
+  width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  border: 2px solid var(--border-dim); background: var(--bg-primary);
+  font-family: var(--font-title); font-size: 0.82rem; font-weight: 700;
   transition: all var(--transition-med); color: var(--text-dim);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 .progress-step.active .step-circle {
-  border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.08);
-  box-shadow: 0 0 16px rgba(0,212,255,0.25);
+  border-color: var(--cyan); color: var(--cyan); background: rgba(0,212,255,0.12);
+  box-shadow: 0 0 18px rgba(0,212,255,0.35), inset 0 0 10px rgba(0,212,255,0.2);
 }
 .progress-step.completed .step-circle {
-  border-color: var(--gold); background: var(--gold); color: var(--bg-deep);
+  border-color: var(--gold);
+  background: var(--gold-banner-grad);
+  color: #121c28;
+  box-shadow: 0 0 14px rgba(200,152,42,0.3);
 }
 .progress-step.active, .progress-step.completed { color: var(--text-primary); }
-.step-label { white-space: nowrap; }
-@media (max-width: 640px) {
+.step-label { white-space: nowrap; font-variant: small-caps; }
+
+@media (max-width: 680px) {
   .step-label { display: none; }
-  .step-circle { width: 30px; height: 30px; font-size: 0.7rem; }
-  .progress-line, .progress-line-fill { top: 14px; }
+  .step-circle { width: 32px; height: 32px; font-size: 0.72rem; }
+  .progress-line, .progress-line-fill { top: 15px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   STEP PANELS
+   STEP PANELS & CHAPTER HEADERS
    ═══════════════════════════════════════════════════════════════ */
 .step-panel {
-  display: none; opacity: 0; translate: 0 20px;
+  display: none; opacity: 0; translate: 0 16px;
   transition: opacity var(--transition-med), translate var(--transition-med);
   @media (prefers-reduced-motion: reduce) { transition: opacity 0.15s ease; translate: none; }
 }
 .step-panel.active { display: block; }
 .step-panel.visible { opacity: 1; translate: 0 0; }
 
-.step-title {
-  font-size: clamp(1.3rem, 4vw, 1.7rem); font-weight: 700; margin-bottom: 4px;
-  background: linear-gradient(90deg, var(--text-primary), var(--blue-bright));
-  -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+.chapter-header-badge {
+  display: inline-block;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(200, 152, 42, 0.1);
+  border: 1px solid rgba(200, 152, 42, 0.35);
+  padding: 3px 12px;
+  border-radius: 99px;
+  margin-bottom: 8px;
 }
-.step-subtitle { color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 24px; }
+
+.step-title {
+  font-family: var(--font-title);
+  font-size: clamp(1.4rem, 4vw, 1.85rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.25;
+}
+.step-subtitle {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* Scholar In-World Margin Annotation (Shallan / Navani Notebook style) */
+.scholar-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  background: rgba(24, 38, 60, 0.5);
+  border-left: 3px solid var(--gold);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 10px 14px;
+  margin-bottom: 24px;
+  position: relative;
+  backdrop-filter: blur(4px);
+}
+.scholar-icon {
+  font-size: 1.1rem; line-height: 1.4; opacity: 0.85; flex-shrink: 0;
+}
+.scholar-text {
+  font-family: var(--font-hand);
+  font-size: 1.15rem;
+  line-height: 1.35;
+  color: #f0e1be;
+  margin: 0;
+}
+.scholar-author {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  color: var(--gold-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  font-style: normal;
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   CARDS
+   RULEBOOK CARDS (Ancestry, Cultures, Paths, Kits, Radiant Orders)
    ═══════════════════════════════════════════════════════════════ */
 .card {
-  background: var(--bg-card); border: 1px solid var(--border-dim);
-  border-radius: var(--radius-lg); padding: 20px; margin-bottom: 16px;
-  transition: all var(--transition-fast); cursor: pointer; position: relative; overflow: hidden;
+  background: var(--bg-card);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 14px;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
 }
 .card::before {
   content: ''; position: absolute; inset: 0; border-radius: inherit; opacity: 0;
-  background: linear-gradient(135deg, rgba(74,158,255,0.06), rgba(0,212,255,0.03));
+  background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(200,152,42,0.04));
   transition: opacity var(--transition-fast); pointer-events: none;
 }
-.card:hover { border-color: var(--border-glow); }
+.card:hover {
+  border-color: var(--border-glow);
+  translate: 0 -2px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
 .card:hover::before { opacity: 1; }
 .card:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+
 .card.selected {
-  border-color: var(--cyan); background: rgba(0,212,255,0.05);
-  box-shadow: 0 0 24px rgba(0,212,255,0.12), inset 0 0 30px rgba(0,212,255,0.03);
+  border-color: var(--cyan);
+  background: rgba(0,212,255,0.06);
+  box-shadow: 0 0 24px rgba(0,212,255,0.2), inset 0 0 30px rgba(0,212,255,0.04);
 }
 .card.selected::after {
   content: '✓'; position: absolute; top: 12px; right: 14px;
-  width: 26px; height: 26px; border-radius: 50%; background: var(--cyan);
-  color: var(--bg-deep); font-size: 0.85rem; font-weight: 700;
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--cyan); color: #080f1a;
+  font-size: 0.9rem; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
   pointer-events: none;
+  box-shadow: 0 0 10px rgba(0,212,255,0.5);
 }
+
 .card-icon { font-size: 1.8rem; margin-bottom: 8px; display: block; }
-.card-title { font-size: 1.1rem; font-weight: 600; color: var(--gold-light); margin-bottom: 6px; }
-.card-desc { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 8px; }
+.card-title {
+  font-family: var(--font-title);
+  font-size: 1.12rem; font-weight: 700;
+  color: var(--gold-light); margin-bottom: 6px;
+  letter-spacing: 0.03em;
+}
+.card-desc {
+  font-size: 0.92rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: 10px;
+}
 .card-bonus {
-  font-size: 0.8rem; color: var(--cyan); background: rgba(0,212,255,0.06);
-  padding: 6px 10px; border-radius: var(--radius-sm); border: 1px solid rgba(0,212,255,0.15);
+  font-family: var(--font-ui);
+  font-size: 0.82rem; font-weight: 600;
+  color: var(--cyan); background: rgba(0,212,255,0.08);
+  padding: 6px 10px; border-radius: var(--radius-sm);
+  border: 1px solid rgba(0,212,255,0.2);
   display: inline-block;
 }
 .card-detail {
-  font-size: 0.78rem; color: var(--text-dim); margin-top: 4px;
+  font-size: 0.8rem; color: var(--text-dim); margin-top: 6px;
 }
-.card-grid {
-  display: grid; gap: 14px;
-}
-.card-grid.cols-2 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-.card-grid.cols-3 { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+
+.card-grid { display: grid; gap: 14px; }
+.card-grid.cols-2 { grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); }
+.card-grid.cols-3 { grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); }
 .card-grid.cols-5 { grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); }
 
 /* ═══════════════════════════════════════════════════════════════
-   FORM INPUTS
+   FORM INPUTS & CONTROLS
    ═══════════════════════════════════════════════════════════════ */
 .form-group { margin-bottom: 18px; }
 .form-label {
-  display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);
-  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px;
+  display: block; font-family: var(--font-ui);
+  font-size: 0.82rem; font-weight: 700; color: var(--text-secondary);
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px;
 }
 .form-input, .form-textarea {
-  width: 100%; padding: 12px 14px; font-size: 0.95rem; color: var(--text-primary);
-  background: var(--bg-input); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
+  width: 100%; padding: 12px 14px; font-size: 0.98rem; color: var(--text-primary);
+  background: var(--bg-input); border: 1px solid var(--border-dim); border-radius: var(--radius-sm);
   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   font-family: inherit; line-height: 1.5;
 }
 .form-input:focus, .form-textarea:focus {
   outline: none; border-color: var(--cyan);
-  box-shadow: 0 0 0 3px rgba(0,212,255,0.12), 0 0 16px rgba(0,212,255,0.08);
+  box-shadow: 0 0 0 3px rgba(0,212,255,0.15), 0 0 16px rgba(0,212,255,0.1);
 }
-.form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); }
+.form-input::placeholder, .form-textarea::placeholder { color: var(--text-dim); font-style: italic; }
 .form-textarea { resize: vertical; min-height: 80px; }
 .form-input:user-invalid { border-color: var(--red-alert); }
 
-/* ═══════════════════════════════════════════════════════════════
-   SUB-OPTIONS (Singer forms, culture expertise)
-   ═══════════════════════════════════════════════════════════════ */
+/* Sub options (Singer forms, etc.) */
 .sub-options {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px;
-  margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.2); border-radius: var(--radius-md);
+  margin-top: 12px; padding: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-md);
+  border: 1px solid var(--border-dim);
 }
 .sub-option {
   padding: 10px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-dim);
-  background: var(--bg-secondary); cursor: pointer; text-align: center; font-size: 0.85rem;
+  background: var(--bg-secondary); cursor: pointer; text-align: center; font-size: 0.88rem;
   transition: all var(--transition-fast); color: var(--text-secondary);
+  font-family: var(--font-ui); font-weight: 600;
 }
 .sub-option:hover { border-color: var(--border-glow); color: var(--text-primary); }
-.sub-option.selected { border-color: var(--gold); background: rgba(212,168,67,0.08); color: var(--gold-light); }
+.sub-option.selected {
+  border-color: var(--gold); background: rgba(200,152,42,0.14); color: var(--gold-light);
+  box-shadow: 0 0 12px rgba(200,152,42,0.2);
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   ATTRIBUTE CONTROLS
+   ATTRIBUTE CONTROLS & DERIVED STATS (Cosmere RPG Stat Block)
    ═══════════════════════════════════════════════════════════════ */
-.attr-group-title {
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text-dim); margin-bottom: 10px; padding-bottom: 6px;
-  border-bottom: 1px solid var(--border-dim);
-}
-.attr-row {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 10px 14px; margin-bottom: 6px; border-radius: var(--radius-md);
-  background: var(--bg-card); border: 1px solid var(--border-dim);
-  transition: border-color var(--transition-fast);
-}
-.attr-row.suggested { border-color: rgba(212,168,67,0.3); }
-.attr-row.suggested::before {
-  content: '★'; position: absolute; left: -4px; top: 50%; translate: 0 -50%;
-  color: var(--gold); font-size: 0.6rem;
-}
-.attr-row { position: relative; }
-.attr-info { display: flex; align-items: center; gap: 10px; }
-.attr-name { font-weight: 600; font-size: 0.95rem; min-width: 100px; }
-.attr-abbr { font-size: 0.7rem; color: var(--text-dim); }
-.attr-controls { display: flex; align-items: center; gap: 8px; }
-.attr-btn {
-  width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border-dim);
-  background: var(--bg-secondary); color: var(--text-primary); font-size: 1.1rem;
-  cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all var(--transition-fast); line-height: 1;
-}
-.attr-btn:hover:not(:disabled) { border-color: var(--cyan); background: rgba(0,212,255,0.1); }
-.attr-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-.attr-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
-.attr-value {
-  font-size: 1.4rem; font-weight: 700; width: 36px; text-align: center; color: var(--cyan);
-  transition: color var(--transition-fast);
-}
-.attr-value[data-val="0"] { color: var(--text-dim); }
 .points-remaining {
-  text-align: center; padding: 14px; margin-bottom: 20px; border-radius: var(--radius-md);
-  background: var(--bg-card); border: 1px solid var(--border-dim);
-  font-size: 1rem; font-weight: 600;
+  text-align: center; padding: 14px; margin-bottom: 22px; border-radius: var(--radius-md);
+  background: var(--bg-card); border: 1px solid var(--border-gold-subtle);
+  font-family: var(--font-title); font-size: 1rem; font-weight: 600;
+  box-shadow: var(--shadow-card);
 }
 .points-remaining .count {
-  font-size: 1.6rem; color: var(--cyan);
-  transition: color var(--transition-fast);
+  font-size: 1.6rem; color: var(--cyan); font-weight: 700;
+  transition: color var(--transition-fast); margin-left: 4px;
 }
 .points-remaining .count.warning { color: var(--gold); }
 .points-remaining .count.zero { color: var(--green-ok); }
 
-/* Derived stats */
+.attr-group-title {
+  font-family: var(--font-title); font-size: 0.8rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 10px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-dim);
+}
+.attr-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 16px; margin-bottom: 8px; border-radius: var(--radius-sm);
+  background: var(--bg-card); border: 1px solid var(--border-dim);
+  transition: border-color var(--transition-fast); position: relative;
+}
+.attr-row.suggested { border-color: rgba(200,152,42,0.4); }
+.attr-row.suggested::before {
+  content: '★'; position: absolute; left: 4px; top: 50%; translate: 0 -50%;
+  color: var(--gold); font-size: 0.65rem;
+}
+.attr-info { display: flex; align-items: center; gap: 10px; }
+.attr-name {
+  font-family: var(--font-title); font-weight: 700; font-size: 1rem; min-width: 110px;
+}
+.attr-abbr {
+  font-family: var(--font-ui); font-size: 0.72rem; color: var(--text-dim);
+  font-weight: 700; letter-spacing: 0.08em;
+}
+.attr-controls { display: flex; align-items: center; gap: 8px; }
+.attr-btn {
+  width: 32px; height: 32px; border-radius: 4px; border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); color: var(--text-primary); font-size: 1.15rem;
+  cursor: pointer; display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast); line-height: 1; font-family: inherit;
+}
+.attr-btn:hover:not(:disabled) { border-color: var(--cyan); background: rgba(0,212,255,0.12); }
+.attr-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+.attr-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
+.attr-value {
+  font-family: var(--font-title); font-size: 1.45rem; font-weight: 700;
+  width: 36px; text-align: center; color: var(--cyan);
+}
+.attr-value[data-val="0"] { color: var(--text-dim); }
+
+/* Derived stats (Rulebook Stat Block) */
 .derived-stats {
   display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;
-  margin-top: 20px; padding: 16px; background: var(--bg-secondary); border-radius: var(--radius-lg);
-  border: 1px solid var(--border-dim);
+  margin-top: 22px; padding: 18px; background: var(--bg-secondary); border-radius: var(--radius-md);
+  border: 1px solid var(--border-gold-subtle);
 }
 .derived-stat {
   text-align: center; padding: 10px;
+  background: rgba(7, 13, 24, 0.4); border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.04);
 }
-.derived-stat .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 2px; }
-.derived-stat .value { font-size: 1.5rem; font-weight: 700; color: var(--gold-light); }
-.derived-stat .detail { font-size: 0.7rem; color: var(--text-dim); }
+.derived-stat .label {
+  font-family: var(--font-ui); font-size: 0.72rem; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--text-secondary); margin-bottom: 2px; font-weight: 700;
+}
+.derived-stat .value {
+  font-family: var(--font-title); font-size: 1.55rem; font-weight: 700; color: var(--gold-light);
+}
+.derived-stat .detail { font-size: 0.72rem; color: var(--text-dim); font-style: italic; }
 
 /* ═══════════════════════════════════════════════════════════════
    SKILLS
    ═══════════════════════════════════════════════════════════════ */
-.skill-group { margin-bottom: 20px; }
+.skill-group { margin-bottom: 22px; }
 .skill-group-title {
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-dim);
-  margin-bottom: 8px; padding-bottom: 6px; border-bottom: 1px solid var(--border-dim);
+  font-family: var(--font-title); font-size: 0.8rem; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--gold); margin-bottom: 8px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--border-dim);
 }
 .skill-row {
   display: flex; align-items: center; justify-content: space-between;
-  padding: 8px 12px; margin-bottom: 4px; border-radius: var(--radius-sm);
+  padding: 8px 14px; margin-bottom: 4px; border-radius: var(--radius-sm);
   background: var(--bg-card); border: 1px solid transparent;
-  transition: all var(--transition-fast); font-size: 0.9rem;
+  transition: all var(--transition-fast); font-size: 0.95rem;
 }
-.skill-row.free-skill { border-color: rgba(212,168,67,0.3); background: rgba(212,168,67,0.04); }
+.skill-row.free-skill { border-color: rgba(200,152,42,0.35); background: rgba(200,152,42,0.06); }
 .skill-info { display: flex; align-items: center; gap: 8px; flex: 1; }
-.skill-name { font-weight: 500; }
+.skill-name { font-weight: 600; font-family: var(--font-body); }
 .skill-badge {
-  font-size: 0.6rem; padding: 1px 6px; border-radius: 99px; background: rgba(212,168,67,0.15);
-  color: var(--gold); text-transform: uppercase; letter-spacing: 0.05em;
+  font-family: var(--font-ui); font-size: 0.65rem; padding: 2px 7px; border-radius: 99px;
+  background: rgba(200,152,42,0.18); color: var(--gold-light); text-transform: uppercase;
+  letter-spacing: 0.06em; font-weight: 700;
 }
 .skill-bonus {
-  font-size: 0.8rem; color: var(--text-dim); min-width: 50px; text-align: right; margin-right: 10px;
+  font-family: var(--font-title); font-size: 0.85rem; color: var(--text-dim);
+  min-width: 50px; text-align: right; margin-right: 12px; font-weight: 600;
 }
 .skill-controls { display: flex; align-items: center; gap: 6px; }
 .skill-btn {
-  width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border-dim);
-  background: var(--bg-secondary); color: var(--text-primary); font-size: 0.9rem;
+  width: 28px; height: 28px; border-radius: 4px; border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); color: var(--text-primary); font-size: 0.95rem;
   cursor: pointer; display: flex; align-items: center; justify-content: center;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-fast); font-family: inherit;
 }
-.skill-btn:hover:not(:disabled) { border-color: var(--cyan); }
+.skill-btn:hover:not(:disabled) { border-color: var(--cyan); background: rgba(0,212,255,0.1); }
 .skill-btn:disabled { opacity: 0.3; cursor: not-allowed; }
 .skill-btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; }
-.skill-rank { font-weight: 700; width: 24px; text-align: center; font-size: 0.95rem; color: var(--cyan); }
+.skill-rank {
+  font-family: var(--font-title); font-weight: 700; width: 24px; text-align: center;
+  font-size: 1rem; color: var(--cyan);
+}
 .skill-rank[data-val="0"] { color: var(--text-dim); }
 
 /* ═══════════════════════════════════════════════════════════════
-   EQUIPMENT CARDS
+   TALENT TREES STYLING — OFFICIAL RULEBOOK AESTHETIC (Page 160)
    ═══════════════════════════════════════════════════════════════ */
-.equip-items {
-  font-size: 0.82rem; color: var(--text-secondary); margin-top: 8px; line-height: 1.7;
+.talent-controls-bar {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: 12px; margin-bottom: 22px; padding: 14px 20px;
+  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
 }
-.equip-items li { padding-left: 4px; }
-.equip-money { color: var(--gold); font-weight: 600; }
+.talent-level-select {
+  display: flex; align-items: center; gap: 10px; font-family: var(--font-ui);
+  font-size: 0.9rem; color: var(--text-secondary);
+}
+.talent-level-select select {
+  background: var(--bg-input); border: 1px solid var(--border-gold-subtle);
+  border-radius: var(--radius-sm); color: var(--gold-light); font-weight: 700;
+  padding: 6px 14px; cursor: pointer; font-family: var(--font-title); font-size: 0.85rem;
+}
+.talent-level-select select:focus {
+  outline: 2px solid var(--gold); border-color: var(--gold);
+}
+.talent-points-pill {
+  font-family: var(--font-title); font-size: 0.92rem; font-weight: 700;
+  color: var(--text-primary); display: flex; align-items: center; gap: 8px;
+}
+.talent-points-pill .count {
+  background: var(--gold-banner-grad); color: #121c28; border-radius: 99px;
+  padding: 2px 12px; font-weight: 800;
+}
+.talent-points-pill .count.zero {
+  background: var(--text-dim); color: #080f1a;
+}
+
+.talent-tabs {
+  display: flex; gap: 8px; overflow-x: auto; padding: 4px 4px 14px; margin-bottom: 22px;
+  scrollbar-width: thin; flex-shrink: 0; min-height: 52px; align-items: center;
+}
+.talent-tab-btn {
+  padding: 9px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); color: var(--text-secondary); cursor: pointer;
+  font-family: var(--font-title); font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap;
+  transition: all var(--transition-fast); display: inline-flex; align-items: center;
+  gap: 8px; flex-shrink: 0; height: 38px; line-height: 1; user-select: none;
+}
+.talent-tab-btn:hover {
+  border-color: var(--border-glow); color: var(--text-primary);
+}
+.talent-tab-btn.active {
+  border-color: var(--gold); color: #141c26;
+  background: var(--gold-banner-grad);
+  box-shadow: 0 0 16px rgba(200,152,42,0.35);
+}
+
+.talent-specialties-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px;
+}
+.specialty-column {
+  background: rgba(13, 23, 38, 0.85);
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  display: flex; flex-direction: column; gap: 14px;
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+
+/* Specialty / Surge Column Gold Plaque Banner ("CRYPTIC BOND" style - Page 160) */
+.rulebook-banner {
+  background: var(--gold-banner-grad);
+  border: 1px solid var(--gold-ribbon-border);
+  border-bottom: 2px solid #6b4304;
+  border-radius: 3px;
+  padding: 8px 12px;
+  text-align: center;
+  box-shadow: 0 4px 14px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.7);
+  position: relative;
+}
+.rulebook-banner.key-banner {
+  background: linear-gradient(180deg, #183858 0%, #0d2238 100%);
+  border-color: var(--cyan);
+  border-bottom: 2px solid #005a7a;
+  color: var(--cyan);
+}
+.rulebook-banner-inner {
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.rulebook-banner-title {
+  font-family: var(--font-title);
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #121c28;
+  font-size: 0.95rem;
+  line-height: 1.2;
+}
+.rulebook-banner.key-banner .rulebook-banner-title {
+  color: #fff;
+  letter-spacing: 0.1em;
+}
+.specialty-col-desc {
+  font-size: 0.85rem; color: var(--text-secondary); line-height: 1.45; margin-top: 4px;
+  font-style: italic;
+}
+.specialty-orders-tag {
+  font-family: var(--font-ui); font-size: 0.72rem; color: var(--gold);
+  font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+}
 
 /* ═══════════════════════════════════════════════════════════════
-   RADIANT SECTION
+   TALENT NODE CARDS — IVORY PARCHMENT REPLICA (Page 160)
    ═══════════════════════════════════════════════════════════════ */
+.talent-node-card {
+  background: var(--parchment-card);
+  border: 2px solid var(--parchment-border);
+  border-radius: 4px;
+  padding: 13px 14px;
+  transition: all var(--transition-fast);
+  position: relative;
+  display: flex; flex-direction: column; gap: 7px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.45);
+  color: var(--parchment-ink);
+}
+.talent-node-card:hover {
+  border-color: #3b5373;
+  box-shadow: 0 5px 16px rgba(0,0,0,0.55);
+}
+
+/* Learned state: Infused with Stormlight Gold */
+.talent-node-card.learned {
+  border-color: var(--gold);
+  background: #fffdf5;
+  box-shadow: 0 0 18px rgba(200, 152, 42, 0.45), 0 3px 10px rgba(0,0,0,0.3);
+}
+.talent-node-card.learned::before {
+  content: '✓ KNOWN';
+  position: absolute; top: -10px; right: 10px;
+  background: var(--gold-banner-grad);
+  border: 1px solid var(--gold-bright);
+  color: #141c26;
+  font-family: var(--font-title); font-size: 0.65rem; font-weight: 800;
+  letter-spacing: 0.08em; padding: 1px 7px; border-radius: 2px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* Key Talent card state */
+.talent-node-card.is-key {
+  border-color: #0284c7;
+  background: #f4faff;
+  box-shadow: 0 0 16px rgba(0,212,255,0.25), 0 3px 10px rgba(0,0,0,0.3);
+}
+
+/* Locked state */
+.talent-node-card.locked {
+  opacity: 0.68;
+  filter: saturate(0.8);
+}
+
+.node-top-row {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 8px; flex-wrap: wrap;
+}
+.node-title-group {
+  display: flex; align-items: center; gap: 7px; flex: 1; min-width: 160px;
+}
+.node-rule-icon {
+  font-size: 1.05rem; line-height: 1; color: #16212e; font-weight: bold; flex-shrink: 0;
+}
+.talent-node-card.is-key .node-rule-icon { color: #0284c7; }
+.talent-node-card.learned .node-rule-icon { color: #9c6c0b; }
+
+.node-name {
+  font-family: var(--font-title);
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #141c26;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
+}
+.talent-node-card.learned .node-name {
+  color: #8c5d08;
+}
+
+.node-badges {
+  display: flex; gap: 4px; flex-wrap: wrap; align-items: center;
+}
+.node-badge {
+  font-family: var(--font-ui);
+  font-size: 0.68rem; padding: 2px 6px; border-radius: 3px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.04em;
+}
+.node-badge.tier {
+  font-size: 0.68rem; padding: 2px 7px; border-radius: 4px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.node-badge.tier.tier-1 {
+  background: #ede6d8; color: #475569; border: 1px solid #cbd5e1;
+}
+.node-badge.tier.tier-2 {
+  background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc;
+}
+.node-badge.tier.tier-3 {
+  background: #fef3c7; color: #92400e; border: 1px solid #fde68a;
+}
+.node-badge.tier.tier-4 {
+  background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe;
+}
+.node-badge.cost {
+  background: #e2e8f0; color: #334155; border: 1px solid #cbd5e1;
+}
+.node-badge.key {
+  background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;
+}
+
+.node-prereq {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--parchment-ink-muted);
+  display: flex; align-items: baseline; gap: 5px;
+  border-bottom: 1px solid var(--parchment-border-subtle);
+  padding-bottom: 4px;
+}
+.node-prereq.met { color: #166534; font-weight: 500; }
+.node-prereq.unmet { color: #991b1b; }
+
+.node-summary {
+  font-family: var(--font-body); font-size: 0.88rem; color: #1e2634; line-height: 1.48; font-weight: 500;
+}
+.talent-details {
+  margin: 4px 0 6px 0; border-top: 1px dashed rgba(0, 0, 0, 0.12); padding-top: 5px;
+}
+.talent-details summary {
+  font-family: var(--font-ui); font-size: 0.74rem; color: #0284c7; cursor: pointer; user-select: none; font-weight: 700;
+  display: inline-flex; align-items: center; gap: 5px; transition: all var(--transition-fast);
+}
+.talent-details summary:hover {
+  color: #0369a1; text-decoration: underline;
+}
+.talent-details[open] summary {
+  color: #92400e; margin-bottom: 6px;
+}
+.talent-full-text {
+  font-family: var(--font-body); font-size: 0.82rem; color: #1e2634; line-height: 1.5;
+  background: rgba(0, 0, 0, 0.04); border-left: 3px solid #0284c7;
+  padding: 8px 10px; border-radius: var(--radius-sm); margin-top: 4px;
+  border: 1px solid rgba(0, 0, 0, 0.08); border-left-width: 3px;
+}
+
+.talent-toolbar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px;
+  flex-wrap: wrap; background: var(--bg-card); padding: 10px 16px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-dim); box-shadow: var(--shadow-card);
+}
+.btn-toggle-all-details {
+  font-family: var(--font-title); font-size: 0.74rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 6px 14px; border-radius: 3px;
+  background: var(--bg-secondary); border: 1px solid var(--border-gold-subtle);
+  color: var(--gold-light); cursor: pointer; transition: all var(--transition-fast);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-toggle-all-details:hover {
+  background: var(--gold-banner-grad); color: #121c28; border-color: var(--gold-bright);
+  box-shadow: 0 0 12px rgba(200,152,42,0.3);
+}
+
+.specialty-talents-list {
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+.node-action-btn {
+  align-self: flex-start; padding: 5px 14px; border-radius: 3px;
+  font-family: var(--font-title); font-size: 0.76rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+  border: 1px solid transparent; transition: all var(--transition-fast); margin-top: 4px;
+}
+.node-action-btn.learn {
+  background: #0f2238; color: #38bdf8; border-color: #0284c7;
+}
+.node-action-btn.learn:hover:not(:disabled) {
+  background: #0284c7; color: #fff; box-shadow: 0 0 10px rgba(0,212,255,0.4);
+}
+.node-action-btn.learned {
+  background: var(--gold-banner-grad); color: #121c28; border-color: #ffeaa4;
+}
+.node-action-btn.learned:hover {
+  background: #e11d48; color: #fff; border-color: #f43f5e;
+}
+.node-action-btn.is-key-badge {
+  background: #0284c7; color: #fff; border-color: #38bdf8; cursor: default;
+}
+.node-action-btn:disabled {
+  opacity: 0.45; cursor: not-allowed; border-color: #cbd5e1;
+  background: #e2e8f0; color: #64748b;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   UNIVERSAL TALENT MODAL BROWSER (Archival Tome Folio)
+   ═══════════════════════════════════════════════════════════════ */
+.talent-modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(5, 10, 18, 0.88); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+.talent-modal-overlay.open { display: flex; }
+.talent-modal-container {
+  background: var(--bg-primary);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  max-width: 1080px; width: 100%; max-height: 90vh;
+  overflow-y: auto; padding: 26px;
+  box-shadow: 0 14px 50px rgba(0,0,0,0.8), 0 0 40px rgba(200,152,42,0.15);
+  display: flex; flex-direction: column; gap: 16px; position: relative;
+}
+.talent-modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border-gold-subtle);
+  padding-bottom: 14px; flex-shrink: 0;
+}
+.talent-modal-title {
+  font-family: var(--font-title); font-size: 1.35rem; font-weight: 700;
+  color: var(--gold-light); display: flex; align-items: center; gap: 10px;
+  letter-spacing: 0.04em;
+}
+.talent-modal-close {
+  background: none; border: none; font-size: 1.6rem; color: var(--text-dim);
+  cursor: pointer; line-height: 1; padding: 4px; transition: color var(--transition-fast);
+}
+.talent-modal-close:hover { color: var(--text-primary); }
+.talent-modal-desc {
+  font-size: 0.92rem; color: var(--text-secondary); margin: 0; flex-shrink: 0; line-height: 1.5;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   CULTURE & EXPERTISE DISPLAY
+   ═══════════════════════════════════════════════════════════════ */
+.culture-selected-display {
+  display: flex; gap: 8px; margin-bottom: 16px; min-height: 32px; flex-wrap: wrap;
+}
+.culture-tag {
+  display: inline-flex; align-items: center; gap: 8px; padding: 5px 14px;
+  border-radius: 99px; background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3);
+  color: var(--cyan); font-family: var(--font-ui); font-size: 0.82rem; font-weight: 600;
+}
+.culture-tag .remove-culture {
+  cursor: pointer; font-size: 0.95rem; opacity: 0.65; transition: opacity 0.15s;
+  background: none; border: none; color: inherit; padding: 0; line-height: 1;
+}
+.culture-tag .remove-culture:hover { opacity: 1; color: var(--red-alert); }
+
+.expertise-select {
+  display: inline-flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; position: relative; z-index: 2;
+}
+.expertise-option {
+  padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-dim);
+  background: var(--bg-secondary); cursor: pointer; font-size: 0.8rem;
+  color: var(--text-secondary); transition: all var(--transition-fast);
+  user-select: none; font-family: var(--font-ui); font-weight: 600;
+}
+.expertise-option:hover { border-color: var(--border-glow); color: var(--text-primary); }
+.expertise-option.selected {
+  border-color: var(--gold); color: var(--gold-light);
+  background: rgba(200,152,42,0.2); box-shadow: 0 0 10px rgba(200,152,42,0.3);
+}
+
+.specialty-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.specialty-tag {
+  font-family: var(--font-ui); font-size: 0.74rem; font-weight: 600; padding: 3px 9px;
+  border-radius: 99px; background: rgba(168,85,247,0.12); border: 1px solid rgba(168,85,247,0.28);
+  color: #c084fc;
+}
+.suggested-attrs {
+  font-family: var(--font-ui); font-size: 0.78rem; color: var(--text-dim); margin-top: 8px;
+}
+.suggested-attrs span { color: var(--gold-light); font-weight: 600; }
+
+/* ═══════════════════════════════════════════════════════════════
+   EQUIPMENT & RADIANT SECTION
+   ═══════════════════════════════════════════════════════════════ */
+.equip-items {
+  font-size: 0.88rem; color: var(--text-secondary); margin-top: 8px; line-height: 1.6;
+}
+.equip-items li { padding-left: 4px; }
+.equip-money { color: var(--gold-light); font-weight: 700; }
+
 .radiant-toggle {
-  display: flex; align-items: center; gap: 14px; margin-bottom: 24px;
-  padding: 16px; background: var(--bg-card); border-radius: var(--radius-md);
+  display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  padding: 18px 20px; background: var(--bg-card); border-radius: var(--radius-md);
   border: 1px solid var(--border-dim); cursor: pointer;
+  box-shadow: var(--shadow-card);
 }
 .toggle-switch {
-  width: 48px; height: 26px; border-radius: 99px; background: var(--border-dim);
+  width: 50px; height: 28px; border-radius: 99px; background: var(--border-dim);
   position: relative; transition: background var(--transition-fast); flex-shrink: 0;
 }
 .toggle-switch::after {
-  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+  content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
   border-radius: 50%; background: var(--text-dim); transition: all var(--transition-fast);
 }
-.toggle-switch.on { background: var(--cyan); }
-.toggle-switch.on::after { translate: 22px 0; background: var(--bg-deep); }
-.radiant-toggle-label { font-weight: 600; font-size: 1rem; }
-.radiant-toggle-sub { font-size: 0.8rem; color: var(--text-dim); }
+.toggle-switch.on { background: var(--cyan); box-shadow: 0 0 12px rgba(0,212,255,0.5); }
+.toggle-switch.on::after { translate: 22px 0; background: #080f1a; }
+.radiant-toggle-label {
+  font-family: var(--font-title); font-weight: 700; font-size: 1.05rem;
+  letter-spacing: 0.04em; color: var(--gold-light);
+}
+.radiant-toggle-sub { font-size: 0.85rem; color: var(--text-dim); }
 
-.order-card .card-title { font-size: 1rem; }
+.order-card .card-title { font-size: 1.15rem; }
 .order-card .oath {
-  font-style: italic; font-size: 0.82rem; color: var(--gold); margin-top: 6px;
-  border-left: 2px solid var(--gold-dim); padding-left: 10px;
+  font-family: var(--font-body); font-style: italic; font-size: 0.92rem;
+  color: var(--gold-light); margin-top: 8px; border-left: 3px solid var(--gold);
+  padding-left: 12px;
 }
-.order-card .surges {
-  display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
-}
+.order-card .surges { display: flex; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
 .surge-tag {
-  font-size: 0.7rem; padding: 2px 8px; border-radius: 99px;
-  background: rgba(74,158,255,0.1); border: 1px solid rgba(74,158,255,0.2);
-  color: var(--blue-bright);
+  font-family: var(--font-ui); font-size: 0.72rem; font-weight: 700; padding: 2px 9px;
+  border-radius: 99px; background: rgba(0,212,255,0.12); border: 1px solid rgba(0,212,255,0.3);
+  color: var(--cyan); text-transform: uppercase; letter-spacing: 0.05em;
 }
 .restricted-badge {
-  font-size: 0.6rem; padding: 2px 8px; border-radius: 99px;
-  background: rgba(255,74,106,0.12); border: 1px solid rgba(255,74,106,0.25);
-  color: var(--red-alert); text-transform: uppercase; letter-spacing: 0.08em;
+  font-family: var(--font-ui); font-size: 0.65rem; padding: 2px 8px; border-radius: 99px;
+  background: rgba(244,63,94,0.15); border: 1px solid rgba(244,63,94,0.3);
+  color: var(--red-alert); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 700;
 }
 .ideal-input { margin-top: 20px; }
 
 /* ═══════════════════════════════════════════════════════════════
-   NAVIGATION
+   BUTTONS & NAVIGATION
    ═══════════════════════════════════════════════════════════════ */
 .nav-buttons {
   display: flex; justify-content: space-between; align-items: center;
-  margin-top: 32px; padding-top: 20px; border-top: 1px solid var(--border-dim);
+  margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--border-dim);
 }
 .btn {
-  padding: 12px 28px; border-radius: var(--radius-md); font-size: 0.9rem; font-weight: 600;
+  padding: 12px 28px; border-radius: 4px; font-size: 0.92rem; font-weight: 700;
   cursor: pointer; border: none; transition: all var(--transition-fast);
-  font-family: inherit; letter-spacing: 0.03em;
+  font-family: var(--font-title); letter-spacing: 0.06em; text-transform: uppercase;
 }
 .btn:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
 .btn-back {
@@ -451,411 +1084,211 @@ body {
 }
 .btn-back:hover { border-color: var(--border-glow); color: var(--text-primary); }
 .btn-next {
-  background: linear-gradient(135deg, var(--blue-glow), var(--cyan));
-  color: var(--bg-deep); font-weight: 700;
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 1px solid var(--cyan);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0,212,255,0.3);
 }
-.btn-next:hover { box-shadow: 0 0 20px rgba(0,212,255,0.3); }
+.btn-next:hover {
+  box-shadow: 0 0 22px rgba(0,212,255,0.45);
+  background: linear-gradient(180deg, #0ea5e9 0%, #0284c7 100%);
+}
 .btn-next:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 .btn-gold {
-  background: linear-gradient(135deg, var(--gold), var(--gold-light));
-  color: var(--bg-deep);
+  background: var(--gold-banner-grad);
+  border: 1px solid var(--gold-ribbon-border);
+  color: #121c28;
 }
 .btn-gold:hover { box-shadow: var(--shadow-gold); }
 .btn-danger {
-  background: rgba(255,74,106,0.1); border: 1px solid rgba(255,74,106,0.25);
+  background: rgba(244,63,94,0.12); border: 1px solid rgba(244,63,94,0.3);
   color: var(--red-alert);
 }
-.btn-danger:hover { background: rgba(255,74,106,0.2); }
+.btn-danger:hover { background: rgba(244,63,94,0.22); }
 .btn-outline {
   background: transparent; border: 1px solid var(--border-glow); color: var(--text-secondary);
 }
 .btn-outline:hover { border-color: var(--cyan); color: var(--text-primary); }
 
-/* ═══════════════════════════════════════════════════════════════
-   VALIDATION MESSAGE
-   ═══════════════════════════════════════════════════════════════ */
 .validation-msg {
-  display: none; padding: 10px 14px; border-radius: var(--radius-sm);
-  background: rgba(255,74,106,0.08); border: 1px solid rgba(255,74,106,0.2);
-  color: var(--red-alert); font-size: 0.85rem; margin-top: 10px;
+  display: none; padding: 12px 16px; border-radius: var(--radius-sm);
+  background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
+  color: #fca5a5; font-size: 0.9rem; margin-top: 12px;
 }
 .validation-msg.show { display: block; }
 
 /* ═══════════════════════════════════════════════════════════════
-   SUMMARY PANEL
+   OFFICIAL RULEBOOK SIGNATURE PAGE FOOTER (Page 160 Replica)
+   ═══════════════════════════════════════════════════════════════ */
+.rulebook-page-footer {
+  margin-top: 50px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(200, 152, 42, 0.25);
+  position: relative;
+}
+.rulebook-page-footer::before {
+  content: ''; position: absolute; top: -3px; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 152, 42, 0.4), transparent);
+}
+.footer-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.footer-left {
+  display: flex; align-items: center; gap: 14px;
+}
+.footer-medallion {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: rgba(7, 13, 24, 0.8);
+  border: 1px solid var(--gold);
+  border-radius: 99px;
+  padding: 3px 12px;
+  box-shadow: 0 0 10px rgba(200, 152, 42, 0.2);
+}
+.medallion-ornament {
+  color: var(--gold); font-size: 0.68rem;
+}
+.page-number {
+  font-family: var(--font-title);
+  font-weight: 800; font-size: 0.88rem;
+  color: var(--gold-light);
+}
+.footer-chapter-text {
+  font-family: var(--font-title);
+  font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--text-secondary);
+}
+.footer-divider-rule {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--border-dim), transparent);
+  min-width: 40px;
+}
+.footer-right {
+  display: flex; align-items: center; gap: 14px;
+  font-family: var(--font-ui); font-size: 0.72rem;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.footer-studio {
+  color: var(--gold); font-weight: 700;
+}
+.footer-license {
+  color: var(--text-dim);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   SUMMARY SHEET (Official Rosharan Character Folio)
    ═══════════════════════════════════════════════════════════════ */
 .summary-sheet {
-  background: var(--bg-card); border: 1px solid var(--border-glow);
-  border-radius: var(--radius-xl); padding: 28px; position: relative; overflow: hidden;
+  background: radial-gradient(circle at 50% 20%, #15243d 0%, #0d1728 100%);
+  border: 2px solid var(--border-gold);
+  border-radius: var(--radius-lg);
+  padding: 32px 28px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.7), 0 0 30px rgba(200,152,42,0.15);
+  position: relative; overflow: hidden;
 }
 .summary-sheet::before {
-  content: ''; position: absolute; inset: 0;
-  background: linear-gradient(135deg, rgba(74,158,255,0.03), transparent, rgba(212,168,67,0.03));
+  content: ''; position: absolute; inset: 5px;
+  border: 1px solid rgba(200,152,42,0.25);
+  border-radius: calc(var(--radius-lg) - 4px);
   pointer-events: none;
 }
 .summary-header {
-  text-align: center; padding-bottom: 20px; margin-bottom: 20px;
-  border-bottom: 1px solid var(--border-dim);
+  text-align: center; padding-bottom: 22px; margin-bottom: 24px;
+  border-bottom: 1px solid var(--border-gold-subtle);
 }
 .summary-name {
-  font-size: 1.8rem; font-weight: 700;
-  background: linear-gradient(135deg, var(--gold-light), var(--cyan));
+  font-family: var(--font-title);
+  font-size: 2.2rem; font-weight: 800; letter-spacing: 0.06em;
+  background: linear-gradient(180deg, #fff3c4 0%, #f4ca5b 45%, #b97f14 100%);
   -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(0,0,0,0.8));
 }
-.summary-concept { color: var(--text-secondary); font-style: italic; margin-top: 4px; }
-.summary-section { margin-bottom: 20px; }
+.summary-concept {
+  color: var(--text-secondary); font-style: italic; margin-top: 6px; font-size: 1.05rem;
+}
+.summary-section { margin-bottom: 24px; }
 .summary-section-title {
-  font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--gold); margin-bottom: 10px; padding-bottom: 4px;
-  border-bottom: 1px solid rgba(212,168,67,0.2);
+  font-family: var(--font-title);
+  font-size: 0.84rem; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--gold); margin-bottom: 12px; padding-bottom: 4px;
+  border-bottom: 1px solid var(--border-gold-subtle);
 }
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
 .summary-stat {
-  text-align: center; padding: 10px; background: rgba(0,0,0,0.2); border-radius: var(--radius-sm);
+  text-align: center; padding: 12px; background: rgba(0,0,0,0.3); border-radius: var(--radius-sm);
+  border: 1px solid rgba(255,255,255,0.05);
 }
-.summary-stat .label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-dim); }
-.summary-stat .val { font-size: 1.3rem; font-weight: 700; color: var(--cyan); }
+.summary-stat .label {
+  font-family: var(--font-ui); font-size: 0.72rem; text-transform: uppercase;
+  color: var(--text-dim); font-weight: 700; letter-spacing: 0.06em;
+}
+.summary-stat .val {
+  font-family: var(--font-title); font-size: 1.45rem; font-weight: 700; color: var(--cyan);
+}
 .summary-stat .val.gold { color: var(--gold-light); }
-.summary-defense-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .summary-list { list-style: none; }
 .summary-list li {
-  padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
-  font-size: 0.9rem; color: var(--text-secondary);
+  padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+  font-size: 0.95rem; color: var(--text-secondary);
 }
 .summary-list li:last-child { border: none; }
-.summary-list .skill-val { float: right; color: var(--cyan); font-weight: 600; }
-.summary-actions {
-  display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-  margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--border-dim);
+.summary-list .skill-val {
+  float: right; color: var(--cyan); font-weight: 700; font-family: var(--font-title);
 }
+
+.summary-talents-grid {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 12px; margin-top: 8px;
+}
+.summary-talent-card {
+  background: var(--parchment-card); border: 2px solid var(--parchment-border);
+  border-radius: 4px; padding: 12px 14px; color: var(--parchment-ink);
+}
+.summary-talent-card.is-key {
+  border-color: #0284c7; background: #f4faff;
+}
+.summary-talent-card.is-surge {
+  border-color: #7c3aed; background: #faf5ff;
+}
+
 .summary-radiant {
-  text-align: center; padding: 16px; background: rgba(0,212,255,0.04);
-  border-radius: var(--radius-md); border: 1px solid rgba(0,212,255,0.15);
+  text-align: center; padding: 18px; background: rgba(0,212,255,0.05);
+  border-radius: var(--radius-md); border: 1px solid rgba(0,212,255,0.25);
 }
-.summary-radiant .order-name { font-size: 1.2rem; font-weight: 700; color: var(--cyan); }
-.summary-radiant .spren-type { font-size: 0.85rem; color: var(--text-dim); margin-top: 2px; }
+.summary-radiant .order-name {
+  font-family: var(--font-title); font-size: 1.3rem; font-weight: 700; color: var(--cyan);
+}
+.summary-radiant .spren-type { font-size: 0.9rem; color: var(--text-dim); margin-top: 2px; }
 .summary-radiant .oath-text {
-  font-style: italic; color: var(--gold); margin-top: 8px; font-size: 0.9rem;
+  font-family: var(--font-body); font-style: italic; color: var(--gold-light);
+  margin-top: 8px; font-size: 1rem;
+}
+.summary-actions {
+  display: flex; flex-wrap: wrap; gap: 12px; justify-content: center;
+  margin-top: 30px; padding-top: 24px; border-top: 1px solid var(--border-dim);
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   SHIMMER ANIMATION
-   ═══════════════════════════════════════════════════════════════ */
-.shimmer {
-  position: relative; overflow: hidden;
-}
-.shimmer::after {
-  content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent);
-  animation: shimmer 4s ease-in-out infinite;
-  @media (prefers-reduced-motion: reduce) { animation: none; display: none; }
-}
-@keyframes shimmer { 0% { left: -100%; } 50%,100% { left: 200%; } }
-
-/* ═══════════════════════════════════════════════════════════════
-   PRINT
+   PRINT STYLES
    ═══════════════════════════════════════════════════════════════ */
 @media print {
   .bg-effects, .progress-container, .nav-buttons, .summary-actions,
-  .app-header, .step-panel:not(.active) { display: none !important; }
+  .app-header, .rulebook-page-footer, .step-panel:not(.active) { display: none !important; }
   body { background: white; color: black; }
-  .summary-sheet { border: 2px solid #333; box-shadow: none; }
-  .summary-name { -webkit-text-fill-color: #333; }
-  .summary-stat .val, .summary-stat .val.gold { color: #333; }
-  .summary-section-title { color: #666; border-color: #ccc; }
+  .summary-sheet { border: 2px solid #222; box-shadow: none; background: white; color: black; }
+  .summary-name { -webkit-text-fill-color: #111; }
+  .summary-stat .val, .summary-stat .val.gold { color: #111; }
+  .summary-section-title { color: #444; border-color: #bbb; }
+  .summary-talent-card { background: white; border-color: #333; }
 }
 
 /* ═══════════════════════════════════════════════════════════════
    SCROLLBAR
    ═══════════════════════════════════════════════════════════════ */
-::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-deep); }
-::-webkit-scrollbar-thumb { background: var(--border-dim); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
-
-/* ═══════════════════════════════════════════════════════════════
-   CULTURE TAG DISPLAY
-   ═══════════════════════════════════════════════════════════════ */
-.culture-selected-display {
-  display: flex; gap: 8px; margin-bottom: 14px; min-height: 30px; flex-wrap: wrap;
-}
-.culture-tag {
-  display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px;
-  border-radius: 99px; background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25);
-  color: var(--cyan); font-size: 0.8rem; font-weight: 500;
-}
-.culture-tag .remove-culture {
-  cursor: pointer; font-size: 0.9rem; opacity: 0.6; transition: opacity 0.15s;
-  background: none; border: none; color: inherit; padding: 0; line-height: 1;
-}
-.culture-tag .remove-culture:hover { opacity: 1; }
-
-/* ═══════════════════════════════════════════════════════════════
-   EXPERTISE SELECT
-   ═══════════════════════════════════════════════════════════════ */
-.expertise-select {
-  display: inline-flex; gap: 6px; margin-top: 8px; flex-wrap: wrap;
-  position: relative; z-index: 2;
-}
-.expertise-option {
-  padding: 4px 10px; border-radius: var(--radius-sm); border: 1px solid var(--border-dim);
-  background: var(--bg-secondary); cursor: pointer; font-size: 0.78rem;
-  color: var(--text-secondary); transition: all var(--transition-fast);
-  user-select: none; position: relative; z-index: 2;
-}
-.expertise-option:hover { border-color: var(--border-glow); color: var(--text-primary); }
-.expertise-option.selected {
-  border-color: var(--gold); color: var(--gold-light);
-  background: rgba(212,168,67,0.18);
-  box-shadow: 0 0 10px rgba(212,168,67,0.25);
-  font-weight: 600;
-}
-
-/* Path specialty tags */
-.specialty-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
-.specialty-tag {
-  font-size: 0.72rem; padding: 3px 8px; border-radius: 99px;
-  background: rgba(122,90,240,0.1); border: 1px solid rgba(122,90,240,0.2);
-  color: var(--storm-purple);
-}
-.suggested-attrs {
-  font-size: 0.75rem; color: var(--text-dim); margin-top: 6px;
-}
-.suggested-attrs span { color: var(--gold); }
-
-/* ═══════════════════════════════════════════════════════════════
-   TALENT TREES STYLING
-   ═══════════════════════════════════════════════════════════════ */
-.talent-controls-bar {
-  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
-  gap: 12px; margin-bottom: 20px; padding: 12px 18px;
-  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
-}
-.talent-level-select {
-  display: flex; align-items: center; gap: 8px; font-size: 0.88rem; color: var(--text-secondary);
-}
-.talent-level-select select {
-  background: var(--bg-input); border: 1px solid var(--border-dim); border-radius: var(--radius-sm);
-  color: var(--gold-light); font-weight: 600; padding: 6px 12px; cursor: pointer; font-family: inherit;
-}
-.talent-level-select select:focus {
-  outline: 2px solid var(--gold); border-color: var(--gold);
-}
-.talent-points-pill {
-  font-size: 0.9rem; font-weight: 600; color: var(--text-primary);
-  display: flex; align-items: center; gap: 6px;
-}
-.talent-points-pill .count {
-  background: var(--gold); color: var(--bg-deep); border-radius: 99px;
-  padding: 2px 10px; font-weight: 700;
-}
-.talent-points-pill .count.zero {
-  background: var(--text-dim); color: var(--bg-deep);
-}
-.talent-tabs {
-  display: flex; gap: 8px; overflow-x: auto; padding: 4px 4px 12px; margin-bottom: 20px;
-  scrollbar-width: thin; flex-shrink: 0; min-height: 52px; align-items: center;
-}
-.talent-tab-btn {
-  padding: 8px 16px; border-radius: var(--radius-md); border: 1px solid var(--border-dim);
-  background: var(--bg-secondary); color: var(--text-secondary); cursor: pointer;
-  font-size: 0.85rem; font-weight: 600; white-space: nowrap; transition: all var(--transition-fast);
-  display: inline-flex; align-items: center; gap: 8px; font-family: inherit;
-  flex-shrink: 0; height: 38px; line-height: 1; user-select: none;
-}
-.talent-tab-btn:hover {
-  border-color: var(--border-glow); color: var(--text-primary);
-}
-.talent-tab-btn.active {
-  border-color: var(--gold); color: var(--gold-light); background: rgba(212,168,67,0.12);
-  box-shadow: 0 0 16px rgba(212,168,67,0.2);
-}
-.talent-specialties-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;
-}
-.specialty-column {
-  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-lg);
-  padding: 16px; display: flex; flex-direction: column; gap: 14px;
-}
-.specialty-col-header {
-  border-bottom: 1px solid var(--border-dim); padding-bottom: 12px; margin-bottom: 4px;
-}
-.specialty-col-title {
-  font-size: 1.05rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 6px;
-}
-.specialty-col-desc {
-  font-size: 0.78rem; color: var(--text-dim); line-height: 1.4; margin-top: 4px;
-}
-.talent-node-card {
-  background: var(--bg-secondary); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
-  padding: 14px; transition: all var(--transition-fast); position: relative;
-  display: flex; flex-direction: column; gap: 8px;
-}
-.talent-node-card:hover {
-  border-color: var(--border-glow);
-}
-.talent-node-card.learned {
-  border-color: var(--gold); background: rgba(212,168,67,0.08);
-  box-shadow: 0 0 16px rgba(212,168,67,0.18);
-}
-.talent-node-card.is-key {
-  border-color: var(--cyan); background: rgba(0,212,255,0.06);
-  box-shadow: 0 0 16px rgba(0,212,255,0.18);
-}
-.talent-node-card.locked {
-  opacity: 0.65;
-}
-.node-top-row {
-  display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap;
-}
-.node-name {
-  font-size: 0.95rem; font-weight: 700; color: var(--text-primary);
-}
-.talent-node-card.learned .node-name {
-  color: var(--gold-light);
-}
-.talent-node-card.is-key .node-name {
-  color: var(--cyan);
-}
-.node-badges {
-  display: flex; gap: 4px; flex-wrap: wrap;
-}
-.node-badge {
-  font-size: 0.68rem; padding: 2px 7px; border-radius: 4px; font-weight: 600; text-transform: uppercase;
-}
-.node-badge.tier {
-  font-size: 0.68rem; padding: 2px 7px; border-radius: 4px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.03em;
-}
-.node-badge.tier.tier-1 {
-  background: rgba(148, 163, 184, 0.15); color: #cbd5e1; border: 1px solid rgba(148, 163, 184, 0.4);
-}
-.node-badge.tier.tier-2 {
-  background: rgba(0, 212, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 212, 255, 0.45);
-}
-.node-badge.tier.tier-3 {
-  background: rgba(212, 168, 67, 0.18); color: var(--gold-light); border: 1px solid rgba(212, 168, 67, 0.5);
-}
-.node-badge.tier.tier-4 {
-  background: rgba(122, 90, 240, 0.22); color: #c084fc; border: 1px solid rgba(122, 90, 240, 0.6);
-  box-shadow: 0 0 8px rgba(122, 90, 240, 0.2);
-}
-.node-summary {
-  font-size: 0.82rem; color: var(--text-primary); line-height: 1.45; margin: 4px 0 2px 0; font-weight: 500;
-}
-.talent-details {
-  margin: 4px 0 6px 0; border-top: 1px dashed rgba(255, 255, 255, 0.1); padding-top: 5px;
-}
-.talent-details summary {
-  font-size: 0.72rem; color: var(--cyan); cursor: pointer; user-select: none; font-weight: 600;
-  display: inline-flex; align-items: center; gap: 5px; transition: all var(--transition-fast);
-}
-.talent-details summary:hover {
-  color: var(--gold-light); text-decoration: underline;
-}
-.talent-details[open] summary {
-  color: var(--gold); margin-bottom: 6px;
-}
-.talent-full-text {
-  font-size: 0.76rem; color: var(--text-secondary); line-height: 1.5; background: rgba(4, 10, 18, 0.65);
-  border-left: 3px solid var(--cyan); padding: 8px 10px; border-radius: var(--radius-sm); margin-top: 4px;
-  border: 1px solid rgba(0, 212, 255, 0.15); border-left-width: 3px;
-}
-.talent-toolbar {
-  display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;
-  flex-wrap: wrap;
-}
-.btn-toggle-all-details {
-  background: rgba(0, 212, 255, 0.08); border: 1px solid var(--border-glow); color: var(--cyan);
-  padding: 5px 12px; border-radius: var(--radius-sm); font-size: 0.75rem; font-weight: 600; cursor: pointer;
-  display: inline-flex; align-items: center; gap: 5px; transition: all var(--transition-fast); font-family: inherit;
-}
-.btn-toggle-all-details:hover {
-  background: rgba(0, 212, 255, 0.18); color: #fff; border-color: var(--cyan);
-}
-.node-badge.cost {
-  background: rgba(122,90,240,0.15); color: var(--storm-purple); border: 1px solid rgba(122,90,240,0.3);
-}
-.node-badge.key {
-  background: rgba(0,212,255,0.15); color: var(--cyan); border: 1px solid rgba(0,212,255,0.3);
-}
-.node-prereq {
-  font-size: 0.72rem; color: var(--text-dim); display: flex; align-items: center; gap: 4px;
-}
-.node-prereq.met {
-  color: var(--green-ok);
-}
-.node-prereq.unmet {
-  color: var(--red-alert);
-}
-.node-desc {
-  font-size: 0.8rem; color: var(--text-secondary); line-height: 1.45;
-}
-.node-action-btn {
-  align-self: flex-start; padding: 5px 12px; border-radius: var(--radius-sm); font-size: 0.75rem;
-  font-weight: 600; cursor: pointer; border: 1px solid transparent; transition: all var(--transition-fast);
-  font-family: inherit; margin-top: 4px;
-}
-.node-action-btn.learn {
-  background: rgba(0,212,255,0.12); color: var(--cyan); border-color: rgba(0,212,255,0.3);
-}
-.node-action-btn.learn:hover {
-  background: var(--cyan); color: var(--bg-deep); box-shadow: 0 0 12px rgba(0,212,255,0.4);
-}
-.node-action-btn.learned {
-  background: rgba(212,168,67,0.2); color: var(--gold-light); border-color: var(--gold);
-}
-.node-action-btn.learned:hover {
-  background: rgba(255,74,106,0.2); color: var(--red-alert); border-color: var(--red-alert);
-}
-.node-action-btn.is-key-badge {
-  background: rgba(0,212,255,0.15); color: var(--cyan); border-color: rgba(0,212,255,0.3);
-  cursor: default;
-}
-.node-action-btn:disabled {
-  opacity: 0.4; cursor: not-allowed; border-color: var(--border-dim); background: var(--bg-input); color: var(--text-dim);
-}
-
-/* Modal styling for Universal Talent Tree Browser */
-.talent-modal-overlay {
-  position: fixed; inset: 0; z-index: 1000; background: rgba(6,14,26,0.85); backdrop-filter: blur(8px);
-  display: none; align-items: center; justify-content: center; padding: 20px;
-}
-.talent-modal-overlay.open { display: flex; }
-.talent-modal-container {
-  background: var(--bg-primary); border: 1px solid var(--border-glow); border-radius: var(--radius-xl);
-  max-width: 1040px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px;
-  box-shadow: 0 12px 48px rgba(0,0,0,0.7), 0 0 40px rgba(0,212,255,0.1);
-  display: flex; flex-direction: column; gap: 16px; position: relative;
-}
-.talent-modal-header {
-  display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border-dim);
-  padding-bottom: 14px; flex-shrink: 0;
-}
-.talent-modal-title {
-  font-size: 1.3rem; font-weight: 700; color: var(--gold-light); display: flex; align-items: center; gap: 8px;
-}
-.talent-modal-close {
-  background: none; border: none; font-size: 1.5rem; color: var(--text-dim); cursor: pointer; line-height: 1; padding: 4px;
-}
-.talent-modal-close:hover { color: var(--text-primary); }
-.talent-modal-desc {
-  font-size: 0.85rem; color: var(--text-secondary); margin: 0; flex-shrink: 0; line-height: 1.5;
-}
-
-.summary-talents-grid {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 8px;
-}
-.summary-talent-card {
-  background: var(--bg-card); border: 1px solid var(--border-dim); border-radius: var(--radius-md);
-  padding: 12px 14px;
-}
-.summary-talent-card.is-key {
-  border-color: rgba(0,212,255,0.3); background: rgba(0,212,255,0.03);
-}
-.summary-talent-card.is-surge {
-  border-color: rgba(122,90,240,0.3); background: rgba(122,90,240,0.03);
-}
+::-webkit-scrollbar-thumb { background: var(--border-glow); border-radius: 4px; border: 1px solid var(--border-dim); }
+::-webkit-scrollbar-thumb:hover { background: var(--gold); }
 
 </style>
 </head>
@@ -870,12 +1303,20 @@ body {
 </div>
 
 <div class="app-container">
-  <header class="app-header">
+    <header class="app-header">
+    <div class="header-ornament-line">
+      <div class="ornament-rule"></div>
+      <div class="ornament-diamond">❖</div>
+      <div class="ornament-rule"></div>
+    </div>
     <h1>Stormlight Character Builder</h1>
-    <div class="subtitle">Cosmere Roleplaying Game</div>
+    <div class="subtitle">Cosmere Roleplaying Game • Official Rules System</div>
     <div class="header-actions">
       <button type="button" class="btn talent-browse-header-btn" id="btnOpenTalentBrowser" aria-label="Browse All Talent Trees">
-        🌳 Browse Talent Trees
+        📜 Browse Talent Trees
+      </button>
+      <button type="button" class="btn btn-dummy-build" id="btnQuickBuildDummy" aria-label="Fill Dummy Data and Build Character">
+        ⚡ Fill Dummy Data (Test Build)
       </button>
     </div>
   </header>
@@ -890,8 +1331,24 @@ body {
 
   <!-- ═══════ STEP 1: CONCEPT ═══════ -->
   <section class="step-panel" id="step-1" aria-label="Step 1: Character Concept">
+    <div class="chapter-header-badge">Chapter 1</div>
     <h2 class="step-title">Character Concept</h2>
-    <p class="step-subtitle">Who is your character? Define the core of their identity.</p>
+    <p class="step-subtitle">Who is your character? Define the core of their identity and purpose.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"Every Radiant's journey begins not with grand power, but with a quiet truth whispered in the dark."</p>
+      <span class="scholar-author">— Shallan Davar, Field Sketches</span>
+    </div>
+
+    <div class="test-helper-banner" style="display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:18px; padding:10px 16px; background:rgba(200, 152, 42, 0.08); border:1px dashed rgba(200, 152, 42, 0.35); border-radius:var(--radius-md); flex-wrap:wrap;">
+      <div style="font-size:0.84rem; color:var(--text-secondary); display:flex; align-items:center; gap:8px;">
+        <span style="font-size:1.1rem;">🧪</span>
+        <span><strong>Testing Mode:</strong> Want to fill all character slots and test the completed sheet immediately?</span>
+      </div>
+      <button type="button" class="btn btn-dummy-build" id="btnStep1QuickBuild" style="font-size:0.78rem; padding:6px 14px;">
+        ⚡ Auto-Fill & Build Complete Character
+      </button>
+    </div>
 
     <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:16px;">
       <div class="form-group">
@@ -920,8 +1377,14 @@ body {
 
   <!-- ═══════ STEP 2: ANCESTRY ═══════ -->
   <section class="step-panel" id="step-2" aria-label="Step 2: Ancestry">
-    <h2 class="step-title">Ancestry</h2>
-    <p class="step-subtitle">Choose the ancestry that defines your character's heritage.</p>
+    <div class="chapter-header-badge">Chapter 2</div>
+    <h2 class="step-title">Ancestry & Heritage</h2>
+    <p class="step-subtitle">Choose the ancestry that defines your character's heritage and biology.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"The carapace of the Singers resonates with the rhythms of the storm, while humankind remains enduringly adaptable."</p>
+      <span class="scholar-author">— Navani Kholin's Journal</span>
+    </div>
     <div id="ancestryCards" class="card-grid cols-2"></div>
     <div id="singerFormContainer" style="display:none;">
       <h3 style="font-size:0.95rem; color:var(--gold-light); margin:16px 0 8px;">Choose a Singer Form</h3>
@@ -941,16 +1404,28 @@ body {
 
   <!-- ═══════ STEP 4: PATH ═══════ -->
   <section class="step-panel" id="step-4" aria-label="Step 4: Heroic Path">
-    <h2 class="step-title">Heroic Path</h2>
+    <div class="chapter-header-badge">Chapter 4</div>
+    <h2 class="step-title">Heroic Paths</h2>
     <p class="step-subtitle">Your path determines your starting talent, skill, and combat specialization.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"A warrior holds the breach, a scholar unlocks the fabrials, an envoy weaves unity among the highprinces."</p>
+      <span class="scholar-author">— Highprince Dalinar Kholin</span>
+    </div>
     <div id="pathCards" class="card-grid cols-2"></div>
     <div class="validation-msg" id="val-4"></div>
   </section>
 
   <!-- ═══════ STEP 5: ATTRIBUTES ═══════ -->
   <section class="step-panel" id="step-5" aria-label="Step 5: Attributes">
-    <h2 class="step-title">Attributes</h2>
+    <div class="chapter-header-badge">Chapter 5</div>
+    <h2 class="step-title">Attributes & Defenses</h2>
     <p class="step-subtitle">Distribute 12 points among your six attributes. Each starts at 0, max 3.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"Six facets define a mortal in the Cosmere: Physical strength and speed, Cognitive intellect and willpower, Spiritual awareness and presence."</p>
+      <span class="scholar-author">— Rosharan Ars Arcanum</span>
+    </div>
     <div class="points-remaining" id="attrPointsDisplay">
       Remaining Points: <span class="count" id="attrPointsCount">12</span>
     </div>
@@ -961,8 +1436,14 @@ body {
 
   <!-- ═══════ STEP 6: SKILLS ═══════ -->
   <section class="step-panel" id="step-6" aria-label="Step 6: Skills">
-    <h2 class="step-title">Skills</h2>
+    <div class="chapter-header-badge">Chapter 6</div>
+    <h2 class="step-title">Skills & Disciplines</h2>
     <p class="step-subtitle">Distribute 10 skill ranks (max 2 per skill). Your path grants 1 free rank in your starting skill.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"Practice sharpens raw instinct into deadly mastery. Choose well the disciplines that will preserve your life."</p>
+      <span class="scholar-author">— Bridge Four Training Manual</span>
+    </div>
     <div class="points-remaining" id="skillPointsDisplay">
       Remaining Skill Ranks: <span class="count" id="skillPointsCount">10</span>
     </div>
@@ -972,8 +1453,14 @@ body {
 
   <!-- ═══════ STEP 7: TALENTS & TALENT TREES ═══════ -->
   <section class="step-panel" id="step-7" aria-label="Step 7: Talents & Talent Trees">
-    <h2 class="step-title">Talents & Talent Trees</h2>
+    <div class="chapter-header-badge">Chapter 5: Radiant Paths & Chapter 7: Talents</div>
+    <h2 class="step-title">Talent Trees & Radiant Paths</h2>
     <p class="step-subtitle">Explore the talent trees of Roshar. Your Heroic Path grants your starting Key Talent, plus spend talent points to unlock specialties or multi-path into any Heroic or Surge tree.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"As the Nahel bond deepens through spoken Ideals, mortal hands grasp the weapons of the ancient Heralds."</p>
+      <span class="scholar-author">— Words of Radiance, Preface</span>
+    </div>
 
     <div class="talent-controls-bar">
       <div class="talent-level-select">
@@ -1010,16 +1497,28 @@ body {
 
   <!-- ═══════ STEP 7: EQUIPMENT ═══════ -->
   <section class="step-panel" id="step-8" aria-label="Step 8: Starting Equipment">
+    <div class="chapter-header-badge">Chapter 8</div>
     <h2 class="step-title">Starting Equipment</h2>
     <p class="step-subtitle">Choose a kit to determine your starting gear and marks (currency).</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"Every expedition demands preparation: infused spheres in the pouch, sharpened steel, and sturdy armor against the chasms."</p>
+      <span class="scholar-author">— Thaylen Quartermaster Guide</span>
+    </div>
     <div id="equipCards" class="card-grid cols-2"></div>
     <div class="validation-msg" id="val-7"></div>
   </section>
 
   <!-- ═══════ STEP 8: RADIANT ═══════ -->
   <section class="step-panel" id="step-9" aria-label="Step 9: Radiant Path">
-    <h2 class="step-title">Radiant Path</h2>
+    <div class="chapter-header-badge">Chapter 9</div>
+    <h2 class="step-title">Radiant Path & Ideals</h2>
     <p class="step-subtitle">Have you bonded a spren? Choose your Radiant Order (optional).</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"Life before death. Strength before weakness. Journey before destination. Speak the ancient words."</p>
+      <span class="scholar-author">— The First Ideal of the Knights Radiant</span>
+    </div>
 
     <div class="radiant-toggle" id="radiantToggle" role="switch" tabindex="0" aria-checked="false" aria-label="Enable Radiant Order selection">
       <div class="toggle-switch" id="toggleSwitch"></div>
@@ -1043,8 +1542,14 @@ body {
 
   <!-- ═══════ STEP 9: SUMMARY ═══════ -->
   <section class="step-panel" id="step-10" aria-label="Character Summary">
+    <div class="chapter-header-badge">Official Dossier</div>
     <h2 class="step-title">Character Complete</h2>
     <p class="step-subtitle">Review your finished character sheet below.</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"The chronicle is recorded. May the Stormfather smile upon your path across the shattered plains."</p>
+      <span class="scholar-author">— Rosharan Character Folio</span>
+    </div>
     <div class="summary-sheet shimmer" id="summarySheet"></div>
   </section>
 
@@ -1053,6 +1558,25 @@ body {
     <button class="btn btn-back" id="btnBack" type="button">← Back</button>
     <button class="btn btn-next" id="btnNext" type="button">Next →</button>
   </div>
+
+  <!-- Official Rulebook Page Footer (Page 160 Replica) -->
+  <footer class="rulebook-page-footer">
+    <div class="footer-inner">
+      <div class="footer-left">
+        <div class="footer-medallion">
+          <span class="medallion-ornament">❖</span>
+          <span class="page-number" id="rulebookPageNum">24</span>
+          <span class="medallion-ornament">❖</span>
+        </div>
+        <div class="footer-chapter-text" id="rulebookChapterText">CHAPTER 1: CHARACTER CONCEPT</div>
+      </div>
+      <div class="footer-divider-rule"></div>
+      <div class="footer-right">
+        <span class="footer-studio">SONDERFLEX STUDIO</span>
+        <span class="footer-license">COSMERE ROLEPLAYING GAME • BROTHERWISE GAMES & DRAGONSTEEL</span>
+      </div>
+    </div>
+  </footer>
 </div>
 
 <!-- PDF-Lib and Character Sheet Template -->
@@ -4023,6 +4547,7 @@ function init() {
   setupNavigation();
   setupTalentModal();
   setupPdfModal();
+  setupDummyBuildButtons();
   goToStep(state.currentStep);
 }
 
@@ -4088,12 +4613,13 @@ function qsa(sel) { return document.querySelectorAll(sel); }
    ═══════════════════════════════════════════════════════════════ */
 function buildProgressBar() {
   const container = el('progressSteps');
+  const ROMAN_NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
   STEP_LABELS.forEach((label, i) => {
     const btn = document.createElement('button');
     btn.className = 'progress-step';
     btn.type = 'button';
     btn.dataset.step = i + 1;
-    btn.innerHTML = `<span class="step-circle">${i + 1}</span><span class="step-label">${label}</span>`;
+    btn.innerHTML = `<span class="step-circle">${ROMAN_NUMERALS[i] || (i + 1)}</span><span class="step-label">${label}</span>`;
     btn.setAttribute('aria-label', `Step ${i+1}: ${label}`);
     btn.addEventListener('click', () => {
       if (i + 1 <= state.currentStep) goToStep(i + 1);
@@ -4151,9 +4677,27 @@ function goToStep(step) {
   if (step === 1) restoreInputs();
   // Update skills display on step 6
   if (step === 6) updateSkillDisplay();
-  if (el('playerName')) el('playerName').value = '';
   // Update talents display on step 7
   if (step === 7) updateTalentTreeDisplay();
+
+  // Update rulebook page footer (Page 160 on Chapter 5 / Talents)
+  const CHAPTER_MAP = [
+    { page: 24, label: 'CHAPTER 1: CHARACTER CONCEPT' },
+    { page: 42, label: 'CHAPTER 2: ANCESTRY & HERITAGE' },
+    { page: 58, label: 'CHAPTER 3: ROSHARAN CULTURES' },
+    { page: 76, label: 'CHAPTER 4: HEROIC PATHS' },
+    { page: 104, label: 'CHAPTER 5: ATTRIBUTES & DEFENSES' },
+    { page: 120, label: 'CHAPTER 6: SKILLS & SPECIALTIES' },
+    { page: 160, label: 'CHAPTER 5: RADIANT PATHS & TALENT TREES' },
+    { page: 194, label: 'CHAPTER 8: STARTING EQUIPMENT' },
+    { page: 210, label: 'CHAPTER 9: RADIANT PATH & IDEALS' },
+    { page: 240, label: 'OFFICIAL CHARACTER DOSSIER' }
+  ];
+  const ch = CHAPTER_MAP[step - 1] || CHAPTER_MAP[0];
+  const pgEl = el('rulebookPageNum');
+  const chEl = el('rulebookChapterText');
+  if (pgEl) pgEl.textContent = ch.page;
+  if (chEl) chEl.textContent = ch.label;
 
   // Hide validation
   const valMsg = el(`val-${step}`);
@@ -4705,7 +5249,6 @@ function buildSkillControls() {
   });
 
   updateSkillDisplay();
-  if (el('playerName')) el('playerName').value = '';
 }
 
 function changeSkill(skillName, dir) {
@@ -4728,7 +5271,6 @@ function changeSkill(skillName, dir) {
 
   state.skills[skillName] = newVal;
   updateSkillDisplay();
-  if (el('playerName')) el('playerName').value = '';
   saveState();
 }
 
@@ -4912,8 +5454,8 @@ function renderTalentTree(containerId, tabKey, isModal) {
   const toggleBtnId = isModal ? 'btnModalToggleAllDetails' : 'btnPageToggleAllDetails';
   html += `
     <div class="talent-toolbar">
-      <div style="font-size:0.8rem;color:var(--text-dim);">
-        <span style="color:var(--cyan);font-weight:600;">Tip:</span> Cards show concise summaries. Click <em>"📖 View Full Handbook Text"</em> to inspect the complete wording.
+      <div style="font-size:0.82rem;color:var(--text-secondary);font-family:var(--font-ui);">
+        <span style="color:var(--gold);font-weight:700;">Handbook Note:</span> Cards display concise rulebook summaries. Click <em>"📖 View Full Handbook Text"</em> to inspect the complete rules wording.
       </div>
       <button type="button" class="btn-toggle-all-details" id="${toggleBtnId}">📖 Expand All Rules</button>
     </div>
@@ -4924,12 +5466,16 @@ function renderTalentTree(containerId, tabKey, isModal) {
     SURGE_TREES.forEach(surge => {
       html += `
         <div class="specialty-column">
-          <div class="specialty-col-header">
-            <div class="specialty-col-title">⚡ ${surge.name}</div>
-            <div class="specialty-col-desc">${surge.desc}</div>
-            <div style="font-size:0.75rem;color:var(--gold-dim);margin-top:4px;">Orders: ${surge.orders.join(', ')}</div>
+          <div class="rulebook-banner">
+            <div class="rulebook-banner-inner">
+              <span class="rulebook-banner-title">⚡ SURGE OF ${surge.name.toUpperCase()}</span>
+            </div>
           </div>
-          ${surge.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+          <div class="specialty-col-desc">${surge.desc}</div>
+          <div class="specialty-orders-tag"><span style="color:var(--gold-light);font-weight:700;">Orders:</span> ${surge.orders.join(' • ')}</div>
+          <div class="specialty-talents-list">
+            ${surge.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+          </div>
         </div>
       `;
     });
@@ -4942,21 +5488,34 @@ function renderTalentTree(containerId, tabKey, isModal) {
     const isPrimaryPath = state.path === pathObj.id;
     const keySummary = pathObj.keyTalent.summary || pathObj.keyTalent.desc;
     html += `
-      <div style="margin-bottom:16px;">
-        <div class="talent-node-card is-key" style="border-left:4px solid var(--cyan);">
+      <div style="margin-bottom:20px;">
+        <div class="rulebook-banner key-banner">
+          <div class="rulebook-banner-inner">
+            <span class="rulebook-banner-title">✦ ${pathObj.name.toUpperCase()} KEY TALENT</span>
+          </div>
+        </div>
+        <div class="talent-node-card is-key" style="margin-top:8px;">
           <div class="node-top-row">
-            <span class="node-name">✦ ${pathObj.name} Key Talent: ${pathObj.keyTalent.name}</span>
+            <div class="node-title-group">
+              <span class="node-rule-icon" aria-hidden="true">★</span>
+              <span class="node-name">${pathObj.keyTalent.name}</span>
+            </div>
             <div class="node-badges">
               <span class="node-badge key">Key Talent</span>
               <span class="node-badge cost">${pathObj.keyTalent.cost}</span>
             </div>
+          </div>
+          <div class="node-prereq met">
+            <span class="prereq-icon">✦</span>
+            <span class="prereq-label">Prerequisite:</span>
+            <span class="prereq-text">${pathObj.name} Heroic Path Starting Feature</span>
           </div>
           <div class="node-summary">${keySummary}</div>
           <details class="talent-details">
             <summary class="talent-details-toggle">📖 View Full Handbook Text</summary>
             <div class="talent-full-text">${pathObj.keyTalent.desc}</div>
           </details>
-          <div style="font-size:0.75rem;color:var(--cyan);font-weight:600;margin-top:6px;">
+          <div style="font-family:var(--font-title);font-size:0.75rem;color:var(--cyan);font-weight:700;margin-top:6px;letter-spacing:0.04em;">
             ${isPrimaryPath ? '✓ Free starting talent from your Heroic Path' : 'Available if choosing ' + pathObj.name + ' as your Heroic Path'}
           </div>
         </div>
@@ -4967,11 +5526,15 @@ function renderTalentTree(containerId, tabKey, isModal) {
     pathObj.specialties.forEach(spec => {
       html += `
         <div class="specialty-column">
-          <div class="specialty-col-header">
-            <div class="specialty-col-title">⚔️ ${spec.name}</div>
-            <div class="specialty-col-desc">${spec.desc}</div>
+          <div class="rulebook-banner">
+            <div class="rulebook-banner-inner">
+              <span class="rulebook-banner-title">⚔️ ${spec.name.toUpperCase()}</span>
+            </div>
           </div>
-          ${spec.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+          <div class="specialty-col-desc">${spec.desc}</div>
+          <div class="specialty-talents-list">
+            ${spec.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+          </div>
         </div>
       `;
     });
@@ -5019,17 +5582,34 @@ function renderTalentCard(t, pts, isModal) {
   const isLocked = !isLearned && !prereqCheck.met;
   const summaryText = t.summary || (t.desc ? t.desc.split('.')[0] + '.' : '');
 
+  // Determine official rulebook action icon (Page 160 style)
+  let icon = '∞';
+  const costLower = (t.cost || '').toLowerCase();
+  const nameLower = (t.name || '').toLowerCase();
+  if (t.isKey || t.id.includes('key') || nameLower.includes('ideal') || nameLower.includes('wound') || nameLower.includes('squire') || nameLower.includes('goal')) {
+    icon = '★';
+  } else if (costLower.includes('reaction') || costLower.includes('free') || costLower.includes('special')) {
+    icon = '▷';
+  } else if (costLower.includes('action')) {
+    icon = '▶';
+  }
+
   return `
     <div class="talent-node-card${isLearned ? ' learned' : ''}${isLocked ? ' locked' : ''}">
       <div class="node-top-row">
-        <span class="node-name">${t.name}</span>
+        <div class="node-title-group">
+          <span class="node-rule-icon" aria-hidden="true">${icon}</span>
+          <span class="node-name">${t.name}</span>
+        </div>
         <div class="node-badges">
           <span class="node-badge tier tier-${t.tier}">Tier ${t.tier}</span>
           <span class="node-badge cost">${t.cost}</span>
         </div>
       </div>
       <div class="node-prereq ${prereqCheck.met ? 'met' : 'unmet'}">
-        ${prereqCheck.met ? '✓' : '🔒'} ${prereqCheck.text}
+        <span class="prereq-icon">${prereqCheck.met ? '✓' : '🔒'}</span>
+        <span class="prereq-label">Prerequisite:</span>
+        <span class="prereq-text">${prereqCheck.text}</span>
       </div>
       <div class="node-summary">${summaryText}</div>
       <details class="talent-details">
@@ -5038,7 +5618,7 @@ function renderTalentCard(t, pts, isModal) {
       </details>
       <div>
         ${isLearned
-          ? `<button type="button" class="node-action-btn learned" data-tid="${t.id}" aria-label="Unlearn ${t.name}">✓ Learned (Click to Remove)</button>`
+          ? `<button type="button" class="node-action-btn learned" data-tid="${t.id}" aria-label="Unlearn ${t.name}">✓ Known (Click to Remove)</button>`
           : `<button type="button" class="node-action-btn learn" data-tid="${t.id}" ${!canLearn ? 'disabled' : ''} aria-label="Learn ${t.name}">${pts.remaining <= 0 ? 'No Points Left' : !prereqCheck.met ? 'Locked' : '+ Learn Talent'}</button>`
         }
       </div>
@@ -5413,6 +5993,9 @@ function buildSummary() {
       </button>
       <button class="btn btn-outline" id="btnPreviewPdf" onclick="previewOfficialPDF()" type="button" style="display:inline-flex; align-items:center; gap:8px;">
         👁️ Preview Official Sheet
+      </button>
+      <button class="btn btn-dummy-build" id="btnSummaryDummyCycle" onclick="fillDummyData()" type="button" style="display:inline-flex; align-items:center; gap:8px;">
+        🎲 Cycle Another Test Build
       </button>
       <button class="btn btn-outline" onclick="window.print()" type="button">🖨️ Print Summary</button>
       <button class="btn btn-outline" onclick="exportJSON()" type="button">📄 Export JSON</button>
@@ -6212,6 +6795,289 @@ function setupPdfModal() {
       modal.classList.remove('open');
     }
   });
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   DUMMY DATA & TEST BUILD GENERATOR
+   ═══════════════════════════════════════════════════════════════ */
+
+let dummyArchetypeIdx = 0;
+
+const DUMMY_ARCHETYPES = [
+  {
+    charName: 'Kaladin Stormblessed',
+    playerName: 'Brandon Sanderson',
+    charConcept: 'A spear-wielding Windrunner and former bridgeman who protects the fallen and commands the surges of Gravitation and Adhesion.',
+    charPurpose: 'Protect those who cannot protect themselves, even when all hope seems lost.',
+    charObstacle: "Deep battle trauma, survivor's guilt, and the unforgiving politics of the Highprinces.",
+    ancestry: 'human',
+    singerForm: null,
+    cultures: ['alethi', 'kharbranthian'],
+    cultureExpertise: { alethi: 'Warfare', kharbranthian: 'Research' },
+    path: 'warrior',
+    attributes: { Strength: 3, Speed: 3, Intellect: 1, Willpower: 3, Awareness: 2, Presence: 0 },
+    skills: {
+      Athletics: 2,
+      'Heavy Weaponry': 2,
+      'Light Weaponry': 1,
+      Agility: 2,
+      Discipline: 2,
+      Intimidation: 1,
+      Perception: 1
+    },
+    level: 1,
+    talents: ['warrior-duelist-practiced-kata'],
+    activeTalentTab: 'warrior',
+    equipment: 'military',
+    isRadiant: true,
+    radiantOrder: 'windrunner',
+    secondIdeal: 'I will protect those who cannot protect themselves, even if I hate them.'
+  },
+  {
+    charName: 'Shallan Davar',
+    playerName: 'Test Pilot',
+    charConcept: 'An inquisitive Veden scholar and Lightweaver artist who weaves illusions with Light and touches the Cognitive Realm.',
+    charPurpose: 'Uncover the lost secrets of the Knights Radiant and save Roshar from the Desolation.',
+    charObstacle: 'Fragmented identities, buried childhood trauma, and dangerous Ghostblood conspiracies.',
+    ancestry: 'human',
+    singerForm: null,
+    cultures: ['veden', 'thaylen'],
+    cultureExpertise: { veden: 'Scholarship', thaylen: 'Commerce' },
+    path: 'agent',
+    attributes: { Strength: 0, Speed: 2, Intellect: 3, Willpower: 2, Awareness: 2, Presence: 3 },
+    skills: {
+      Insight: 2,
+      Deception: 2,
+      Deduction: 2,
+      Crafting: 2,
+      Persuasion: 2,
+      Stealth: 1
+    },
+    level: 1,
+    talents: ['agent-investigator-watchful-eye'],
+    activeTalentTab: 'agent',
+    equipment: 'underworld',
+    isRadiant: true,
+    radiantOrder: 'lightweaver',
+    secondIdeal: 'I am terrified, but I will speak the truth of what I have done.'
+  },
+  {
+    charName: 'Venli of the Listeners',
+    playerName: 'Cosmere Tester',
+    charConcept: 'A singer envoy of the Listener clans bonded to Timbre, learning the ancient songs and shaping stone.',
+    charPurpose: 'Guide the singer survivors to true freedom and unite them in peace with humankind.',
+    charObstacle: 'The crushing weight of having unleashed the Fused, and mutual distrust from both factions.',
+    ancestry: 'singer',
+    singerForm: 'warform',
+    cultures: ['listener', 'wayfarer'],
+    cultureExpertise: { listener: 'Rhythms', wayfarer: 'Survival' },
+    path: 'envoy',
+    attributes: { Strength: 2, Speed: 1, Intellect: 2, Willpower: 3, Awareness: 1, Presence: 3 },
+    skills: {
+      Discipline: 2,
+      Persuasion: 2,
+      Leadership: 2,
+      Lore: 2,
+      'Heavy Weaponry': 1,
+      Survival: 2
+    },
+    level: 1,
+    talents: ['envoy-diplomat-steadfast-challenge'],
+    activeTalentTab: 'envoy',
+    equipment: 'artisan',
+    isRadiant: true,
+    radiantOrder: 'willshaper',
+    secondIdeal: 'I will seek freedom for those who are in bondage.'
+  },
+  {
+    charName: 'Jasnah Kholin',
+    playerName: 'Archivist',
+    charConcept: 'Highprincess of Alethkar, master historian, and Elsecaller whose logic pierces through Rosharan mythology.',
+    charPurpose: 'Arm humankind with the knowledge and fabrials needed to survive the return of the Voidbringers.',
+    charObstacle: 'Dogmatic orthodoxy of the Vorin Ardents and betrayal from highprinces.',
+    ancestry: 'human',
+    singerForm: null,
+    cultures: ['alethi', 'azish'],
+    cultureExpertise: { alethi: 'Warfare', azish: 'Law' },
+    path: 'scholar',
+    attributes: { Strength: 1, Speed: 1, Intellect: 3, Willpower: 3, Awareness: 2, Presence: 2 },
+    skills: {
+      Lore: 2,
+      Crafting: 2,
+      Deduction: 2,
+      Intimidation: 2,
+      Medicine: 2,
+      Insight: 1
+    },
+    level: 1,
+    talents: ['scholar-artifabrian-efficient-engineer'],
+    activeTalentTab: 'scholar',
+    equipment: 'academic',
+    isRadiant: true,
+    radiantOrder: 'elsecaller',
+    secondIdeal: 'I will reach my full potential and seek truth beyond comfort.'
+  }
+];
+
+function fillDummyData() {
+  const preset = DUMMY_ARCHETYPES[dummyArchetypeIdx % DUMMY_ARCHETYPES.length];
+  dummyArchetypeIdx++;
+
+  // 1. Assign state values
+  state.charName = preset.charName;
+  state.playerName = preset.playerName;
+  state.charConcept = preset.charConcept;
+  state.charPurpose = preset.charPurpose;
+  state.charObstacle = preset.charObstacle;
+  state.ancestry = preset.ancestry;
+  state.singerForm = preset.singerForm;
+  state.cultures = [...preset.cultures];
+  state.cultureExpertise = { ...preset.cultureExpertise };
+  state.path = preset.path;
+  state.attributes = { ...preset.attributes };
+
+  // Reset skills to 0 first, then assign preset skills
+  SKILLS.forEach(s => { state.skills[s.name] = 0; });
+  Object.keys(preset.skills).forEach(k => {
+    state.skills[k] = preset.skills[k];
+  });
+
+  state.level = preset.level || 1;
+  state.talents = [...preset.talents];
+  state.activeTalentTab = preset.activeTalentTab || preset.path;
+  state.equipment = preset.equipment;
+  state.isRadiant = preset.isRadiant;
+  state.radiantOrder = preset.radiantOrder;
+  state.secondIdeal = preset.secondIdeal || '';
+
+  // 2. Synchronize UI across all steps
+
+  // Step 1: Concept
+  if (el('charName')) el('charName').value = state.charName;
+  if (el('playerName')) el('playerName').value = state.playerName;
+  if (el('charConcept')) el('charConcept').value = state.charConcept;
+  if (el('charPurpose')) el('charPurpose').value = state.charPurpose;
+  if (el('charObstacle')) el('charObstacle').value = state.charObstacle;
+
+  // Step 2: Ancestry
+  if (el('ancestryCards')) {
+    el('ancestryCards').querySelectorAll('.card').forEach((card, i) => {
+      const isSel = ANCESTRIES[i]?.id === state.ancestry;
+      card.classList.toggle('selected', isSel);
+      card.setAttribute('aria-checked', isSel);
+    });
+  }
+  if (el('singerFormContainer')) {
+    el('singerFormContainer').style.display = state.ancestry === 'singer' ? '' : 'none';
+  }
+  if (el('singerForms')) {
+    el('singerForms').querySelectorAll('.sub-option').forEach((opt, i) => {
+      const isSel = state.ancestry === 'singer' && ANCESTRIES[1].forms[i]?.id === state.singerForm;
+      opt.classList.toggle('selected', isSel);
+    });
+  }
+
+  // Step 3: Cultures
+  updateCultureCards();
+  updateCultureDisplay();
+
+  // Step 4: Path
+  if (el('pathCards')) {
+    el('pathCards').querySelectorAll('.card').forEach((card, i) => {
+      const isSel = PATHS[i]?.id === state.path;
+      card.classList.toggle('selected', isSel);
+      card.setAttribute('aria-checked', isSel);
+    });
+  }
+
+  // Step 5: Attributes
+  updateAttributeDisplay();
+  updateDerivedStats();
+
+  // Step 6: Skills
+  updateSkillDisplay();
+
+  // Step 7: Talents
+  if (el('charLevelSelect')) {
+    el('charLevelSelect').value = state.level;
+  }
+  updateTalentTreeDisplay();
+
+  // Step 8: Equipment
+  if (el('equipCards')) {
+    el('equipCards').querySelectorAll('.card').forEach((card, i) => {
+      const isSel = EQUIPMENT[i]?.id === state.equipment;
+      card.classList.toggle('selected', isSel);
+      card.setAttribute('aria-checked', isSel);
+    });
+  }
+
+  // Step 9: Radiant
+  const toggle = el('radiantToggle');
+  const toggleSwitch = el('toggleSwitch');
+  const section = el('radiantSection');
+  if (toggle && toggleSwitch && section) {
+    toggleSwitch.classList.toggle('on', state.isRadiant);
+    toggle.setAttribute('aria-checked', state.isRadiant);
+    section.style.display = state.isRadiant ? '' : 'none';
+  }
+  if (el('orderCards')) {
+    el('orderCards').querySelectorAll('.card').forEach((card, i) => {
+      const isSel = ORDERS[i]?.id === state.radiantOrder;
+      card.classList.toggle('selected', isSel);
+      card.setAttribute('aria-checked', isSel);
+    });
+  }
+  if (el('idealInputContainer')) {
+    el('idealInputContainer').style.display = (state.isRadiant && state.radiantOrder) ? '' : 'none';
+  }
+  if (el('secondIdeal')) {
+    el('secondIdeal').value = state.secondIdeal;
+  }
+
+  // Clear validation notices
+  for (let s = 1; s <= TOTAL_STEPS; s++) {
+    const valMsg = el(`val-${s}`);
+    if (valMsg) { valMsg.classList.remove('show'); valMsg.textContent = ''; }
+  }
+
+  // Persist to local storage
+  saveState();
+
+  // Navigate all the way to Step 10 (Character Summary)
+  goToStep(TOTAL_STEPS);
+
+  // Show visual toast notification
+  const pathObj = PATHS.find(p => p.id === preset.path);
+  const orderObj = ORDERS.find(o => o.id === preset.radiantOrder);
+  showDummyToast(`⚡ Dummy Character Built: ${preset.charName} (${pathObj ? pathObj.name : ''} / ${orderObj ? orderObj.name : ''})`);
+}
+
+function showDummyToast(msg) {
+  let toast = el('dummyToastNotice');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'dummyToastNotice';
+    toast.className = 'dummy-toast-notice';
+    document.body.appendChild(toast);
+  }
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toast._timeout);
+  toast._timeout = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+function setupDummyBuildButtons() {
+  const btnHeader = el('btnQuickBuildDummy');
+  if (btnHeader) {
+    btnHeader.addEventListener('click', fillDummyData);
+  }
+  const btnStep1 = el('btnStep1QuickBuild');
+  if (btnStep1) {
+    btnStep1.addEventListener('click', fillDummyData);
+  }
 }
 
 /* ═══════════════════════════════════════════════════════════════
