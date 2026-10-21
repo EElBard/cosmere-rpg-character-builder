@@ -953,36 +953,209 @@ body {
    ═══════════════════════════════════════════════════════════════ */
 .talent-modal-overlay {
   position: fixed; inset: 0; z-index: 1000;
-  background: rgba(28, 22, 14, 0.7); backdrop-filter: blur(8px);
-  display: none; align-items: center; justify-content: center; padding: 20px;
+  background: rgba(18, 14, 10, 0.78); backdrop-filter: blur(8px);
+  display: none; align-items: center; justify-content: center; padding: 16px;
 }
 .talent-modal-overlay.open { display: flex; }
 .talent-modal-container {
-  background: #f7f1e4;
+  background: #fbf7ef;
   border: 2px solid var(--border-gold);
-  border-radius: var(--radius-lg);
-  max-width: 1080px; width: 100%; max-height: 90vh;
-  overflow-y: auto; padding: 26px;
-  box-shadow: 0 14px 50px rgba(60,45,25,0.35);
-  display: flex; flex-direction: column; gap: 16px; position: relative;
+  border-radius: 12px;
+  max-width: 1320px; width: 96vw; height: 92vh; max-height: 92vh;
+  display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 20px 60px rgba(40, 25, 10, 0.45);
+  position: relative;
 }
 .talent-modal-header {
   display: flex; align-items: center; justify-content: space-between;
-  border-bottom: 1.5px solid rgba(179,130,26,0.3);
-  padding-bottom: 14px; flex-shrink: 0;
+  padding: 14px 24px; border-bottom: 1.5px solid rgba(179, 130, 26, 0.25);
+  background: #f4ecdc; flex-shrink: 0; gap: 16px; flex-wrap: wrap;
+}
+.talent-modal-header-left {
+  display: flex; flex-direction: column; gap: 2px;
 }
 .talent-modal-title {
-  font-family: var(--font-title); font-size: 1.35rem; font-weight: 800;
+  font-family: var(--font-title); font-size: 1.28rem; font-weight: 800;
   color: #6b4705; display: flex; align-items: center; gap: 10px;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.04em; margin: 0;
 }
+.modal-title-icon { font-size: 1.35rem; }
+.talent-modal-subtitle {
+  font-size: 0.8rem; color: #7a6b57; font-family: var(--font-ui);
+}
+.talent-modal-header-right {
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.modal-level-control {
+  display: flex; align-items: center; gap: 6px; font-family: var(--font-ui);
+  font-size: 0.84rem; font-weight: 700; color: #5a4933;
+}
+.modal-level-control select {
+  font-family: var(--font-ui); font-size: 0.82rem; font-weight: 700;
+  padding: 4px 8px; border-radius: 4px; border: 1.5px solid #cbbaa0;
+  background: #ffffff; color: #3d3122; cursor: pointer;
+}
+.modal-points-pill {
+  font-family: var(--font-title); font-size: 0.82rem; font-weight: 800;
+  padding: 5px 12px; border-radius: 99px; background: rgba(2, 132, 199, 0.1);
+  border: 1.5px solid rgba(2, 132, 199, 0.3); color: #0284c7; letter-spacing: 0.04em;
+}
+.modal-points-pill .count { font-weight: 900; }
 .talent-modal-close {
-  background: none; border: none; font-size: 1.6rem; color: #7a6b57;
-  cursor: pointer; line-height: 1; padding: 4px; transition: color var(--transition-fast);
+  background: #ede3ce; border: 1px solid #cbbaa0; width: 34px; height: 34px;
+  border-radius: 50%; font-size: 1.25rem; color: #6b4705; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all var(--transition-fast); line-height: 1; padding: 0;
 }
-.talent-modal-close:hover { color: #1e1913; }
-.talent-modal-desc {
-  font-size: 0.94rem; color: #4d4133; margin: 0; flex-shrink: 0; line-height: 1.5;
+.talent-modal-close:hover {
+  background: #0284c7; color: #ffffff; border-color: #0369a1;
+}
+
+/* Modal Controls & Toolbar Bar */
+.talent-modal-controls-bar {
+  padding: 10px 24px; background: #efe5d0;
+  border-bottom: 1.5px solid rgba(179, 130, 26, 0.2);
+  flex-shrink: 0; display: flex; flex-direction: column; gap: 10px;
+}
+.talent-tabs.modal-tabs {
+  margin-bottom: 0; padding-bottom: 0;
+}
+.modal-filter-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+.modal-search-box {
+  display: flex; align-items: center; gap: 8px; background: #ffffff;
+  border: 1.5px solid #cbbaa0; border-radius: 4px; padding: 5px 12px;
+  flex: 1; min-width: 220px; max-width: 380px; transition: all var(--transition-fast);
+}
+.modal-search-box:focus-within {
+  border-color: #0284c7; box-shadow: 0 0 8px rgba(2, 132, 199, 0.25);
+}
+.modal-search-box input {
+  border: none; outline: none; background: transparent; font-family: var(--font-body);
+  font-size: 0.92rem; color: #1e1913; width: 100%;
+}
+.modal-search-box .search-icon { font-size: 0.85rem; opacity: 0.6; }
+.btn-clear-search {
+  background: none; border: none; font-size: 0.82rem; color: #887865;
+  cursor: pointer; padding: 2px 4px; line-height: 1;
+}
+.btn-clear-search:hover { color: #b91c1c; }
+
+.modal-tier-filters, .modal-status-filters {
+  display: flex; align-items: center; gap: 4px; font-family: var(--font-ui);
+}
+.filter-label {
+  color: #7a6b57; font-weight: 700; text-transform: uppercase;
+  font-size: 0.72rem; letter-spacing: 0.05em; margin-right: 2px;
+}
+.tier-filter-btn, .status-filter-btn {
+  padding: 4px 10px; border-radius: 3px; border: 1.5px solid #cbbaa0;
+  background: #fbf7ef; font-family: var(--font-ui); font-size: 0.75rem;
+  font-weight: 700; color: #5a4933; cursor: pointer; transition: all var(--transition-fast);
+}
+.tier-filter-btn:hover, .status-filter-btn:hover {
+  border-color: #0284c7; color: #0284c7; background: #ffffff;
+}
+.tier-filter-btn.active, .status-filter-btn.active {
+  background: #0284c7; color: #ffffff; border-color: #0369a1;
+  box-shadow: 0 1px 4px rgba(2, 132, 199, 0.3);
+}
+
+.modal-scroll-body {
+  flex: 1; overflow-y: auto; padding: 20px 24px 30px;
+  scrollbar-width: thin;
+}
+
+/* Tier Groups within columns */
+.talent-tier-group {
+  display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px;
+}
+.talent-tier-header {
+  display: flex; align-items: baseline; gap: 8px;
+  border-bottom: 1px dashed rgba(179, 130, 26, 0.35);
+  padding-bottom: 5px; margin-top: 4px;
+}
+.talent-tier-tag {
+  font-family: var(--font-title); font-size: 0.72rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px; border-radius: 3px;
+}
+.talent-tier-tag.tier-1 {
+  background: #e6dfcf; color: #4b3e2e; border: 1px solid #cbbaa0;
+}
+.talent-tier-tag.tier-2 {
+  background: #e0f2fe; color: #0369a1; border: 1px solid #7dd3fc;
+}
+.talent-tier-tag.tier-3 {
+  background: #fef3c7; color: #92400e; border: 1px solid #fde68a;
+}
+.talent-tier-tag.tier-4 {
+  background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe;
+}
+.talent-tier-desc {
+  font-family: var(--font-ui); font-size: 0.74rem; color: #7a6b57; font-style: italic;
+}
+.talent-tier-cards {
+  display: flex; flex-direction: column; gap: 12px;
+}
+
+/* Action Type Badges */
+.action-type-badge {
+  font-family: var(--font-ui); font-size: 0.68rem; padding: 2px 7px;
+  border-radius: 3px; font-weight: 800; text-transform: uppercase;
+  letter-spacing: 0.04em; display: inline-flex; align-items: center; gap: 4px;
+}
+.action-type-badge.action-standard {
+  background: #e2e8f0; color: #1e293b; border: 1px solid #cbd5e1;
+}
+.action-type-badge.action-reaction {
+  background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;
+}
+.action-type-badge.action-free {
+  background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0;
+}
+.action-type-badge.action-passive {
+  background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1;
+}
+.action-type-badge.action-key {
+  background: #dbeafe; color: #1e40af; border: 1px solid #93c5fd;
+}
+.action-type-badge.action-special {
+  background: #faf5ff; color: #6b21a8; border: 1px solid #e9d5ff;
+}
+
+/* Resource Badges (Focus & Stormlight) */
+.resource-badge {
+  font-family: var(--font-ui); font-size: 0.68rem; padding: 2px 7px;
+  border-radius: 3px; font-weight: 800; letter-spacing: 0.04em;
+  text-transform: uppercase; display: inline-flex; align-items: center; gap: 3px;
+}
+.resource-badge.focus {
+  background: rgba(147, 51, 234, 0.12); border: 1px solid rgba(147, 51, 234, 0.3);
+  color: #7e22ce;
+}
+.resource-badge.investiture {
+  background: rgba(2, 132, 199, 0.12); border: 1px solid rgba(2, 132, 199, 0.35);
+  color: #0284c7;
+}
+
+/* Modal Surge View Pills (My Order vs Browse Other Orders) */
+.modal-surge-view-pills {
+  display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+}
+.btn-surge-view-pill {
+  padding: 5px 12px; font-family: var(--font-title); font-size: 0.76rem;
+  font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+  border-radius: 4px; border: 1.5px solid var(--border-dim);
+  background: #fbf7ef; color: var(--text-secondary); cursor: pointer;
+  transition: all var(--transition-fast); display: inline-flex; align-items: center; gap: 6px;
+}
+.btn-surge-view-pill:hover {
+  border-color: var(--cyan); color: var(--cyan); background: #ffffff;
+}
+.btn-surge-view-pill.active {
+  background: var(--cyan); color: #ffffff; border-color: #0369a1;
+  box-shadow: 0 1px 6px rgba(2, 132, 199, 0.3);
 }
 
 /* ═══════════════════════════════════════════════════════════════
@@ -1077,6 +1250,275 @@ body {
   color: var(--red-alert); text-transform: uppercase; letter-spacing: 0.08em; font-weight: 800;
 }
 .ideal-input { margin-top: 20px; }
+
+/* ═══════════════════════════════════════════════════════════════
+   RADIANT SURGE TREES FILTER & BONDING BANNERS
+   ═══════════════════════════════════════════════════════════════ */
+.radiant-order-summary-banner {
+  background: var(--bg-card);
+  border: 1.5px solid var(--cyan);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12);
+  flex-wrap: wrap;
+}
+.radiant-order-summary-content {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.radiant-order-title-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.radiant-badge-icon {
+  font-size: 1.25rem;
+  color: var(--cyan);
+}
+.radiant-badge-name {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: 0.08em;
+  color: var(--cyan);
+}
+.radiant-spren-pill {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  padding: 2px 10px;
+  border-radius: 99px;
+  background: rgba(2, 132, 199, 0.1);
+  border: 1px solid rgba(2, 132, 199, 0.25);
+  color: var(--cyan);
+  font-weight: 700;
+}
+.radiant-order-info-row {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.radiant-order-oath-text {
+  font-family: var(--font-body);
+  font-style: italic;
+  color: var(--gold-light);
+}
+.btn-change-order {
+  padding: 6px 14px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 4px;
+  background: transparent;
+  border: 1.5px solid var(--border-dim);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+.btn-change-order:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(2, 132, 199, 0.06);
+}
+
+/* Inline Radiant Order Picker */
+.radiant-inline-picker {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-gold);
+  border-radius: var(--radius-md);
+  padding: 18px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--shadow-card);
+}
+.radiant-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-family: var(--font-title);
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--gold-light);
+}
+.btn-picker-close {
+  background: none;
+  border: none;
+  font-size: 0.82rem;
+  cursor: pointer;
+  color: var(--text-dim);
+  font-family: var(--font-ui);
+}
+.btn-picker-close:hover {
+  color: var(--text-primary);
+}
+.radiant-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 12px;
+}
+.radiant-picker-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.radiant-picker-card:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 2px 10px rgba(2, 132, 199, 0.15);
+  transform: translateY(-2px);
+}
+.radiant-picker-card.selected {
+  border-color: var(--gold);
+  background: #fdfbf7;
+  box-shadow: 0 0 12px rgba(179, 130, 26, 0.25);
+}
+.radiant-picker-card .rpc-name {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+.radiant-picker-card.selected .rpc-name {
+  color: var(--gold-light);
+}
+.radiant-picker-card .rpc-spren {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+}
+.radiant-picker-card .rpc-surges {
+  font-family: var(--font-ui);
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--cyan);
+  margin-top: 2px;
+}
+.radiant-picker-card .rpc-oath {
+  font-family: var(--font-body);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  margin-top: 4px;
+  line-height: 1.3;
+}
+.radiant-picker-card.unbond-card {
+  border-style: dashed;
+  opacity: 0.85;
+}
+.radiant-picker-card.unbond-card:hover {
+  opacity: 1;
+  border-color: var(--red-alert);
+}
+
+/* Unbonded Empty State Card */
+.unbonded-surges-card {
+  background: var(--bg-card);
+  border: 1.5px dashed var(--border-gold);
+  border-radius: var(--radius-md);
+  padding: 28px 24px;
+  margin-bottom: 24px;
+  text-align: center;
+  box-shadow: var(--shadow-card);
+}
+.unbonded-icon {
+  font-size: 2.2rem;
+  margin-bottom: 10px;
+  color: var(--gold);
+}
+.unbonded-title {
+  font-family: var(--font-title);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gold-light);
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+.unbonded-desc {
+  max-width: 620px;
+  margin: 0 auto 20px;
+  font-size: 0.92rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+/* Radiant Surge Skills Callout (Skills Step) */
+.radiant-skills-callout {
+  margin-top: 24px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--cyan);
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  box-shadow: var(--shadow-card);
+}
+.rsc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+.rsc-icon { font-size: 1.2rem; color: var(--cyan); }
+.rsc-title {
+  font-family: var(--font-title);
+  font-weight: 800;
+  font-size: 1rem;
+  color: var(--cyan);
+  letter-spacing: 0.05em;
+}
+.rsc-badge {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  padding: 2px 8px;
+  border-radius: 99px;
+  background: rgba(2,132,199,0.1);
+  border: 1px solid rgba(2,132,199,0.25);
+  color: var(--cyan);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.rsc-body {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+.surge-skill-pill {
+  background: #ffffff;
+  border: 1px solid var(--border-dim);
+  border-radius: var(--radius-sm);
+  padding: 8px 12px;
+  font-size: 0.88rem;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.surge-skill-bonus {
+  font-family: var(--font-ui);
+  font-weight: 800;
+  color: var(--gold-light);
+  font-size: 0.82rem;
+}
+.rsc-note {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-top: 4px;
+}
 
 /* ═══════════════════════════════════════════════════════════════
    BUTTONS & NAVIGATION
@@ -1930,7 +2372,7 @@ body {
 }
 
 [data-theme="dark"] .talent-modal-overlay {
-  background: rgba(4, 8, 16, 0.85);
+  background: rgba(4, 8, 16, 0.88);
 }
 [data-theme="dark"] .talent-modal-container {
   background: #0d1827;
@@ -1939,19 +2381,122 @@ body {
   box-shadow: 0 16px 50px rgba(0, 0, 0, 0.8), 0 0 30px rgba(200, 152, 42, 0.25);
 }
 [data-theme="dark"] .talent-modal-header {
+  background: #09121f;
   border-bottom-color: rgba(200, 152, 42, 0.3);
 }
 [data-theme="dark"] .talent-modal-title {
   color: #f5d688;
 }
+[data-theme="dark"] .talent-modal-subtitle {
+  color: #9cb1c9;
+}
 [data-theme="dark"] .talent-modal-close {
+  background: #14243b;
+  border-color: #233b5c;
   color: #9cb1c9;
 }
 [data-theme="dark"] .talent-modal-close:hover {
+  background: var(--cyan);
+  color: #08111e;
+  border-color: var(--cyan);
+}
+[data-theme="dark"] .modal-level-control {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .modal-level-control select {
+  background: #101c2e;
+  border-color: #233b5c;
   color: #f0f4f9;
 }
-[data-theme="dark"] .talent-modal-desc {
+[data-theme="dark"] .modal-points-pill {
+  background: rgba(2, 132, 199, 0.15);
+  border-color: rgba(2, 132, 199, 0.4);
+  color: #38bdf8;
+}
+[data-theme="dark"] .talent-modal-controls-bar {
+  background: #091424;
+  border-bottom-color: rgba(200, 152, 42, 0.25);
+}
+[data-theme="dark"] .modal-search-box {
+  background: #101c2e;
+  border-color: #233b5c;
+}
+[data-theme="dark"] .modal-search-box input {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .tier-filter-btn, [data-theme="dark"] .status-filter-btn {
+  background: #101c2e;
+  border-color: #233b5c;
   color: #9cb1c9;
+}
+[data-theme="dark"] .tier-filter-btn:hover, [data-theme="dark"] .status-filter-btn:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: #17283c;
+}
+[data-theme="dark"] .tier-filter-btn.active, [data-theme="dark"] .status-filter-btn.active {
+  background: var(--cyan);
+  color: #08111e;
+  border-color: var(--cyan);
+}
+[data-theme="dark"] .talent-tier-header {
+  border-bottom-color: rgba(200, 152, 42, 0.3);
+}
+[data-theme="dark"] .talent-tier-desc {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .talent-tier-tag.tier-1 {
+  background: #1a2a40;
+  color: #c5d4e8;
+  border-color: #2e4566;
+}
+[data-theme="dark"] .talent-tier-tag.tier-2 {
+  background: rgba(2, 132, 199, 0.2);
+  color: #38bdf8;
+  border-color: rgba(2, 132, 199, 0.4);
+}
+[data-theme="dark"] .talent-tier-tag.tier-3 {
+  background: rgba(245, 158, 11, 0.2);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+}
+[data-theme="dark"] .talent-tier-tag.tier-4 {
+  background: rgba(168, 85, 247, 0.2);
+  color: #c084fc;
+  border-color: rgba(168, 85, 247, 0.4);
+}
+[data-theme="dark"] .action-type-badge.action-standard {
+  background: #1c2b42; color: #e2e8f0; border-color: #334b6e;
+}
+[data-theme="dark"] .action-type-badge.action-reaction {
+  background: rgba(239, 68, 68, 0.2); color: #fca5a5; border-color: rgba(239, 68, 68, 0.4);
+}
+[data-theme="dark"] .action-type-badge.action-free {
+  background: rgba(16, 185, 129, 0.2); color: #6ee7b7; border-color: rgba(16, 185, 129, 0.4);
+}
+[data-theme="dark"] .action-type-badge.action-passive {
+  background: #18263a; color: #94a3b8; border-color: #2b3e5b;
+}
+[data-theme="dark"] .action-type-badge.action-key {
+  background: rgba(2, 132, 199, 0.2); color: #7dd3fc; border-color: rgba(2, 132, 199, 0.4);
+}
+[data-theme="dark"] .action-type-badge.action-special {
+  background: rgba(168, 85, 247, 0.2); color: #d8b4fe; border-color: rgba(168, 85, 247, 0.4);
+}
+[data-theme="dark"] .btn-surge-view-pill {
+  background: #101c2e;
+  border-color: #233b5c;
+  color: #9cb1c9;
+}
+[data-theme="dark"] .btn-surge-view-pill:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: #17283c;
+}
+[data-theme="dark"] .btn-surge-view-pill.active {
+  background: var(--cyan);
+  color: #08111e;
+  border-color: var(--cyan);
 }
 
 [data-theme="dark"] .radiant-toggle {
@@ -1976,6 +2521,85 @@ body {
 [data-theme="dark"] .order-card .oath {
   color: #f5d688;
   border-left-color: var(--gold);
+}
+[data-theme="dark"] .radiant-order-summary-banner {
+  background: #111e30;
+  border-color: var(--cyan);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.15);
+}
+[data-theme="dark"] .radiant-badge-name {
+  color: var(--cyan);
+}
+[data-theme="dark"] .radiant-spren-pill {
+  background: rgba(0, 212, 255, 0.12);
+  border-color: rgba(0, 212, 255, 0.3);
+  color: var(--cyan);
+}
+[data-theme="dark"] .radiant-order-oath-text {
+  color: #f5d688;
+}
+[data-theme="dark"] .btn-change-order {
+  border-color: #233b5c;
+  color: #c5d4e8;
+}
+[data-theme="dark"] .btn-change-order:hover {
+  border-color: var(--cyan);
+  color: var(--cyan);
+  background: rgba(0, 212, 255, 0.1);
+}
+[data-theme="dark"] .radiant-inline-picker {
+  background: #0f1c2d;
+  border-color: var(--gold);
+}
+[data-theme="dark"] .radiant-picker-card {
+  background: #15243a;
+  border-color: #233b5c;
+}
+[data-theme="dark"] .radiant-picker-card:hover {
+  border-color: var(--cyan);
+  box-shadow: 0 2px 14px rgba(0, 212, 255, 0.2);
+}
+[data-theme="dark"] .radiant-picker-card.selected {
+  border-color: var(--gold);
+  background: #1c2b42;
+  box-shadow: 0 0 16px rgba(200, 152, 42, 0.35);
+}
+[data-theme="dark"] .radiant-picker-card .rpc-name {
+  color: #f0f4f9;
+}
+[data-theme="dark"] .radiant-picker-card.selected .rpc-name {
+  color: #fbe08e;
+}
+[data-theme="dark"] .radiant-picker-card .rpc-spren {
+  color: #9cb1c9;
+}
+[data-theme="dark"] .radiant-picker-card .rpc-surges {
+  color: #67e8f9;
+}
+[data-theme="dark"] .radiant-picker-card .rpc-oath {
+  color: #c5d4e8;
+}
+[data-theme="dark"] .unbonded-surges-card {
+  background: #0f1c2d;
+  border-color: var(--gold);
+}
+[data-theme="dark"] .unbonded-title {
+  color: #fbe08e;
+}
+[data-theme="dark"] .unbonded-desc {
+  color: #c5d4e8;
+}
+[data-theme="dark"] .radiant-skills-callout {
+  background: #111e30;
+  border-color: var(--cyan);
+}
+[data-theme="dark"] .surge-skill-pill {
+  background: #15243a;
+  border-color: #233b5c;
+  color: #f0f4f9;
+}
+[data-theme="dark"] .surge-skill-bonus {
+  color: #fbe08e;
 }
 [data-theme="dark"] .culture-tag {
   background: rgba(0, 212, 255, 0.12);
@@ -2153,12 +2777,52 @@ body {
       <span class="scholar-author">— Highprince Dalinar Kholin</span>
     </div>
     <div id="pathCards" class="card-grid cols-2"></div>
+    <div class="step-guide-banner" style="margin-top:20px; padding:14px 18px; border-radius:var(--radius-md); background:var(--bg-card); border:1.5px solid var(--border-gold); display:flex; align-items:center; gap:14px; box-shadow:var(--shadow-card);">
+      <span style="font-size:1.6rem; color:var(--cyan); flex-shrink:0;">⚡</span>
+      <div style="flex:1;">
+        <div style="font-family:var(--font-title); font-size:0.95rem; font-weight:800; color:var(--gold-light); letter-spacing:0.04em;">Knights Radiant Creation Flow</div>
+        <div style="font-size:0.86rem; color:var(--text-secondary); margin-top:2px; line-height:1.45;">
+          Choose your starting Heroic Path above. In the very next step — <strong>Step 5: Radiant Path &amp; Ideals</strong> — you can indicate whether you have bonded a spren and select your Radiant Order <em>before</em> allocating your Attributes &amp; Skills!
+        </div>
+      </div>
+    </div>
     <div class="validation-msg" id="val-4"></div>
   </section>
 
-  <!-- ═══════ STEP 5: ATTRIBUTES ═══════ -->
-  <section class="step-panel" id="step-5" aria-label="Step 5: Attributes">
-    <div class="chapter-header-badge">Chapter 5</div>
+  <!-- ═══════ STEP 5: RADIANT PATH & IDEALS ═══════ -->
+  <section class="step-panel" id="step-5" aria-label="Step 5: Radiant Path & Ideals">
+    <div class="chapter-header-badge">Chapter 5: Radiant Paths</div>
+    <h2 class="step-title">Radiant Path & Ideals</h2>
+    <p class="step-subtitle">Have you bonded a spren? Choose your Radiant Order (optional).</p>
+    <div class="scholar-note">
+      <span class="scholar-icon">✒️</span>
+      <p class="scholar-text">"Life before death. Strength before weakness. Journey before destination. Speak the ancient words."</p>
+      <span class="scholar-author">— The First Ideal of the Knights Radiant</span>
+    </div>
+
+    <div class="radiant-toggle" id="radiantToggle" role="switch" tabindex="0" aria-checked="false" aria-label="Enable Radiant Order selection">
+      <div class="toggle-switch" id="toggleSwitch"></div>
+      <div>
+        <div class="radiant-toggle-label">I have bonded a spren</div>
+        <div class="radiant-toggle-sub">Enable to choose a Radiant Order</div>
+      </div>
+    </div>
+
+    <div id="radiantSection" style="display:none;">
+      <div id="orderCards" class="card-grid cols-2"></div>
+      <div class="ideal-input" id="idealInputContainer" style="display:none;">
+        <div class="form-group">
+          <label class="form-label" for="secondIdeal">Your Second Ideal</label>
+          <textarea class="form-textarea" id="secondIdeal" placeholder="Speak your truth… What is your Second Ideal?" rows="2" maxlength="300"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="validation-msg" id="val-5"></div>
+  </section>
+
+  <!-- ═══════ STEP 6: ATTRIBUTES ═══════ -->
+  <section class="step-panel" id="step-6" aria-label="Step 6: Attributes">
+    <div class="chapter-header-badge">Chapter 6</div>
     <h2 class="step-title">Attributes & Defenses</h2>
     <p class="step-subtitle">Distribute 12 points among your six attributes. Each starts at 0, max 3.</p>
     <div class="scholar-note">
@@ -2171,12 +2835,12 @@ body {
     </div>
     <div id="attributeControls"></div>
     <div class="derived-stats" id="derivedStats"></div>
-    <div class="validation-msg" id="val-5"></div>
+    <div class="validation-msg" id="val-6"></div>
   </section>
 
-  <!-- ═══════ STEP 6: SKILLS ═══════ -->
-  <section class="step-panel" id="step-6" aria-label="Step 6: Skills">
-    <div class="chapter-header-badge">Chapter 6</div>
+  <!-- ═══════ STEP 7: SKILLS ═══════ -->
+  <section class="step-panel" id="step-7" aria-label="Step 7: Skills">
+    <div class="chapter-header-badge">Chapter 7</div>
     <h2 class="step-title">Skills & Disciplines</h2>
     <p class="step-subtitle">Distribute 10 skill ranks (max 2 per skill). Your path grants 1 free rank in your starting skill.</p>
     <div class="scholar-note">
@@ -2188,14 +2852,15 @@ body {
       Remaining Skill Ranks: <span class="count" id="skillPointsCount">10</span>
     </div>
     <div id="skillControls"></div>
-    <div class="validation-msg" id="val-6"></div>
+    <div id="radiantSurgeSkillsCallout"></div>
+    <div class="validation-msg" id="val-7"></div>
   </section>
 
-  <!-- ═══════ STEP 7: TALENTS & TALENT TREES ═══════ -->
-  <section class="step-panel" id="step-7" aria-label="Step 7: Talents & Talent Trees">
+  <!-- ═══════ STEP 8: TALENTS & TALENT TREES ═══════ -->
+  <section class="step-panel" id="step-8" aria-label="Step 8: Talents & Talent Trees">
     <div class="chapter-header-badge">Chapter 5: Radiant Paths & Chapter 7: Talents</div>
     <h2 class="step-title">Talent Trees & Radiant Paths</h2>
-    <p class="step-subtitle">Explore the talent trees of Roshar. Your Heroic Path grants your starting Key Talent, plus spend talent points to unlock specialties or multi-path into any Heroic or Surge tree.</p>
+    <p class="step-subtitle">Explore the talent trees of Roshar. Your Heroic Path grants your starting Key Talent, plus spend talent points to unlock specialties or your bonded Radiant Surges.</p>
     <div class="scholar-note">
       <span class="scholar-icon">✒️</span>
       <p class="scholar-text">"As the Nahel bond deepens through spoken Ideals, mortal hands grasp the weapons of the ancient Heralds."</p>
@@ -2232,11 +2897,11 @@ body {
       <!-- 3 specialty columns or surge columns -->
     </div>
 
-    <div class="validation-msg" id="val-9"></div>
+    <div class="validation-msg" id="val-8"></div>
   </section>
 
-  <!-- ═══════ STEP 7: EQUIPMENT ═══════ -->
-  <section class="step-panel" id="step-8" aria-label="Step 8: Starting Equipment">
+  <!-- ═══════ STEP 9: EQUIPMENT ═══════ -->
+  <section class="step-panel" id="step-9" aria-label="Step 9: Starting Equipment">
     <div class="chapter-header-badge">Chapter 8</div>
     <h2 class="step-title">Starting Equipment</h2>
     <p class="step-subtitle">Choose a kit to determine your starting gear and marks (currency).</p>
@@ -2246,38 +2911,7 @@ body {
       <span class="scholar-author">— Thaylen Quartermaster Guide</span>
     </div>
     <div id="equipCards" class="card-grid cols-2"></div>
-    <div class="validation-msg" id="val-7"></div>
-  </section>
-
-  <!-- ═══════ STEP 8: RADIANT ═══════ -->
-  <section class="step-panel" id="step-9" aria-label="Step 9: Radiant Path">
-    <div class="chapter-header-badge">Chapter 9</div>
-    <h2 class="step-title">Radiant Path & Ideals</h2>
-    <p class="step-subtitle">Have you bonded a spren? Choose your Radiant Order (optional).</p>
-    <div class="scholar-note">
-      <span class="scholar-icon">✒️</span>
-      <p class="scholar-text">"Life before death. Strength before weakness. Journey before destination. Speak the ancient words."</p>
-      <span class="scholar-author">— The First Ideal of the Knights Radiant</span>
-    </div>
-
-    <div class="radiant-toggle" id="radiantToggle" role="switch" tabindex="0" aria-checked="false" aria-label="Enable Radiant Order selection">
-      <div class="toggle-switch" id="toggleSwitch"></div>
-      <div>
-        <div class="radiant-toggle-label">I have bonded a spren</div>
-        <div class="radiant-toggle-sub">Enable to choose a Radiant Order</div>
-      </div>
-    </div>
-
-    <div id="radiantSection" style="display:none;">
-      <div id="orderCards" class="card-grid cols-2"></div>
-      <div class="ideal-input" id="idealInputContainer" style="display:none;">
-        <div class="form-group">
-          <label class="form-label" for="secondIdeal">Your Second Ideal</label>
-          <textarea class="form-textarea" id="secondIdeal" placeholder="Speak your truth… What is your Second Ideal?" rows="2" maxlength="300"></textarea>
-        </div>
-      </div>
-    </div>
-    <div class="validation-msg" id="val-8"></div>
+    <div class="validation-msg" id="val-9"></div>
   </section>
 
   <!-- ═══════ STEP 9: SUMMARY ═══════ -->
@@ -5242,7 +5876,7 @@ const SURGE_TREES = [
 ];
 
 
-const STEP_LABELS = ['Concept','Ancestry','Cultures','Path','Attributes','Skills','Talents','Equipment','Radiant','Summary'];
+const STEP_LABELS = ['Concept','Ancestry','Cultures','Path','Radiant','Attributes','Skills','Talents','Equipment','Summary'];
 const TOTAL_STEPS = STEP_LABELS.length;
 const ATTR_POINTS = 12;
 const SKILL_POINTS = 10;
@@ -5280,11 +5914,11 @@ function init() {
   buildAncestryCards();
   buildCultureCards();
   buildPathCards();
+  buildRadiantSection();
   buildAttributeControls();
   buildSkillControls();
   buildTalentTreeSection();
   buildEquipmentCards();
-  buildRadiantSection();
   setupNavigation();
   setupTalentModal();
   setupPdfModal();
@@ -5315,6 +5949,9 @@ function loadState() {
       Object.assign(state, parsed);
       if (!Array.isArray(state.talents)) state.talents = [];
       if (!state.level) state.level = 1;
+      if (!state.currentStep || state.currentStep < 1 || state.currentStep > TOTAL_STEPS) {
+        state.currentStep = 1;
+      }
       // Ensure skills object has all keys
       SKILLS.forEach(s => { if (!(s.name in state.skills)) state.skills[s.name] = 0; });
       // Ensure cultureExpertise is populated for any selected cultures
@@ -5416,22 +6053,27 @@ function goToStep(step) {
 
   // Restore inputs on step 1
   if (step === 1) restoreInputs();
-  // Update skills display on step 6
-  if (step === 6) updateSkillDisplay();
-  // Update talents display on step 7
-  if (step === 7) updateTalentTreeDisplay();
+  // Update attributes & derived defenses display on step 6
+  if (step === 6) {
+    updateAttributeDisplay();
+    updateDerivedStats();
+  }
+  // Update skills display on step 7
+  if (step === 7) updateSkillDisplay();
+  // Update talents display on step 8
+  if (step === 8) updateTalentTreeDisplay();
 
-  // Update rulebook page footer (Page 160 on Chapter 5 / Talents)
+  // Update rulebook page footer
   const CHAPTER_MAP = [
     { page: 24, label: 'CHAPTER 1: CHARACTER CONCEPT' },
     { page: 42, label: 'CHAPTER 2: ANCESTRY & HERITAGE' },
     { page: 58, label: 'CHAPTER 3: ROSHARAN CULTURES' },
     { page: 76, label: 'CHAPTER 4: HEROIC PATHS' },
-    { page: 104, label: 'CHAPTER 5: ATTRIBUTES & DEFENSES' },
-    { page: 120, label: 'CHAPTER 6: SKILLS & SPECIALTIES' },
-    { page: 160, label: 'CHAPTER 5: RADIANT PATHS & TALENT TREES' },
+    { page: 130, label: 'CHAPTER 5: RADIANT PATHS & IDEALS' },
+    { page: 104, label: 'CHAPTER 6: ATTRIBUTES & DEFENSES' },
+    { page: 120, label: 'CHAPTER 7: SKILLS & DISCIPLINES' },
+    { page: 160, label: 'CHAPTER 5: RADIANT PATHS & CHAPTER 7: TALENTS' },
     { page: 194, label: 'CHAPTER 8: STARTING EQUIPMENT' },
-    { page: 210, label: 'CHAPTER 9: RADIANT PATH & IDEALS' },
     { page: 240, label: 'OFFICIAL CHARACTER DOSSIER' }
   ];
   const ch = CHAPTER_MAP[step - 1] || CHAPTER_MAP[0];
@@ -5496,28 +6138,31 @@ function validateStep(step) {
     case 4:
       if (!state.path) return showError('Please choose a heroic path.');
       break;
-    case 5: {
+    case 5:
+      // Step 5 is Radiant (Optional step, always valid)
+      saveState();
+      break;
+    case 6: {
+      // Step 6 is Attributes
       const spent = Object.values(state.attributes).reduce((a,b)=>a+b,0);
       if (spent !== ATTR_POINTS) return showError(`Please distribute all ${ATTR_POINTS} attribute points (${ATTR_POINTS - spent} remaining).`);
       break;
     }
-    case 6: {
+    case 7: {
+      // Step 7 is Skills
       const spent = Object.values(state.skills).reduce((a,b)=>a+b,0);
       const freeRank = state.path ? 1 : 0;
       if (spent < SKILL_POINTS + freeRank) return showError(`You have ${SKILL_POINTS + freeRank - spent} skill ranks remaining to distribute.`);
       break;
     }
-    case 7: {
-      // Step 7 is Talents
+    case 8: {
+      // Step 8 is Talents
       saveState();
       break;
     }
-    case 8:
-      if (!state.equipment) return showError('Please choose a starting equipment kit.');
-      break;
     case 9:
-      // Step 9 is Radiant (Optional step, always valid)
-      saveState();
+      // Step 9 is Equipment
+      if (!state.equipment) return showError('Please choose a starting equipment kit.');
       break;
   }
   return true;
@@ -5836,8 +6481,10 @@ function updateAttributeDisplay() {
     const row = el(`attr-row-${attr.id}`);
     if (row) {
       const btns = row.querySelectorAll('.attr-btn');
-      btns[0].disabled = state.attributes[attr.id] <= 0;
-      btns[1].disabled = state.attributes[attr.id] >= MAX_ATTR || remaining <= 0;
+      if (btns && btns.length >= 2) {
+        btns[0].disabled = state.attributes[attr.id] <= 0;
+        btns[1].disabled = state.attributes[attr.id] >= MAX_ATTR || remaining <= 0;
+      }
     }
   });
 
@@ -6057,10 +6704,76 @@ function updateSkillDisplay() {
       // Disable buttons
       const btns = rowEl.querySelectorAll('.skill-btn');
       const minVal = isFree ? 1 : 0;
-      btns[0].disabled = state.skills[skill.name] <= minVal;
-      btns[1].disabled = state.skills[skill.name] >= MAX_SKILL || remaining <= 0;
+      if (btns && btns.length >= 2) {
+        btns[0].disabled = state.skills[skill.name] <= minVal;
+        btns[1].disabled = state.skills[skill.name] >= MAX_SKILL || remaining <= 0;
+      }
     }
   });
+
+  // Update radiant surge skills callout if bonded
+  const surgeCallout = el('radiantSurgeSkillsCallout');
+  if (surgeCallout) {
+    if (state.isRadiant && state.radiantOrder) {
+      const orderObj = ORDERS.find(o => o.id === state.radiantOrder);
+      if (orderObj) {
+        surgeCallout.style.display = '';
+        surgeCallout.innerHTML = `
+          <div class="radiant-skills-callout">
+            <div class="rsc-header" style="justify-content:space-between;">
+              <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+                <span class="rsc-icon">⚡</span>
+                <span class="rsc-title">${orderObj.name} Surge Skills</span>
+                <span class="rsc-badge">Granted by Spren Bond</span>
+              </div>
+              <button type="button" class="btn-change-order" id="btnStep7ChangeOrder" style="padding:4px 10px; font-size:0.74rem;">
+                ↻ Change Order
+              </button>
+            </div>
+            <div class="rsc-body">
+              ${orderObj.surges.map(sname => {
+                const parentSurge = SURGE_TREES.find(s => s.name === sname);
+                const attr = parentSurge?.attribute || 'Willpower';
+                const attrVal = state.attributes[attr] || 0;
+                return `
+                  <div class="surge-skill-pill">
+                    <strong>Surge of ${sname}</strong> <span style="color:var(--text-dim);">(${attr})</span>:
+                    <span class="surge-skill-bonus">+${attrVal + 1} (1 Free Rank)</span>
+                  </div>
+                `;
+              }).join('')}
+            </div>
+            <div class="rsc-note">
+              Per official Roshar rules (Chapter 5, p. 131), swearing your First Ideal grants access to your order's two surge skills with 1 free rank. Select and upgrade their talents in the <strong>Talent Trees &amp; Radiant Paths</strong> step!
+            </div>
+          </div>
+        `;
+        const changeBtn = el('btnStep7ChangeOrder');
+        if (changeBtn) changeBtn.addEventListener('click', () => goToStep(5));
+      } else {
+        surgeCallout.style.display = 'none';
+        surgeCallout.innerHTML = '';
+      }
+    } else {
+      surgeCallout.style.display = '';
+      surgeCallout.innerHTML = `
+        <div class="radiant-skills-callout unbonded-callout" style="border-style:dashed; opacity:0.92; margin-top:20px;">
+          <div class="rsc-header">
+            <span class="rsc-icon">⚡</span>
+            <span class="rsc-title" style="color:var(--text-secondary);">Mundane Character (No Radiant Spren Bond)</span>
+          </div>
+          <div class="rsc-note" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+            <span>You currently do not have a bonded Radiant Order. If you wish to swear Ideals and wield Surge powers:</span>
+            <button type="button" class="btn btn-outline" id="btnStep7BondSpren" style="font-size:0.76rem; padding:5px 12px; border-color:var(--cyan); color:var(--cyan);">
+              ⚡ Bond a Radiant Order
+            </button>
+          </div>
+        </div>
+      `;
+      const bondBtn = el('btnStep7BondSpren');
+      if (bondBtn) bondBtn.addEventListener('click', () => goToStep(5));
+    }
+  }
 }
 
 
@@ -6127,7 +6840,9 @@ function buildTalentTreeSection() {
     const p = TALENT_TREES[pk];
     tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === pk ? ' active' : ''}" data-tab="${pk}" role="tab">${p.icon} ${p.name}</button>`;
   });
-  tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === 'surges' ? ' active' : ''}" data-tab="surges" role="tab">⚡ Radiant Surges</button>`;
+  const orderObj = (state.isRadiant && state.radiantOrder) ? ORDERS.find(o => o.id === state.radiantOrder) : null;
+  const surgeBtnTitle = orderObj ? `⚡ ${orderObj.name} Surges` : '⚡ Radiant Surges';
+  tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === 'surges' ? ' active' : ''}" data-tab="surges" role="tab">${surgeBtnTitle}</button>`;
   tabsContainer.innerHTML = tabsHtml;
 
   tabsContainer.querySelectorAll('.talent-tab-btn').forEach(btn => {
@@ -6171,6 +6886,11 @@ function updateTalentTreeDisplay() {
   }
   const tabsContainer = el('talentPathTabs');
   if (tabsContainer) {
+    const orderObj = (state.isRadiant && state.radiantOrder) ? ORDERS.find(o => o.id === state.radiantOrder) : null;
+    const surgeBtn = tabsContainer.querySelector('[data-tab="surges"]');
+    if (surgeBtn) {
+      surgeBtn.innerHTML = orderObj ? `⚡ ${orderObj.name} Surges` : '⚡ Radiant Surges';
+    }
     tabsContainer.querySelectorAll('.talent-tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === state.activeTalentTab));
   }
 
@@ -6184,6 +6904,32 @@ function updateTalentTreeDisplay() {
   renderTalentTree('talentSpecialtiesContainer', state.activeTalentTab, false);
 }
 
+function renderSpecialtyTalents(talents, pts, isModal) {
+  const tierGroups = {};
+  talents.forEach(t => {
+    const tr = t.tier || 1;
+    if (!tierGroups[tr]) tierGroups[tr] = [];
+    tierGroups[tr].push(t);
+  });
+  const tierKeys = Object.keys(tierGroups).sort((a,b)=>Number(a)-Number(b));
+  return tierKeys.map(tr => {
+    const desc = tr === '1' ? 'Basic Specialties & Starting Powers (Levels 1–4)' :
+                 tr === '2' ? 'Advanced Specialties (Levels 5–9)' :
+                 tr === '3' ? 'Master Powers (Level 10+)' : 'Cosmological Mastery';
+    return `
+      <div class="talent-tier-group" data-tier="${tr}">
+        <div class="talent-tier-header">
+          <span class="talent-tier-tag tier-${tr}">Tier ${tr}</span>
+          <span class="talent-tier-desc">${desc}</span>
+        </div>
+        <div class="talent-tier-cards">
+          ${tierGroups[tr].map(t => renderTalentCard(t, pts, isModal)).join('')}
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
 function renderTalentTree(containerId, tabKey, isModal) {
   const container = el(containerId);
   if (!container) return;
@@ -6195,32 +6941,149 @@ function renderTalentTree(containerId, tabKey, isModal) {
   const toggleBtnId = isModal ? 'btnModalToggleAllDetails' : 'btnPageToggleAllDetails';
   html += `
     <div class="talent-toolbar">
-      <div style="font-size:0.82rem;color:var(--text-secondary);font-family:var(--font-ui);">
-        <span style="color:var(--gold);font-weight:700;">Handbook Note:</span> Cards display concise rulebook summaries. Click <em>"📖 View Full Handbook Text"</em> to inspect the complete rules wording.
+      <div style="font-size:0.84rem;color:var(--text-secondary);font-family:var(--font-ui);">
+        <span style="color:var(--gold);font-weight:700;">Handbook Note:</span> Cards display concise rulebook summaries. Click <em>"📖 View Full Handbook Text"</em> on any card to read complete rules text.
       </div>
       <button type="button" class="btn-toggle-all-details" id="${toggleBtnId}">📖 Expand All Rules</button>
     </div>
   `;
 
   if (tabKey === 'surges') {
-    html += '<div class="talent-specialties-grid">';
-    SURGE_TREES.forEach(surge => {
+    const orderObj = (state.isRadiant && state.radiantOrder) ? ORDERS.find(o => o.id === state.radiantOrder) : null;
+
+    if (orderObj) {
+      // Determine which surges to display
+      let displayedSurges = SURGE_TREES.filter(s => orderObj.surges.includes(s.name));
+      if (isModal && state.modalSurgeBrowseTarget) {
+        if (state.modalSurgeBrowseTarget === 'all') {
+          displayedSurges = SURGE_TREES;
+        } else {
+          const targetOrder = ORDERS.find(o => o.id === state.modalSurgeBrowseTarget);
+          if (targetOrder) {
+            displayedSurges = SURGE_TREES.filter(s => targetOrder.surges.includes(s.name));
+          }
+        }
+      }
+
+      const isBrowsingAll = isModal && state.modalSurgeBrowseTarget === 'all';
+      const browseOrderObj = (isModal && state.modalSurgeBrowseTarget && state.modalSurgeBrowseTarget !== 'all')
+        ? ORDERS.find(o => o.id === state.modalSurgeBrowseTarget)
+        : null;
+
       html += `
-        <div class="specialty-column">
-          <div class="rulebook-banner">
-            <div class="rulebook-banner-inner">
-              <span class="rulebook-banner-title">⚡ SURGE OF ${surge.name.toUpperCase()}</span>
+        <div class="radiant-order-summary-banner">
+          <div class="radiant-order-summary-content">
+            <div class="radiant-order-title-row">
+              <span class="radiant-badge-icon">⚡</span>
+              <span class="radiant-badge-name">KNIGHTS RADIANT: <strong>${orderObj.name.toUpperCase()}</strong></span>
+              <span class="radiant-spren-pill">Bonded Spren: <strong>${orderObj.spren}</strong></span>
+              ${orderObj.restricted ? '<span class="restricted-badge">Rare / Restricted</span>' : ''}
+            </div>
+            <div class="radiant-order-info-row">
+              <span>Order Surges: <strong style="color:var(--cyan);">${orderObj.surges.join(' &amp; ')}</strong></span>
+              <span style="opacity:0.4;">•</span>
+              <span class="radiant-order-oath-text">Ideal: <em>${orderObj.oath}</em></span>
             </div>
           </div>
-          <div class="specialty-col-desc">${surge.desc}</div>
-          <div class="specialty-orders-tag"><span style="color:var(--gold-light);font-weight:700;">Orders:</span> ${surge.orders.join(' • ')}</div>
-          <div class="specialty-talents-list">
-            ${surge.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+          <div class="radiant-order-banner-actions">
+            ${isModal ? `
+              <div class="modal-surge-view-pills">
+                <button type="button" class="btn-surge-view-pill${!state.modalSurgeBrowseTarget ? ' active' : ''}" id="btnModalSurgeMyOrder">
+                  ✦ My Order (${orderObj.name})
+                </button>
+                <button type="button" class="btn-surge-view-pill${state.modalSurgeBrowseTarget ? ' active' : ''}" id="btnModalBrowseOtherOrders">
+                  📜 Browse Other Orders ▾
+                </button>
+              </div>
+            ` : `
+              <button type="button" class="btn-change-order" id="btnPageChangeOrder">
+                ↻ Change Order
+              </button>
+            `}
+          </div>
+        </div>
+
+        <div class="radiant-inline-picker" id="${isModal ? 'modalOrderPicker' : 'pageOrderPicker'}" style="display:none;">
+          <div class="radiant-picker-header">
+            <span>${isModal ? 'Select an Order to browse its Surge trees (or view all surges):' : 'Select a different Radiant Order (or select Unbonded):'}</span>
+            <button type="button" class="btn-picker-close" id="${isModal ? 'btnModalPickerClose' : 'btnPagePickerClose'}">✕ Close</button>
+          </div>
+          <div class="radiant-picker-grid">
+            ${isModal ? `
+              <div class="radiant-picker-card${state.modalSurgeBrowseTarget === 'all' ? ' selected' : ''}" data-browse-all="true">
+                <div class="rpc-name">🌟 All 10 Surges</div>
+                <div class="rpc-spren">Complete Reference Tome</div>
+                <div class="rpc-surges">Browse all Rosharan powers</div>
+              </div>
+            ` : ''}
+            ${ORDERS.map(o => `
+              <div class="radiant-picker-card${(isModal ? (state.modalSurgeBrowseTarget === o.id || (!state.modalSurgeBrowseTarget && state.radiantOrder === o.id)) : (state.radiantOrder === o.id)) ? ' selected' : ''}" data-order="${o.id}">
+                <div class="rpc-name">${o.name}</div>
+                <div class="rpc-spren">Spren: ${o.spren}</div>
+                <div class="rpc-surges">Surges: ${o.surges.join(' • ')}</div>
+                <div class="rpc-oath">${o.oath}</div>
+              </div>
+            `).join('')}
+            ${!isModal ? `
+              <div class="radiant-picker-card unbond-card" data-unbond="true">
+                <div class="rpc-name">Unbonded (Mundane)</div>
+                <div class="rpc-spren">No bonded spren</div>
+                <div class="rpc-surges">No Surge trees</div>
+              </div>
+            ` : ''}
+          </div>
+        </div>
+
+        ${isBrowsingAll ? `
+          <div style="margin-bottom:14px; font-size:0.86rem; color:var(--text-secondary); background:rgba(2,132,199,0.08); border:1px solid rgba(2,132,199,0.25); border-radius:4px; padding:8px 14px;">
+            ℹ️ Browsing All 10 Rosharan Surges. Your character is bonded as a <strong>${orderObj.name}</strong> (${orderObj.surges.join(' &amp; ')}). Talents outside your order remain locked.
+          </div>
+        ` : browseOrderObj ? `
+          <div style="margin-bottom:14px; font-size:0.86rem; color:var(--text-secondary); background:rgba(2,132,199,0.08); border:1px solid rgba(2,132,199,0.25); border-radius:4px; padding:8px 14px;">
+            ℹ️ Browsing Surges for <strong>${browseOrderObj.name}</strong> (${browseOrderObj.surges.join(' &amp; ')}). Click "My Order" above to return to ${orderObj.name}.
+          </div>
+        ` : ''}
+
+        <div class="talent-specialties-grid surge-grid-bonded">
+          ${displayedSurges.map(surge => `
+            <div class="specialty-column is-surge-column">
+              <div class="rulebook-banner">
+                <div class="rulebook-banner-inner">
+                  <span class="rulebook-banner-title">⚡ SURGE OF ${surge.name.toUpperCase()}</span>
+                </div>
+              </div>
+              <div class="specialty-col-desc">${surge.desc}</div>
+              <div class="specialty-orders-tag"><span style="color:var(--gold-light);font-weight:700;">Orders:</span> ${surge.orders.join(' • ')} • Attribute: <strong>${surge.attribute}</strong></div>
+              <div class="specialty-talents-list">
+                ${renderSpecialtyTalents(surge.talents, pts, isModal)}
+              </div>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      // User is not yet bonded to a Radiant Order
+      html += `
+        <div class="unbonded-surges-card">
+          <div class="unbonded-icon">⚡</div>
+          <h3 class="unbonded-title">Radiant Spren Bond Required</h3>
+          <p class="unbonded-desc">
+            Surges are fundamental cosmic forces channeled through a sacred <strong>Nahel bond</strong> with a spren. 
+            To unlock and access Surge talent trees, choose which Radiant Order you have bonded:
+          </p>
+          <div class="radiant-picker-grid" style="margin-top:16px;">
+            ${ORDERS.map(o => `
+              <div class="radiant-picker-card" data-order="${o.id}">
+                <div class="rpc-name">${o.name}</div>
+                <div class="rpc-spren">Spren: ${o.spren}</div>
+                <div class="rpc-surges">Surges: ${o.surges.join(' • ')}</div>
+                <div class="rpc-oath">${o.oath}</div>
+              </div>
+            `).join('')}
           </div>
         </div>
       `;
-    });
-    html += '</div>';
+    }
   } else {
     const pathObj = TALENT_TREES[tabKey];
     if (!pathObj) return;
@@ -6242,7 +7105,7 @@ function renderTalentTree(containerId, tabKey, isModal) {
               <span class="node-name">${pathObj.keyTalent.name}</span>
             </div>
             <div class="node-badges">
-              <span class="node-badge key">Key Talent</span>
+              <span class="action-type-badge action-key">Key Talent</span>
               <span class="node-badge cost">${pathObj.keyTalent.cost}</span>
             </div>
           </div>
@@ -6274,7 +7137,7 @@ function renderTalentTree(containerId, tabKey, isModal) {
           </div>
           <div class="specialty-col-desc">${spec.desc}</div>
           <div class="specialty-talents-list">
-            ${spec.talents.map(t => renderTalentCard(t, pts, isModal)).join('')}
+            ${renderSpecialtyTalents(spec.talents, pts, isModal)}
           </div>
         </div>
       `;
@@ -6295,7 +7158,58 @@ function renderTalentTree(containerId, tabKey, isModal) {
     });
   }
 
-  // Attach button click events
+  // Change order / browse events
+  const changeOrderBtn = el(isModal ? 'btnModalBrowseOtherOrders' : 'btnPageChangeOrder');
+  const myOrderBtn = el('btnModalSurgeMyOrder');
+  const orderPicker = el(isModal ? 'modalOrderPicker' : 'pageOrderPicker');
+  const pickerCloseBtn = el(isModal ? 'btnModalPickerClose' : 'btnPagePickerClose');
+
+  if (changeOrderBtn && orderPicker) {
+    changeOrderBtn.addEventListener('click', () => {
+      const isHidden = orderPicker.style.display === 'none';
+      orderPicker.style.display = isHidden ? 'block' : 'none';
+    });
+  }
+  if (myOrderBtn) {
+    myOrderBtn.addEventListener('click', () => {
+      state.modalSurgeBrowseTarget = null;
+      renderTalentTree('modalTalentSpecialtiesContainer', 'surges', true);
+    });
+  }
+  if (pickerCloseBtn && orderPicker) {
+    pickerCloseBtn.addEventListener('click', () => {
+      orderPicker.style.display = 'none';
+    });
+  }
+
+  container.querySelectorAll('.radiant-picker-card').forEach(card => {
+    card.addEventListener('click', () => {
+      if (isModal && state.isRadiant && state.radiantOrder) {
+        // In modal, clicking an order card switches the browse target view
+        if (card.dataset.browseAll === 'true') {
+          state.modalSurgeBrowseTarget = 'all';
+        } else if (card.dataset.order) {
+          state.modalSurgeBrowseTarget = card.dataset.order;
+        }
+        renderTalentTree('modalTalentSpecialtiesContainer', 'surges', true);
+      } else {
+        // In page wizard or when unbonded, selecting bonds the order
+        if (card.dataset.unbond === 'true') {
+          selectOrder(null);
+        } else if (card.dataset.order) {
+          selectOrder(card.dataset.order);
+        }
+        if (isModal) {
+          buildModalTalentSection();
+          updateTalentTreeDisplay();
+        } else {
+          updateTalentTreeDisplay();
+        }
+      }
+    });
+  });
+
+  // Attach learn/unlearn button click events
   container.querySelectorAll('.node-action-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -6308,12 +7222,18 @@ function renderTalentTree(containerId, tabKey, isModal) {
       }
       if (isModal) {
         renderTalentTree('modalTalentSpecialtiesContainer', state.activeTalentTab, true);
+        updateModalPointsDisplay();
         updateTalentTreeDisplay();
       } else {
         updateTalentTreeDisplay();
       }
     });
   });
+
+  // Apply modal filters if in modal view
+  if (isModal) {
+    applyModalFilters();
+  }
 }
 
 function renderTalentCard(t, pts, isModal) {
@@ -6323,33 +7243,71 @@ function renderTalentCard(t, pts, isModal) {
   const isLocked = !isLearned && !prereqCheck.met;
   const summaryText = t.summary || (t.desc ? t.desc.split('.')[0] + '.' : '');
 
-  // Determine official rulebook action icon (Page 160 style)
-  let icon = '∞';
+  // Determine official rulebook action icon & badge
+  let actionType = 'Passive';
+  let actionIcon = '∞';
+  let actionClass = 'action-passive';
   const costLower = (t.cost || '').toLowerCase();
   const nameLower = (t.name || '').toLowerCase();
+
   if (t.isKey || t.id.includes('key') || nameLower.includes('ideal') || nameLower.includes('wound') || nameLower.includes('squire') || nameLower.includes('goal')) {
-    icon = '★';
-  } else if (costLower.includes('reaction') || costLower.includes('free') || costLower.includes('special')) {
-    icon = '▷';
+    actionType = 'Key / Ideal';
+    actionIcon = '★';
+    actionClass = 'action-key';
+  } else if (costLower.includes('reaction')) {
+    actionType = 'Reaction';
+    actionIcon = '▷';
+    actionClass = 'action-reaction';
+  } else if (costLower.includes('free action') || costLower.includes('free')) {
+    actionType = 'Free Action';
+    actionIcon = '⚡';
+    actionClass = 'action-free';
   } else if (costLower.includes('action')) {
-    icon = '▶';
+    actionType = 'Action';
+    actionIcon = '▶';
+    actionClass = 'action-standard';
+  } else if (costLower.includes('special')) {
+    actionType = 'Special';
+    actionIcon = '✦';
+    actionClass = 'action-special';
+  }
+
+  // Determine resource badges (Focus or Stormlight)
+  let resourceBadge = '';
+  if (costLower.includes('focus')) {
+    const m = costLower.match(/(\d+)\s+focus/);
+    const amt = m ? m[1] : '1';
+    resourceBadge = `<span class="resource-badge focus">${amt} Focus</span>`;
+  } else if (costLower.includes('investiture')) {
+    const m = costLower.match(/(\d+)\s+investiture/);
+    const amt = m ? m[1] : '1';
+    resourceBadge = `<span class="resource-badge investiture">${amt} Stormlight</span>`;
   }
 
   return `
-    <div class="talent-node-card${isLearned ? ' learned' : ''}${isLocked ? ' locked' : ''}">
+    <div class="talent-node-card${isLearned ? ' learned' : ''}${isLocked ? ' locked' : ''}" 
+         data-tid="${t.id}"
+         data-name="${t.name.toLowerCase()}"
+         data-tier="${t.tier}"
+         data-cost="${t.cost.toLowerCase()}"
+         data-summary="${summaryText.toLowerCase()}"
+         data-learned="${isLearned}"
+         data-can-learn="${canLearn}">
       <div class="node-top-row">
         <div class="node-title-group">
-          <span class="node-rule-icon" aria-hidden="true">${icon}</span>
+          <span class="node-rule-icon" aria-hidden="true">${actionIcon}</span>
           <span class="node-name">${t.name}</span>
         </div>
         <div class="node-badges">
           <span class="node-badge tier tier-${t.tier}">Tier ${t.tier}</span>
-          <span class="node-badge cost">${t.cost}</span>
+          <span class="action-type-badge ${actionClass}">${actionType}</span>
+          ${resourceBadge}
+          ${t.cost && !costLower.includes('passive') ? `<span class="node-badge cost">${t.cost}</span>` : ''}
         </div>
       </div>
       <div class="node-prereq ${prereqCheck.met ? 'met' : 'unmet'}">
         <span class="prereq-icon">${prereqCheck.met ? '✓' : '🔒'}</span>
-        <span class="prereq-label">Prerequisite:</span>
+        <span class="prereq-label">${prereqCheck.met ? 'Prerequisite Met:' : 'Prerequisite:'}</span>
         <span class="prereq-text">${prereqCheck.text}</span>
       </div>
       <div class="node-summary">${summaryText}</div>
@@ -6418,6 +7376,67 @@ function unlearnTalent(talentId) {
   saveState();
 }
 
+function updateModalPointsDisplay() {
+  const pts = getTalentPoints();
+  const countEl = el('modalTalentPointsCount');
+  if (countEl) {
+    countEl.textContent = pts.remaining;
+    countEl.className = 'count' + (pts.remaining === 0 ? ' zero' : '');
+  }
+}
+
+function applyModalFilters() {
+  const container = el('modalTalentSpecialtiesContainer');
+  if (!container) return;
+
+  const query = (state.modalSearchQuery || '').trim().toLowerCase();
+  const tierFilter = state.modalTierFilter || 'all';
+  const statusFilter = state.modalStatusFilter || 'all';
+
+  const cards = container.querySelectorAll('.talent-node-card:not(.is-key)');
+  cards.forEach(card => {
+    const name = card.dataset.name || '';
+    const summary = card.dataset.summary || '';
+    const cost = card.dataset.cost || '';
+    const tier = card.dataset.tier || '';
+    const isLearned = card.dataset.learned === 'true';
+    const canLearn = card.dataset.canLearn === 'true';
+
+    // Match search query
+    let matchQuery = true;
+    if (query) {
+      matchQuery = name.includes(query) || summary.includes(query) || cost.includes(query);
+    }
+
+    // Match tier
+    let matchTier = true;
+    if (tierFilter !== 'all') {
+      matchTier = tier === tierFilter;
+    }
+
+    // Match status
+    let matchStatus = true;
+    if (statusFilter === 'known') {
+      matchStatus = isLearned;
+    } else if (statusFilter === 'available') {
+      matchStatus = canLearn || isLearned;
+    }
+
+    const isVisible = matchQuery && matchTier && matchStatus;
+    card.style.display = isVisible ? '' : 'none';
+  });
+
+  // Hide empty tier groups
+  container.querySelectorAll('.talent-tier-group').forEach(group => {
+    const allCards = group.querySelectorAll('.talent-node-card');
+    let hasVisible = false;
+    allCards.forEach(c => {
+      if (c.style.display !== 'none') hasVisible = true;
+    });
+    group.style.display = hasVisible ? '' : 'none';
+  });
+}
+
 function setupTalentModal() {
   const openBtn = el('btnOpenTalentBrowser');
   const closeBtn = el('btnCloseTalentModal');
@@ -6442,11 +7461,96 @@ function setupTalentModal() {
       updateTalentTreeDisplay();
     }
   });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('open')) {
+      modal.classList.remove('open');
+      updateTalentTreeDisplay();
+    }
+  });
+
+  // Modal Level Selector
+  const modalLevelSelect = el('modalCharLevelSelect');
+  if (modalLevelSelect) {
+    modalLevelSelect.addEventListener('change', (e) => {
+      state.level = parseInt(e.target.value);
+      if (el('charLevelSelect')) el('charLevelSelect').value = state.level;
+      updateModalPointsDisplay();
+      updateTalentTreeDisplay();
+      renderTalentTree('modalTalentSpecialtiesContainer', state.activeTalentTab, true);
+      saveState();
+    });
+  }
+
+  // Modal Reset Talents Button
+  const modalResetBtn = el('btnModalResetTalents');
+  if (modalResetBtn) {
+    modalResetBtn.addEventListener('click', () => {
+      if (state.talents.length === 0) return;
+      if (confirm('Reset all spent talent points?')) {
+        state.talents = [];
+        updateModalPointsDisplay();
+        updateTalentTreeDisplay();
+        renderTalentTree('modalTalentSpecialtiesContainer', state.activeTalentTab, true);
+        saveState();
+      }
+    });
+  }
+
+  // Search input & clear button
+  const searchInput = el('modalTalentSearchInput');
+  const clearSearchBtn = el('btnModalClearSearch');
+  if (searchInput) {
+    searchInput.addEventListener('input', (e) => {
+      state.modalSearchQuery = e.target.value;
+      if (clearSearchBtn) clearSearchBtn.style.display = state.modalSearchQuery ? 'inline' : 'none';
+      applyModalFilters();
+    });
+  }
+  if (clearSearchBtn && searchInput) {
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      state.modalSearchQuery = '';
+      clearSearchBtn.style.display = 'none';
+      applyModalFilters();
+      searchInput.focus();
+    });
+  }
+
+  // Tier filter buttons
+  const tierFiltersContainer = el('modalTierFilters');
+  if (tierFiltersContainer) {
+    tierFiltersContainer.querySelectorAll('.tier-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        tierFiltersContainer.querySelectorAll('.tier-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.modalTierFilter = btn.dataset.tier;
+        applyModalFilters();
+      });
+    });
+  }
+
+  // Status filter buttons
+  const statusFiltersContainer = el('modalStatusFilters');
+  if (statusFiltersContainer) {
+    statusFiltersContainer.querySelectorAll('.status-filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        statusFiltersContainer.querySelectorAll('.status-filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        state.modalStatusFilter = btn.dataset.status;
+        applyModalFilters();
+      });
+    });
+  }
 }
 
 function buildModalTalentSection() {
   const tabsContainer = el('modalTalentPathTabs');
   if (!tabsContainer) return;
+
+  // Sync level selector & points
+  const modalLevelSelect = el('modalCharLevelSelect');
+  if (modalLevelSelect) modalLevelSelect.value = state.level || 1;
+  updateModalPointsDisplay();
 
   const pathKeys = ['agent', 'envoy', 'hunter', 'leader', 'scholar', 'warrior'];
   let tabsHtml = '';
@@ -6454,7 +7558,9 @@ function buildModalTalentSection() {
     const p = TALENT_TREES[pk];
     tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === pk ? ' active' : ''}" data-tab="${pk}" role="tab">${p.icon} ${p.name}</button>`;
   });
-  tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === 'surges' ? ' active' : ''}" data-tab="surges" role="tab">⚡ Radiant Surges</button>`;
+  const orderObj = (state.isRadiant && state.radiantOrder) ? ORDERS.find(o => o.id === state.radiantOrder) : null;
+  const surgeBtnTitle = orderObj ? `⚡ ${orderObj.name} Surges` : '⚡ Radiant Surges';
+  tabsHtml += `<button type="button" class="talent-tab-btn${state.activeTalentTab === 'surges' ? ' active' : ''}" data-tab="surges" role="tab">${surgeBtnTitle}</button>`;
   tabsContainer.innerHTML = tabsHtml;
 
   tabsContainer.querySelectorAll('.talent-tab-btn').forEach(btn => {
@@ -6469,7 +7575,7 @@ function buildModalTalentSection() {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   STEP 8: EQUIPMENT
+   STEP 9: EQUIPMENT
    ═══════════════════════════════════════════════════════════════ */
 function buildEquipmentCards() {
   const container = el('equipCards');
@@ -6502,7 +7608,7 @@ function selectEquipment(id) {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   STEP 8: RADIANT
+   STEP 5: RADIANT PATH & IDEALS
    ═══════════════════════════════════════════════════════════════ */
 function buildRadiantSection() {
   const toggle = el('radiantToggle');
@@ -6520,7 +7626,12 @@ function buildRadiantSection() {
     toggleSwitch.classList.toggle('on', state.isRadiant);
     toggle.setAttribute('aria-checked', state.isRadiant);
     section.style.display = state.isRadiant ? '' : 'none';
-    if (!state.isRadiant) { state.radiantOrder = null; }
+    if (!state.isRadiant) {
+      selectOrder(null);
+    }
+    updateDerivedStats();
+    updateTalentTreeDisplay();
+    updateSkillDisplay();
     saveState();
   });
   toggle.addEventListener('keydown', e => {
@@ -6529,6 +7640,7 @@ function buildRadiantSection() {
 
   // Build order cards
   const container = el('orderCards');
+  container.innerHTML = '';
   ORDERS.forEach(order => {
     const card = document.createElement('div');
     card.className = 'card order-card' + (state.radiantOrder === order.id ? ' selected' : '');
@@ -6537,25 +7649,69 @@ function buildRadiantSection() {
     card.setAttribute('aria-checked', state.radiantOrder === order.id);
     card.innerHTML = `
       <div class="card-title">${order.name} ${order.restricted ? '<span class="restricted-badge">Rare / Restricted</span>' : ''}</div>
-      <div class="card-desc">${order.spren}</div>
+      <div class="card-desc">Bonded Spren: <strong>${order.spren}</strong></div>
       <div class="surges">
         ${order.surges.map(s => `<span class="surge-tag">${s}</span>`).join('')}
       </div>
       <div class="oath">${order.oath}</div>
     `;
-    card.addEventListener('click', () => selectOrder(order.id));
-    card.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); selectOrder(order.id); } });
+    card.addEventListener('click', () => {
+      selectOrder(order.id);
+      updateTalentTreeDisplay();
+    });
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        selectOrder(order.id);
+        updateTalentTreeDisplay();
+      }
+    });
     container.appendChild(card);
   });
+
+  if (state.radiantOrder) {
+    el('idealInputContainer').style.display = '';
+  }
 }
 
 function selectOrder(id) {
   state.radiantOrder = id;
-  el('orderCards').querySelectorAll('.card').forEach((c, i) => {
-    c.classList.toggle('selected', ORDERS[i].id === id);
-    c.setAttribute('aria-checked', ORDERS[i].id === id);
-  });
-  el('idealInputContainer').style.display = id ? '' : 'none';
+  state.isRadiant = !!id;
+
+  const toggle = el('radiantToggle');
+  const toggleSwitch = el('toggleSwitch');
+  const section = el('radiantSection');
+  if (toggle) toggle.setAttribute('aria-checked', state.isRadiant ? 'true' : 'false');
+  if (toggleSwitch) toggleSwitch.classList.add('on', state.isRadiant);
+  if (section) section.style.display = state.isRadiant ? '' : 'none';
+
+  const orderCardsContainer = el('orderCards');
+  if (orderCardsContainer) {
+    orderCardsContainer.querySelectorAll('.card').forEach((c, i) => {
+      const isSel = ORDERS[i]?.id === id;
+      c.classList.toggle('selected', isSel);
+      c.setAttribute('aria-checked', isSel ? 'true' : 'false');
+    });
+  }
+  const idealContainer = el('idealInputContainer');
+  if (idealContainer) {
+    idealContainer.style.display = id ? '' : 'none';
+  }
+
+  // Prune any talents from surge trees that the character no longer has access to
+  if (state.talents && state.talents.length > 0) {
+    const validSurgeNames = (state.isRadiant && state.radiantOrder)
+      ? (ORDERS.find(o => o.id === state.radiantOrder)?.surges || [])
+      : [];
+    state.talents = state.talents.filter(tid => {
+      if (!tid.startsWith('srg-')) return true;
+      const parentSurge = SURGE_TREES.find(s => s.talents.some(t => t.id === tid));
+      return parentSurge && validSurgeNames.includes(parentSurge.name);
+    });
+  }
+
+  updateDerivedStats();
+  updateSkillDisplay();
   saveState();
 }
 
@@ -7731,29 +8887,7 @@ function fillDummyData() {
     });
   }
 
-  // Step 5: Attributes
-  updateAttributeDisplay();
-  updateDerivedStats();
-
-  // Step 6: Skills
-  updateSkillDisplay();
-
-  // Step 7: Talents
-  if (el('charLevelSelect')) {
-    el('charLevelSelect').value = state.level;
-  }
-  updateTalentTreeDisplay();
-
-  // Step 8: Equipment
-  if (el('equipCards')) {
-    el('equipCards').querySelectorAll('.card').forEach((card, i) => {
-      const isSel = EQUIPMENT[i]?.id === state.equipment;
-      card.classList.toggle('selected', isSel);
-      card.setAttribute('aria-checked', isSel);
-    });
-  }
-
-  // Step 9: Radiant
+  // Step 5: Radiant
   const toggle = el('radiantToggle');
   const toggleSwitch = el('toggleSwitch');
   const section = el('radiantSection');
@@ -7774,6 +8908,28 @@ function fillDummyData() {
   }
   if (el('secondIdeal')) {
     el('secondIdeal').value = state.secondIdeal;
+  }
+
+  // Step 6: Attributes & Defenses
+  updateAttributeDisplay();
+  updateDerivedStats();
+
+  // Step 7: Skills
+  updateSkillDisplay();
+
+  // Step 8: Talents & Surge Trees
+  if (el('charLevelSelect')) {
+    el('charLevelSelect').value = state.level;
+  }
+  updateTalentTreeDisplay();
+
+  // Step 9: Equipment
+  if (el('equipCards')) {
+    el('equipCards').querySelectorAll('.card').forEach((card, i) => {
+      const isSel = EQUIPMENT[i]?.id === state.equipment;
+      card.classList.toggle('selected', isSel);
+      card.setAttribute('aria-checked', isSel);
+    });
   }
 
   // Clear validation notices
@@ -7890,14 +9046,67 @@ document.addEventListener('DOMContentLoaded', init);
 <div class="talent-modal-overlay" id="talentModalOverlay" role="dialog" aria-modal="true" aria-label="Universal Talent Trees Browser">
   <div class="talent-modal-container">
     <div class="talent-modal-header">
-      <div class="talent-modal-title">🌳 Cosmere RPG Talent Trees Rulebook</div>
-      <button type="button" class="talent-modal-close" id="btnCloseTalentModal" aria-label="Close talent browser">×</button>
+      <div class="talent-modal-header-left">
+        <h2 class="talent-modal-title">
+          <span class="modal-title-icon">🌳</span>
+          <span>Cosmere RPG Talent Trees Folio</span>
+        </h2>
+        <div class="talent-modal-subtitle">Roshar Handbook Reference • Chapters 4 &amp; 5 • Interactive Talent Builder</div>
+      </div>
+      <div class="talent-modal-header-right">
+        <div class="modal-level-control">
+          <label for="modalCharLevelSelect">Character Level:</label>
+          <select id="modalCharLevelSelect" aria-label="Select Character Level in Modal">
+            <option value="1">Level 1 (Tier 1)</option>
+            <option value="2">Level 2</option>
+            <option value="3">Level 3</option>
+            <option value="4">Level 4</option>
+            <option value="5">Level 5 (Tier 2)</option>
+            <option value="6">Level 6</option>
+            <option value="7">Level 7</option>
+            <option value="8">Level 8</option>
+            <option value="9">Level 9</option>
+            <option value="10">Level 10 (Tier 3)</option>
+          </select>
+        </div>
+        <div class="modal-points-pill" id="modalTalentPointsDisplay">
+          Points: <span class="count" id="modalTalentPointsCount">1</span>
+        </div>
+        <button type="button" class="btn btn-outline" id="btnModalResetTalents" title="Reset all spent talent points" style="font-size:0.75rem; padding:4px 10px;">↻ Reset</button>
+        <button type="button" class="talent-modal-close" id="btnCloseTalentModal" aria-label="Close talent browser">✕</button>
+      </div>
     </div>
-    <p class="talent-modal-desc">
-      Browse all Heroic Paths (Agent, Envoy, Hunter, Leader, Scholar, Warrior) and Radiant Surges across all specialties and tiers. You can learn and unlearn talents here directly.
-    </p>
-    <div class="talent-tabs" id="modalTalentPathTabs" role="tablist"></div>
-    <div id="modalTalentSpecialtiesContainer"></div>
+
+    <div class="talent-modal-controls-bar">
+      <div class="talent-tabs modal-tabs" id="modalTalentPathTabs" role="tablist" aria-label="Path selection tabs"></div>
+
+      <div class="modal-filter-row">
+        <div class="modal-search-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="modalTalentSearchInput" placeholder="Filter talents by name, prerequisite, keyword..." aria-label="Search talents" />
+          <button type="button" id="btnModalClearSearch" class="btn-clear-search" style="display:none;" aria-label="Clear search">✕</button>
+        </div>
+        <div class="modal-tier-filters" id="modalTierFilters">
+          <span class="filter-label">Tier:</span>
+          <button type="button" class="tier-filter-btn active" data-tier="all">All</button>
+          <button type="button" class="tier-filter-btn" data-tier="1">T1</button>
+          <button type="button" class="tier-filter-btn" data-tier="2">T2</button>
+          <button type="button" class="tier-filter-btn" data-tier="3">T3</button>
+          <button type="button" class="tier-filter-btn" data-tier="4">T4</button>
+        </div>
+        <div class="modal-status-filters" id="modalStatusFilters">
+          <span class="filter-label">Status:</span>
+          <button type="button" class="status-filter-btn active" data-status="all">All</button>
+          <button type="button" class="status-filter-btn" data-status="available">Learnable</button>
+          <button type="button" class="status-filter-btn" data-status="known">Known</button>
+        </div>
+        <button type="button" class="btn-toggle-all-details" id="btnModalToggleAllDetails">📖 Expand All Rules</button>
+      </div>
+    </div>
+
+    <div class="modal-scroll-body" id="modalTalentScrollBody">
+      <div id="modalTalentSpecialtiesContainer"></div>
+    </div>
   </div>
 </div>
 
