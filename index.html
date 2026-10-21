@@ -1211,26 +1211,75 @@ body {
 .equip-money { color: #7a5408; font-weight: 800; }
 
 .radiant-toggle {
-  display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
-  padding: 18px 20px; background: var(--bg-card); border-radius: var(--radius-md);
+  display: flex; align-items: center; gap: 18px; margin-bottom: 24px;
+  padding: 18px 22px; background: var(--bg-card); border-radius: var(--radius-md);
   border: 1.5px solid var(--border-dim); cursor: pointer;
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-card); transition: all var(--transition-fast);
+  user-select: none;
 }
+.radiant-toggle:hover {
+  border-color: var(--border-glow);
+}
+.radiant-toggle.is-bonded {
+  border-color: var(--cyan);
+  background: var(--bg-card);
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.15);
+}
+.radiant-toggle.is-bonded .radiant-toggle-label {
+  color: var(--cyan);
+}
+
+/* Toggle Switch Capsule Track (OFF state: Muted Recessed Groove) */
 .toggle-switch {
-  width: 50px; height: 28px; border-radius: 99px; background: #d5c7ab;
-  position: relative; transition: background var(--transition-fast); flex-shrink: 0;
+  width: 52px; height: 30px; border-radius: 99px;
+  background: #d1c2a8;
+  border: 1.5px solid #b5a489;
+  position: relative; transition: all var(--transition-fast); flex-shrink: 0;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15);
 }
+
+/* Knob (OFF state: Left side, dark slate brown, not glowing) */
 .toggle-switch::after {
-  content: ''; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px;
-  border-radius: 50%; background: #7a6b57; transition: all var(--transition-fast);
+  content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #7a6b57;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: all var(--transition-fast);
 }
-.toggle-switch.on { background: var(--cyan); box-shadow: 0 0 12px rgba(2,132,199,0.4); }
-.toggle-switch.on::after { translate: 22px 0; background: #ffffff; }
+
+/* Toggle Switch Capsule Track (ON state: Glowing Stormlight Cyan) */
+.toggle-switch.on {
+  background: #0284c7;
+  border-color: #38bdf8;
+  box-shadow: 0 0 16px rgba(2, 132, 199, 0.55), inset 0 1px 2px rgba(255, 255, 255, 0.4);
+}
+
+/* Knob (ON state: Right side, pure glowing white) */
+.toggle-switch.on::after {
+  translate: 22px 0;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
 .radiant-toggle-label {
   font-family: var(--font-title); font-weight: 800; font-size: 1.05rem;
-  letter-spacing: 0.04em; color: #6b4705;
+  letter-spacing: 0.04em; color: #6b4705; transition: color var(--transition-fast);
 }
 .radiant-toggle-sub { font-size: 0.85rem; color: #7a6b57; }
+
+/* Status pill inside toggle */
+.radiant-toggle-badge {
+  font-family: var(--font-ui); font-size: 0.7rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: 0.06em; padding: 2px 8px;
+  border-radius: 99px; display: inline-flex; align-items: center; gap: 4px;
+}
+.radiant-toggle-badge.off {
+  background: #e2dbce; border: 1px solid #c5b8a3; color: #7a6b57;
+}
+.radiant-toggle-badge.on {
+  background: rgba(2, 132, 199, 0.15); border: 1px solid rgba(2, 132, 199, 0.4);
+  color: #0284c7; font-weight: 900;
+}
 
 .order-card .card-title { font-size: 1.15rem; }
 .order-card .oath {
@@ -2503,20 +2552,46 @@ body {
   background: var(--bg-card);
   border-color: var(--border-dim);
 }
+[data-theme="dark"] .radiant-toggle.is-bonded {
+  border-color: var(--cyan);
+  box-shadow: 0 4px 20px rgba(0, 212, 255, 0.2);
+}
+[data-theme="dark"] .radiant-toggle.is-bonded .radiant-toggle-label {
+  color: var(--cyan);
+}
 [data-theme="dark"] .toggle-switch {
-  background: #1d2e46;
+  background: #091321;
+  border-color: #1a2a40;
+  box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.6);
 }
 [data-theme="dark"] .toggle-switch::after {
-  background: #60758e;
+  background: #334760;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+[data-theme="dark"] .toggle-switch.on {
+  background: #0284c7;
+  border-color: #38bdf8;
+  box-shadow: 0 0 18px rgba(0, 212, 255, 0.65), inset 0 1px 2px rgba(255, 255, 255, 0.4);
 }
 [data-theme="dark"] .toggle-switch.on::after {
   background: #ffffff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
 }
 [data-theme="dark"] .radiant-toggle-label {
   color: #f5d688;
 }
 [data-theme="dark"] .radiant-toggle-sub {
   color: #9cb1c9;
+}
+[data-theme="dark"] .radiant-toggle-badge.off {
+  background: #111e30;
+  border-color: #233b5c;
+  color: #60758e;
+}
+[data-theme="dark"] .radiant-toggle-badge.on {
+  background: rgba(0, 212, 255, 0.15);
+  border-color: rgba(0, 212, 255, 0.45);
+  color: var(--cyan);
 }
 [data-theme="dark"] .order-card .oath {
   color: #f5d688;
@@ -2802,9 +2877,12 @@ body {
 
     <div class="radiant-toggle" id="radiantToggle" role="switch" tabindex="0" aria-checked="false" aria-label="Enable Radiant Order selection">
       <div class="toggle-switch" id="toggleSwitch"></div>
-      <div>
-        <div class="radiant-toggle-label">I have bonded a spren</div>
-        <div class="radiant-toggle-sub">Enable to choose a Radiant Order</div>
+      <div style="flex:1;">
+        <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">
+          <span class="radiant-toggle-label">I have bonded a spren</span>
+          <span class="radiant-toggle-badge off" id="radiantToggleBadge">Mundane / Off</span>
+        </div>
+        <div class="radiant-toggle-sub" id="radiantToggleSub">Enable to choose a Radiant Order</div>
       </div>
     </div>
 
@@ -6053,6 +6131,8 @@ function goToStep(step) {
 
   // Restore inputs on step 1
   if (step === 1) restoreInputs();
+  // Update radiant toggle display on step 5
+  if (step === 5) updateRadiantToggleUI();
   // Update attributes & derived defenses display on step 6
   if (step === 6) {
     updateAttributeDisplay();
@@ -7610,36 +7690,60 @@ function selectEquipment(id) {
 /* ═══════════════════════════════════════════════════════════════
    STEP 5: RADIANT PATH & IDEALS
    ═══════════════════════════════════════════════════════════════ */
-function buildRadiantSection() {
+function updateRadiantToggleUI() {
   const toggle = el('radiantToggle');
   const toggleSwitch = el('toggleSwitch');
   const section = el('radiantSection');
+  const badge = el('radiantToggleBadge');
+  const sub = el('radiantToggleSub');
 
-  if (state.isRadiant) {
-    toggleSwitch.classList.add('on');
-    toggle.setAttribute('aria-checked', 'true');
-    section.style.display = '';
+  const isBonded = !!state.isRadiant;
+
+  if (toggle) {
+    toggle.setAttribute('aria-checked', isBonded ? 'true' : 'false');
+    toggle.classList.toggle('is-bonded', isBonded);
   }
+  if (toggleSwitch) {
+    toggleSwitch.classList.toggle('on', isBonded);
+  }
+  if (section) {
+    section.style.display = isBonded ? '' : 'none';
+  }
+  if (badge) {
+    badge.className = 'radiant-toggle-badge ' + (isBonded ? 'on' : 'off');
+    badge.textContent = isBonded ? '⚡ Bonded / Radiant' : 'Mundane / Off';
+  }
+  if (sub) {
+    sub.textContent = isBonded ? 'Spren bond active • Choose your Radiant Order below' : 'Enable to choose a Radiant Order';
+  }
+}
 
-  toggle.addEventListener('click', () => {
-    state.isRadiant = !state.isRadiant;
-    toggleSwitch.classList.toggle('on', state.isRadiant);
-    toggle.setAttribute('aria-checked', state.isRadiant);
-    section.style.display = state.isRadiant ? '' : 'none';
-    if (!state.isRadiant) {
-      selectOrder(null);
-    }
-    updateDerivedStats();
-    updateTalentTreeDisplay();
-    updateSkillDisplay();
-    saveState();
-  });
-  toggle.addEventListener('keydown', e => {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
-  });
+function buildRadiantSection() {
+  const toggle = el('radiantToggle');
+
+  updateRadiantToggleUI();
+
+  if (toggle) {
+    toggle.addEventListener('click', () => {
+      state.isRadiant = !state.isRadiant;
+      if (!state.isRadiant) {
+        selectOrder(null);
+      } else {
+        updateRadiantToggleUI();
+      }
+      updateDerivedStats();
+      updateTalentTreeDisplay();
+      updateSkillDisplay();
+      saveState();
+    });
+    toggle.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle.click(); }
+    });
+  }
 
   // Build order cards
   const container = el('orderCards');
+  if (!container) return;
   container.innerHTML = '';
   ORDERS.forEach(order => {
     const card = document.createElement('div');
@@ -7678,12 +7782,7 @@ function selectOrder(id) {
   state.radiantOrder = id;
   state.isRadiant = !!id;
 
-  const toggle = el('radiantToggle');
-  const toggleSwitch = el('toggleSwitch');
-  const section = el('radiantSection');
-  if (toggle) toggle.setAttribute('aria-checked', state.isRadiant ? 'true' : 'false');
-  if (toggleSwitch) toggleSwitch.classList.add('on', state.isRadiant);
-  if (section) section.style.display = state.isRadiant ? '' : 'none';
+  updateRadiantToggleUI();
 
   const orderCardsContainer = el('orderCards');
   if (orderCardsContainer) {
@@ -7996,9 +8095,7 @@ function startOver() {
   document.querySelectorAll('.card').forEach(c => { c.classList.remove('selected'); c.setAttribute('aria-checked', 'false'); });
   document.querySelectorAll('.sub-option').forEach(o => o.classList.remove('selected'));
   el('singerFormContainer').style.display = 'none';
-  el('toggleSwitch').classList.remove('on');
-  el('radiantToggle').setAttribute('aria-checked', 'false');
-  el('radiantSection').style.display = 'none';
+  updateRadiantToggleUI();
   el('idealInputContainer').style.display = 'none';
   el('cultureSelectedDisplay').innerHTML = '';
 
@@ -8888,14 +8985,7 @@ function fillDummyData() {
   }
 
   // Step 5: Radiant
-  const toggle = el('radiantToggle');
-  const toggleSwitch = el('toggleSwitch');
-  const section = el('radiantSection');
-  if (toggle && toggleSwitch && section) {
-    toggleSwitch.classList.toggle('on', state.isRadiant);
-    toggle.setAttribute('aria-checked', state.isRadiant);
-    section.style.display = state.isRadiant ? '' : 'none';
-  }
+  updateRadiantToggleUI();
   if (el('orderCards')) {
     el('orderCards').querySelectorAll('.card').forEach((card, i) => {
       const isSel = ORDERS[i]?.id === state.radiantOrder;
